@@ -58,15 +58,42 @@ simfbmonce <- function(n, H, T) {
   Ychang <- Y*(T/n)^H
   return(Ychang)
 } #Simulate fBm once (simtim=1)
+Wstat <- function(L, K, p, t = 1, X) {
+  # Initialize W to 0
+  W_value <- 0
+  
+  # Precompute constants
+  Kseq <- seq(0, t, length.out = K+1)
+  Lseq <- seq(0, t, length.out = L+1)
+  L_K <- L / K
+  
+  # Precompute differences in X for all L partitions
+  deltaX_L_array <- abs(diff(X))^p
+  
+  # Iterate over the K indices
+  for (i in 1:K) {
+    # Calculate the difference in X for the K partition
+    deltaX_K <- abs(X[1 + i * L_K] - X[1 + (i - 1) * L_K])^p
+    
+    # Precompute the denominator for the L partition over the i-th K partition
+    deltaX_L <- sum(deltaX_L_array[(1 + (i - 1) * L_K):(i * L_K)])
+    
+    # Accumulate the sum
+    W_value <- W_value + deltaX_K / deltaX_L * (Kseq[i + 1] - Kseq[i])
+  }
+  
+  return(W_value)
+} #Improved Wstat fct
 
 #Simulate fBm (naive)
-n <- 1000
-simtim <- 5 #Number of times to simulate the fBm (simtim>1)
-H = 0.2
-T= 10
+n<- 1000
+simtim <- 50 #Number of times to simulate the fBm (simtim>1)
+H <- 0.5
+T <- 10
 
 X <- simfbm(n, simtim, H, T)
 time <- seq(0,T, length.out = n)
+time
 
 plot(time, X[1,], type = "l", col = "blue", xlab = "time (s)", ylab = "y", ylim = c(min(X),max(X)))
 for (i in 2:nrow(X)) {
@@ -125,6 +152,13 @@ f_lambda <- function(lambda, H) {
   return(f_result)
 }
 
+
+t_k <- 0:l
+f_tk <- 0:l
+for (k in 0:l){
+  t_k[k+1] <- pi * k/l
+  f_tk[k+1] <- B3_lambda_H(t_k[k+1],H)
+}
 # Function to compute a_k sequence
 compute_a_k <- function(l, H) {
   # Generate i.i.d. standard normal random variables U^(0) and U^(1)
@@ -160,15 +194,16 @@ compute_a_k <- function(l, H) {
   return(a_k)
 }
 
-l <- 500
-n <- 2*l
-H <- 0.2
+n <- 1000
+lchoice <- 20000
+l <- ifelse(lchoice>=n/2, lchoice, n/2)
+H <- 0.5
 
 
 a_k <- compute_a_k(l, H)
-fft_approx <- fft(a_k)
+fft_approx <- fft(a_k)[(2*l-n+1):(2*l)]
 fft_approx
-Xn_approx <- (2*l/pi)^H*Re(fft_approx)
+Xn_approx <-Re(fft_approx) #(2*l/pi)^H*
 Xn_approx
 sum(Xn_approx)
 
@@ -193,7 +228,7 @@ compute_X_n <- function(n, l, H) {
   }
   
   return(com_X_n)
-}
+} #Spectral wo/ fft (very slow!)
 
 
 test <- compute_X_n(n, l, H)
@@ -205,17 +240,23 @@ for (i in 2:n){
 testny
 testny <- testny*(T/n)^H
 
-X_check <- matrix(0,simtim, 2*l)
+H <- 0.5
+simtim <- 50
+lchoice <- 20000
+l <- ifelse(lchoice>=n/2, lchoice, n/2)
+
+X_check <- matrix(0,simtim, n)
 
 for (i in 1:simtim){
-  X_check[i,] <- Re(fft(compute_a_k(l, H))) #(2*l/pi)^H*
+  X_check[i,] <- Re(fft(compute_a_k(l, H))[(2*l-n+1):(2*l)]) #(2*l/pi)^H*
 } #FFT method
 for (i in 1:simtim){
   X_check[i,] <- compute_X_n(n, l, H)
 } #Pure X_n estimate
-time <- seq(0,T, length.out = 2*l)
+time <- seq(0,T, length.out = n)
 
 Y <- matrix(0,simtim,n)
+Y[,1] <- X_check[,1]
 for (i in 2:n){
   Y[,i] <- Y[,i-1]+X_check[,i]
 }
@@ -229,15 +270,16 @@ for (i in 2:nrow(Y)) {
 
 
 #Roughness estimator using simulations of fBm
-L = 200*200-1
-K = 200
+L = 300*300
+K = 300
 n <- L+1
-l <- n/2
+lchoice <- 500000
+l <- ifelse(lchoice>=n/2, lchoice, n/2)
 
-H = 0.8
+H = 0.1
 T= 1
-X <- simfbmonce(n,H,T)
-test <- Re(fft(compute_a_k(l, H)))
+#X <- simfbmonce(n,H,T)
+test <- Re(fft(compute_a_k(l, H))[1:n])
 X <- numeric(n)
 X[1] <- test[1]
 for (i in 2:n){
@@ -253,62 +295,104 @@ p_values <- 1 / inv_p_values
 W_values <- sapply(p_values, function(p) Wstat(L = L, K = K, p, t = 1, X = X))
 
 # Calculate log(W) to avoid log(0) issues
-log_W_values <- log(W_values)
+#log_W_values <- log(W_values)
 
-# Plot log(W) against 1/p in log scale on the x-axis
-plot(inv_p_values, log_W_values, type = "l", col = "black", lwd = 2,
-     main = "Plot of log(W) against 1/p",
+# Log scale plot of W against 1/p 
+plot(inv_p_values, W_values, log= "y", type = "l", col = "black", lwd = 1,
+     main = "",
      xlab = "1/p",
-     ylab = "log(W)")
+     ylab = "W", yaxt = "n")
+# Define where to place the ticks (powers of 10)
+y_ticks <- c(10^-0.2, 10^-0.1, 10^0, 10^0.1, 10^0.2) #H=0,8
+y_ticks <- c(10^-0.4, 10^-0.2, 10^0, 10^0.2, 10^0.4, 10^0.6) #H=0,5
+y_ticks <- c(10^-0.5, 10^0, 10^0.5, 10^1) #H=0,3
+y_ticks <- c(10^0, 10^5, 10^10, 10^15, 10^20, 10^25) #H=0,1
 
-abline(h = 0, col = "blue", lwd = 2, lty = 1)  #Estimating \hat{p}
-abline(v = H, col = "black", lwd = 2, lty = 2)  # True H
+# Add y-axis with labels as powers of 10
+axis(2, at = y_ticks, labels = expression(10^-0.2, 10^-0.1, 10^0, 10^0.1, 10^0.2)) #H=0,8
+axis(2, at = y_ticks, labels = expression(10^-0.4, 10^-0.2, 10^0, 10^0.2, 10^0.4, 10^0.6)) #H=0,5
+axis(2, at = y_ticks, labels = expression(10^-0.5, 10^0, 10^0.5, 10^1)) #H=0,3
+axis(2, at = y_ticks, labels = expression(10^0, 10^5, 10^10, 10^15, 10^20, 10^25)) #H=0,1
+
+abline(h = 1, col = "blue", lwd = 1, lty = 1)  #Estimating \hat{p}
+abline(v = H, col = "black", lwd = 1, lty = 2)  # True H
 
 # Find the index where log(W) crosses y = 0
-crossing_index <- which.min(abs(log_W_values))
+crossing_index <- which.min(abs(W_values-1))
 x_at_y_0 <- inv_p_values[crossing_index]
-abline(v = x_at_y_0, col = "blue", lwd = 2, lty = 1)
-
+abline(v = x_at_y_0, col = "blue", lwd = 1, lty = 1)
 
 
 ## Histogram of estimated roughness index
-#Simulate fBm (naive)
-L <- 300*300-1
-K <- 300
+L <- 2000*2000
+K <- 2000
 n <- L+1
-l <- n/2
+lchoice <- 5000000
+l <- ifelse(lchoice>=n/2, lchoice, n/2)
 
 simtim <- 150 #Number of times to simulate the fBm (>1)
 H = 0.1
 T= 1
 
-X = simfbm(n, simtim, H, T) #Original simulation
+#X = simfbm(n, simtim, H, T) #Original simulation
 
-X_check <- matrix(0,simtim, 2*l)
+X_check <- matrix(0,simtim, n)
 for (i in 1:simtim){
-  X_check[i,] <- Re(fft(compute_a_k(l, H))) #(2*l/pi)^H*
+  X_check[i,] <- Re(fft(compute_a_k(l, H))[1:n])
 } #FFT method
 Y <- matrix(0,simtim,n)
 for (i in 2:n){
   Y[,i] <- Y[,i-1]+X_check[,i]
 }
-Y <- Y*(T/n)^H
-X <- Y
+X <- Y*(T/n)^H
 
-# Define a sequence of p values
-inv_p_values <- seq(H-0.09, H+0.09, length.out = 1000)  # Avoid p=0 to prevent division by zero
-p_values <- 1 / inv_p_values
-
-x_at_y_0 <- numeric(simtim)
+p_inv_sols <- numeric(simtim)
 for (i in 1:simtim){
-  # Compute W for each p
-  W_values <- sapply(p_values, function(p) Wstat(L = L, K = K, p, t = 1, X = X[i,]))
-  log_W_values <- log(W_values)
-
-  # Find the index where log(W) crosses y = 0
-  abs_log_W_values <- abs(log_W_values)
-  crossing_index <- which.min(abs_log_W_values)
-  x_at_y_0[i] <- inv_p_values[crossing_index]
+  objective_function <- function(p) {
+    (Wstat(L = L, K = K, p, t=1 , X = X[i,]) - T)^2  # Squared difference to minimize
+  }
+  p_inv_sols[i] <- 1/optimize(objective_function, interval = c(1,15))$minimum
 }
-hist(x_at_y_0, main = paste("H=",H), xlab = "H=1/p", ylab = "Density")
+hist(p_inv_sols, main = paste("H=",H), xlab = "H=1/p", ylab = "Density")
+
+
+
+##Estimated H plotted against different values of K
+L <- 300*300
+
+n <- L+1
+lchoice <- 200000
+l <- ifelse(lchoice>=n/2, lchoice, n/2)
+H = 0.1
+T= 1
+
+
+test <- Re(fft(compute_a_k(l, H))[1:n])
+X <- numeric(n)
+X[1] <- test[1]
+for (i in 2:n){
+  X[i] <- X[i-1]+test[i]
+}
+X <- X*(T/n)^H #Simulated fBm (spectral method)
+
+
+roughness_fct <- function(K){
+  objective_function <- function(p) {
+    (Wstat(L = L, K = K, p, t=1 , X = X) - T)^2  # Squared difference to minimize
+  }
+  return(1/optimize(objective_function, interval = c(1,15))$minimum)
+}
+
+
+K_values <- 2:500 
+roughness_index <- sapply(K_values, function(K) roughness_fct(K))  # apply your function
+
+# Create the plot
+plot(K_values, roughness_index, type = "l",  # 'l' for lines
+     xlab = "K", ylab = "Estimated Roughness Index", 
+     main = "")
+
+abline(h = roughness_fct(sqrt(L)), col = "blue", lwd = 1, lty = 1) 
+abline(v = sqrt(L), col = "blue", lwd = 1, lty = 1)
+
 
