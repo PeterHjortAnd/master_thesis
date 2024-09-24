@@ -1,5 +1,6 @@
 library(MASS)
 library(tidyverse)
+library(complex)
 
 ## Functions used throughout the document
 set.seed(1)
@@ -96,62 +97,244 @@ compute_a_k <- function(l, H) {
   return(a_k)
 }
 
-T <- 3500
-delta <- 1/20
-n <- T/delta
+T <- 2000
+delta <- 1/20000
+n <- round(T/delta, digits = 0)
 H <- 0.14
 nu <- 0.3
 m <- -5
 alpha <- 5*10^(-4)
-l <- n/2
+lchoice <- 90000000
+l <- ifelse(lchoice>=n/2, lchoice, n/2)
 
 
 #W <- simfbmonce(n,H,T)
 
-test <- Re(fft(compute_a_k(l, H)))
+#all_points <- fft(compute_a_k(l, H))
+test <- Re(all_points[0:n])
 X <- numeric(n)
 X[1] <- test[1]
 for (i in 2:n){
   X[i] <- X[i-1]+test[i]
 }
-W <- X*(T/n)^H
+W <- X*(T/n)^H #Simulated fBm
 
 X <- numeric(n)
 X[1] <- m
 for (i in 2:n){
   X[i] = nu*(W[i]-W[i-1])+alpha*delta*(m-X[i-1])+X[i-1]
 } #RSFV simulation
-vol <- exp(X)
+vol <- exp(X) #Simulated volatility
+
+#time <- seq(0,T, length.out = n)
+#plot(time, vol, type = "l", col = "blue", xlab = "", ylab = "")
+
+
+U <- rnorm(n)
+P <- numeric(2)
+P[1] <- 2
+for (i in 2:n) {
+  P[i] <- P[i-1] + P[i-1] * vol[i-1] * sqrt(delta) * U[i-1]
+} #Efficient price simulation
+
+eta <- 0.25
+tick_size <- 5*10^-4
+
+X_price <- numeric(n)
+X_price[1] <- round(P[1], digits = 3)
+for (i in 2:n){
+  if(P[i]>(X_price[i-1]+(1/2+eta)*tick_size)){
+    X_price[i] <- X_price[i-1]+tick_size
+    while (P[i]>(X_price[i]+(1/2+eta)*tick_size)){
+      X_price[i] <- X_price[i]+tick_size
+    }
+  } else if(P[i]<(X_price[i-1]-(1/2+eta)*tick_size)){
+    X_price[i] <- X_price[i-1]-tick_size
+    while (P[i]<(X_price[i]-(1/2+eta)*tick_size)){
+      X_price[i] <- X_price[i]-tick_size
+    }
+  } else {
+    X_price[i] <- X_price[i-1]
+  }
+} #Observed price simulation
 
 time <- seq(0,T, length.out = n)
-plot(time, vol, type = "l", col = "blue", xlab = "", ylab = "")
+plot(time[1:100000], P[1:100000], type = "l", col = "blue", xlab = "", ylab = "")
+lines(time[1:100000], X_price[1:100000], col = "red", lwd = 2)
 
-U <- rnorm(T)
-P <- numeric(T*1/delta)
-P[1] <- 5
-for (i in 1:T) {
-  for (j in 1:(1/delta)) {
-    idx <- (i - 1) * 1/delta + j  # Convert (n, delta) indices into a single index for P
-    
-    # Update P for the substep using the same U_n for all substeps in the partition
-    P[idx + 1] <- P[idx] + P[idx] * X[idx] * sqrt(delta) * U[i]
+price_changes <- function(X){
+  price <- numeric(2)
+  for (i in 2:length(X)){
+    price[i] <- X[i]-X[i-1]
   }
-} #Price simulation
-
-XDaily <- X[seq(1, length(X), by = 1/delta)]
-#Estimating volatility
-m <- function(q,Delta){
-  volDelta <- exp(XDaily[seq(1, length(XDaily), by = Delta)])
-  1/(T/Delta) *sum(abs(volDelta)^q)
+  return(price)
+}
+price_changes(X_price[1:1000])
+# Function to estimate eta
+estimate_eta <- function(price) {
+  # Initialize counts
+  N_c <- 0  # Number of continuations
+  N_a <- -1  # Number of alternations
+  last_change <- 0
+  price_chan <- price_changes(price)
+  # Loop through the price changes to count alternations and continuations
+  for (i in 2:length(price_chan)) {
+    if (price_chan[i]!=0){
+      if (sign(price_chan[i]) == sign(last_change)) {
+        # If the price change direction is the same as the previous one, it's a continuation
+        N_c <- N_c + 1
+      } else {
+        # If the price change direction is different, it's an alternation
+        N_a <- N_a + 1
+      }
+      last_change <- price_chan[i]
+    }
+  }
+  # Compute eta
+  if (N_a == 0) {
+    warning("No alternations found. Eta cannot be computed.")
+    return(NA)
+  } else {
+    eta_hat <- N_c / (2 * N_a)
+    return(eta_hat)
+  }
+}
+estimate_eta(X_price[1:20000])
+eta_estimates <- numeric(1)
+for (i in 1:T){
+  eta_estimates[i] <- estimate_eta(X_price[(8334+(i-1)*20000):(9167+(i-1)*20000)])
 }
 
-q = 1
-Delta_values <- 1:100
-m_values <- sapply(Delta_values, function(Delta) m(q = q, Delta))
-log_Delta <- log(Delta_values)
-log_m <- log(m_values)
+hour_total_points <- 9167-8334
+int_var_est <- numeric(T)
+for (i in 1:T){
+  X_eff_hat <- numeric(1)
+  ten_to_11 <- X_price[(8334+(i-1)*1/delta):(9167+(i-1)*1/delta)]
+  eta_hat <- estimate_eta(ten_to_11)
+  X_eff_hat[1] <- ten_to_11[1]
+  sum_term <- 0
+  for (k in 2:833){
+    X_eff_hat[k] <- ten_to_11[k] - sign(ten_to_11[k]-ten_to_11[k-1])*(1/2-eta_hat)*tick_size
+    sum_term <- sum_term+((X_eff_hat[k]-X_eff_hat[k-1])/X_eff_hat[k-1])^2
+  }
+  int_var_est[i] <- sum_term
+} #Make vol estimate 10 am to 11 am daily
+daily_vol_est <- int_var_est * sqrt(n/hour_total_points) #Daily volatility estimate (normalized values)
 
-plot(log_Delta, log_m, xlab = "Log(Delta)", ylab = "Log(m(q,Delta))")
+int_var_est <- numeric(T)
+for (i in 1:T){
+  X_eff_hat <- numeric(1)
+  ten_to_11 <- X_price[(8334+(i-1)*1/delta):(9167+(i-1)*1/delta)]
+  change_points <- ten_to_11[c(TRUE, diff(ten_to_11) != 0)]  # Include the first element, then select changes
+  eta_hat <- estimate_eta(ten_to_11)
+  X_eff_hat[1] <- ten_to_11[1]
+  sum_term <- 0
+  for (k in 2:(length(change_points))){
+    X_eff_hat[k] <- change_points[k] - sign(change_points[k]-change_points[k-1])*(1/2-eta_hat)*tick_size
+    sum_term <- sum_term+((X_eff_hat[k]-X_eff_hat[k-1])/X_eff_hat[k-1])^2
+  }
+  int_var_est[i] <- sum_term
+} #Make vol estimate 10 am to 11 am daily
+daily_vol_est <- int_var_est * sqrt(n/hour_total_points) #Daily volatility estimate (only tau terms)
+daily_vol_est
+
+int_var_est <- numeric(T)
+for (i in 1:T){
+  ten_to_11 <- X_price[(8334+(i-1)*1/delta):(9167+(i-1)*1/delta)]
+  change_points <- ten_to_11[c(TRUE, diff(ten_to_11) != 0)]  # Include the first element, then select changes
+  log_returns <- diff(log(ten_to_11))
+  squared_log_returns <- log_returns^2
+  int_var_est[i] <- sqrt(sum(squared_log_returns))
+} #Make vol estimate 10 am to 11 am daily
+daily_vol_est <- int_var_est * sqrt(n/hour_total_points) #Daily volatility estimate using RV def from roughvol
+daily_vol_est
+
+int_var_est <- numeric(T)
+for (i in 1:T){
+  X_eff_hat <- numeric(1)
+  ten_to_11 <- X_price[(8334+(i-1)*1/delta):(9167+(i-1)*1/delta)]
+  change_points <- ten_to_11[c(TRUE, diff(ten_to_11) != 0)]  # Include the first element, then select changes
+  eta_hat <- estimate_eta(ten_to_11)
+  X_eff_hat[1] <- ten_to_11[1]
+  sum_term <- 0
+  for (k in 2:(length(change_points))){
+    X_eff_hat[k] <- change_points[k] - sign(change_points[k]-change_points[k-1])*(1/2-eta_hat)*tick_size
+  }
+  log_returns <- diff(log(X_eff_hat))
+  squared_log_returns <- log_returns^2
+  int_var_est[i] <- sqrt(sum(squared_log_returns))
+} #Make vol estimate 10 am to 11 am daily
+daily_vol_est <- int_var_est * sqrt(n/hour_total_points) #Daily volatility estimate (only tau terms) with RV def from roughvol
+daily_vol_est
+
+int_var_est <- numeric(T)
+for (i in 1:T){
+  ten_to_11 <- P[(8334+(i-1)*1/delta):(9167+(i-1)*1/delta)]
+  sum_term <- 0
+  for (k in 2:length(ten_to_11)){
+    sum_term <- sum_term+((ten_to_11[k]-ten_to_11[k-1])/ten_to_11[k-1])^2
+  }
+  int_var_est[i] <- sum_term
+} #Make vol estimate 10 am to 11 am daily
+daily_vol_est <- int_var_est*sqrt(n/hour_total_points) #Daily volatility using efficient price directly instead of estimating
+daily_vol_est
+
+int_var_est <- numeric(T)
+for (i in 1:T){
+  ten_to_11 <- P[(8334+(i-1)*1/delta):(9167+(i-1)*1/delta)]
+  log_returns <- diff(log(ten_to_11))
+  squared_log_returns <- log_returns^2
+  int_var_est[i] <- sqrt(sum(squared_log_returns))
+} #Make vol estimate 10 am to 11 am daily
+daily_vol_est <- int_var_est*sqrt(n/hour_total_points) #Using efficient price directly and RV def from roughvol
+daily_vol_est
+
+mean_vol <- numeric(1)
+for (i in 1:T){
+  mean_vol[i] <- mean(vol[(8334+(i-1)*1/delta):(9167+(i-1)*1/delta)])
+}
+daily_vol_est <- mean_vol #Test using directly simulated volatility instead of estimating
+
+mqdelta <- function(cap_delta,q){
+  m_qdelta <- numeric(1)
+  for (i in 1:cap_delta){
+    delta_elements <- daily_vol_est[seq(i, length(daily_vol_est), by = cap_delta)]
+    vol_term <- numeric(2)
+    for (j in 2:(T/cap_delta)){
+      vol_term[j] <- abs(log(delta_elements[j])-log(delta_elements[j-1]))^q 
+    }
+    m_qdelta[i] <- 1/(length(delta_elements-1))*sum(vol_term)
+  }
+  final_m <- mean(m_qdelta)
+  return(log(final_m))
+}
+# Define a range of cap_delta (Δ) values and q values
+Delta_values <- 1:50
+log_Delta <- log(Delta_values)
+q_values <- c(0.5, 1, 1.5, 2, 3)  # Different q values
+
+# Calculate log(m_q(Δ)) for each q and Δ
+log_mq_list <- lapply(q_values, function(q) {
+  sapply(Delta_values, function(delta) mqdelta(delta, q))  # Calculate log_mq for each delta
+})
+
+# Plot the first q value
+plot(log_Delta, log_mq_list[[1]], type = "p", col = "blue", pch = 19,
+     xlab = expression(log(Delta)), 
+     ylab = expression(log(m(q,Delta))),
+     ylim = c(min(sapply(log_mq_list, min)), max(sapply(log_mq_list, max))),
+     xlim = c(min(log_Delta), max(log_Delta))
+)
+
+colors <- c("blue", "green", "red", "lightblue", "purple")
+# Add lines for the remaining q values
+for (i in 2:length(q_values)) {
+  points(log_Delta, log_mq_list[[i]], col = colors[i], pch = i + 18)  # Add points
+  #lines(log_Delta, log_mq_list[[i]], col = colors[i], lty = i)  # Add lines
+}
+
+# Add legend
+legend("topright", legend = paste("q =", q_values), col = colors, pch = 19:23, lty = 1:length(q_values))
 
 
 
