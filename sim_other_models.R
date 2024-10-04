@@ -1,6 +1,7 @@
 library(MASS)
 library(tidyverse)
 library(complex)
+library(knitr)
 ## Functions used throughout the document
 set.seed(1)
 Wstat <- function(L, K, p, t = 1, X) {
@@ -29,6 +30,93 @@ Wstat <- function(L, K, p, t = 1, X) {
   
   return(W_value)
 } #Improved Wstat fct
+# For fBm spectral sim
+a_plus <- function(j, lambda) {
+  return(2 * pi * j + lambda)
+}
+a_minus <- function(j, lambda) {
+  return(2 * pi * j - lambda)
+}
+B3_lambda_H <- function(lambda, H) {
+  sum_result <- 0
+  # First sum from j=1 to 3
+  for (j in 1:3) {
+    term1 <- (a_plus(j, lambda))^(-2 * H - 1)
+    term2 <- (a_minus(j, lambda))^(-2 * H - 1)
+    sum_result <- sum_result + term1 + term2
+  }
+  
+  # Additional terms for j=3 and j=4
+  term3_1 <- (a_plus(3, lambda))^(-2 * H)
+  term3_2 <- (a_minus(3, lambda))^(-2 * H)
+  term4_1 <- (a_plus(4, lambda))^(-2 * H)
+  term4_2 <- (a_minus(4, lambda))^(-2 * H)
+  
+  additional_terms <- (term3_1 + term3_2 + term4_1 + term4_2) / (8 * H * pi)
+  
+  return(sum_result + additional_terms)
+}
+f_lambda <- function(lambda, H) {
+  # Handle the singularity at lambda = 0
+  if (lambda == 0) {
+    return(Inf)  # In practice, you may want to set a very large number instead of Inf
+  }
+  
+  gamma_term <- gamma(2 * H + 1)  # Gamma(2H + 1)
+  sine_term <- sin(pi * H)  # sin(pi * H)
+  cos_term <- 1 - cos(lambda)  # (1 - cos(lambda))
+  
+  # Compute the B3(lambda, H) term
+  B3_term <- B3_lambda_H(lambda, H)
+  
+  # Compute the full f(lambda)
+  f_result <- 2 * sine_term * gamma_term * cos_term * (abs(lambda)^(-2 * H - 1) + B3_term)
+  
+  return(f_result)
+}
+U_0 <- rnorm(l)  # U^(0) for k = 0, ..., l-1
+U_1 <- rnorm(l)  # U^(1) for k = 0, ..., l-1
+t_k <- 0:l
+for (k in 0:l){
+  t_k[k+1] <- pi * k/l
+}
+compute_a_k <- function(l, H) {
+  # Generate i.i.d. standard normal random variables U^(0) and U^(1)
+
+  
+  f_tk <- 0:l
+  for (k in 0:l){
+    f_tk[k+1] <- f_lambda(t_k[k+1],H)
+  }
+  
+  # Initialize a_k as a vector of complex numbers
+  a_k <- complex(real = rep(0, 2 * l), imaginary = rep(0, 2 * l))
+  
+  # Loop to compute a_k for each k = 0, ..., 2l - 1
+  for (k in 0:(2 * l - 1)) {
+    if (k == 0) {
+      # a_0 = 0
+      a_k[k + 1] <- 0
+    } else if (k >= 1 && k <= (l - 1)) {
+      # a_k = 1/2 * (U^(0)_(k-1) + i * U^(1)_(k-1)) * sqrt(f(t_k) / l)
+      a_k[k + 1] <- 0.5 * (U_0[k] + 1i * U_1[k]) * sqrt(f_tk[k+1] / l)
+    } else if (k == l) {
+      # a_l = U^(0)_(l-1) * sqrt(f(t_k) / l)
+      a_k[k + 1] <- U_0[l] * sqrt(f_tk[l+1] / l)
+    } else {
+      # a_k = 1/2 * (U^(0)_(2l-k-1) - i * U^(1)_(2l-k-1)) * sqrt(f(t_k) / l)
+      a_k[k + 1] <- 0.5 * (U_0[2 * l - k] - 1i * U_1[2 * l - k]) * sqrt(f_tk[2*l-k+1] / l)
+    }
+  }
+  
+  return(a_k)
+}
+fbm_sim <- function(n, l, H, T){
+  test <- Re(fft(compute_a_k(l, H))[1:n])
+  X <- cumsum(test)
+  X <- X*(T/n)^H
+  return(X)
+} # Final sim fBm function
 
 # Parameters
 L = 500*500
@@ -148,9 +236,10 @@ abline(v = sqrt(L), col = "blue", lwd = 1, lty = 1)
 # Parameters
 L = 300*300
 K = 300
-n <- L+1
+#n <- L+1
 window <- 300
 n <- window*(L+1)
+#n <- 10000
 T <- 10
 dt <- T / n 
 time <- seq(0, T, by = dt)
@@ -180,11 +269,15 @@ for (i in 2:(n+1)){
   sigma[i] <- sigma_0*exp(Y[i])
 }
 
-S <- numeric(1)
-S[1] <- 100
+S_or <- numeric(1)
+S_or[1] <- 100
 for (i in 1:n){
-  S[i+1] <- S[i]+S[i]*sigma[i]*dB_1[i]
+  S_or[i+1] <- S_or[i]+S_or[i]*sigma[i]*dB_1[i]
 }
+sigma[6890]*dB_1[6890]*
+
+plot(time, S_or, type = "l", col = "blue", lwd = 2, 
+     xlab = "Time", ylab = "S_t", main = "Simulated Process S_t")
 
 # Realized volatility
 log_returns <- diff(log(S))
@@ -199,9 +292,7 @@ sigma_vol_win <- numeric(1)
 for (i in 1:(floor((n+1)/window))){
   sigma_vol_win[i] <- mean(sigma[(1+(i-1)*window):(i*window)])
 }
-max(sigma_vol_win)
-max(daily_vol)
-max(S)
+
 plot(daily_vol, type = "l", col = "black", lwd = 2, 
      xlab = "Time",xaxt = "n", ylab = "volatility",  main = "")
 lines(sigma_vol_win, col = "red", lwd = 2)
@@ -224,61 +315,15 @@ objective_function <- function(p) {
 p_inv_sols <- 1/optimize(objective_function, interval = c(1,20))$minimum
 p_inv_sols
 
-simtim <- 100
+simtim <- 25
 RV_check <- matrix(0,simtim, L+1)
 IV_check <- matrix(0,simtim, L+1)
-for (k in 1:simtim){
-  dB_1 <- rnorm(n, mean = 0, sd = sqrt(dt))
-  B_1 <- numeric(n+1)
-  B_1[2:(n+1)] <- cumsum(dB_1)
-  dB_2 <- rnorm(n, mean = 0, sd = sqrt(dt))
-  B_2 <- numeric(n+1)
-  B_2[2:(n+1)] <- cumsum(dB_2)
-  
-  Y <- numeric(1)
-  Y[1] <- Y_0
-  for (i in 1:n){
-    Y[i+1] <- Y[i] -gamma*Y[i]*dt + theta*dB_2[i]
-  }
-  
-  sigma <- numeric(1)
-  sigma[1] <- sigma_0
-  for (i in 2:(n+1)){
-    sigma[i] <- sigma_0*exp(Y[i])
-  }
-  
-  S <- numeric(1)
-  S[1] <- 100
-  for (i in 1:n){
-    S[i+1] <- S[i]+S[i]*sigma[i]*dB_1[i]
-  }
-  # Realized volatility
-  log_returns <- diff(log(S))
-  squared_log_returns <- log_returns^2
-  real_vol <- numeric(1)
-  for (i in 1:(floor((n+1)/window))){
-    real_vol[i] <- sqrt(sum(squared_log_returns[(1+(i-1)*window):(i*window)]))
-  }
-  daily_vol <- real_vol*sqrt(((n+1)/T)/window)
-  sigma_vol_win <- numeric(1)
-  for (i in 1:(floor((n+1)/window))){
-    sigma_vol_win[i] <- mean(sigma[(1+(i-1)*window):(i*window)])
-  }
-  RV_check[k,] <- daily_vol
-  IV_check[k,] <- sigma_vol_win
-}
-
-simtim <- 10
-RV_check <- matrix(0, simtim, L+1)
-IV_check <- matrix(0, simtim, L+1)
 # Precompute constants
 sqrt_dt <- sqrt(dt)
 n_plus_1 <- n + 1
 window_length <- floor(n_plus_1 / window)
 sqrt_term <- sqrt(n_plus_1 / (T * window))
-
-for (k in 1:simtim) {
-  # Generate Brownian motions
+for (k in 1:simtim){
   dB_1 <- rnorm(n, mean = 0, sd = sqrt_dt)
   dB_2 <- rnorm(n, mean = 0, sd = sqrt_dt)
   
@@ -286,21 +331,21 @@ for (k in 1:simtim) {
   B_1 <- c(0, cumsum(dB_1))
   B_2 <- c(0, cumsum(dB_2))
   
-  # Simulate Y using vectorized calculation
   Y <- numeric(n_plus_1)
   Y[1] <- Y_0
-  Y[2:n_plus_1] <- Y_0 - gamma * cumsum(Y[1:n] * dt) + theta * B_2[2:n_plus_1]
+  for (i in 1:n){
+    Y[i+1] <- Y[i] -gamma*Y[i]*dt + theta*dB_2[i]
+  }
   
-  # Compute sigma using Y (vectorized)
   sigma <- sigma_0 * exp(Y)
   
-  # Simulate S using vectorized calculation
   S <- numeric(n_plus_1)
   S[1] <- 100
-  S[2:n_plus_1] <- S[1] * cumprod(1 + sigma[2:n_plus_1] * dB_1)
-  
-  # Calculate log returns and squared log returns (vectorized)
-  log_returns <- diff(log(S))
+  for (i in 1:n){
+    S[i+1] <- S[i]+S[i]*sigma[i]*dB_1[i]
+  }
+  # Realized volatility
+  log_returns <- diff(log(abs(S)))
   squared_log_returns <- log_returns^2
   
   # Realized volatility calculation (vectorized)
@@ -316,8 +361,7 @@ for (k in 1:simtim) {
 }
 
 X = RV_check
-X = IV_check
-
+#X = IV_check
 p_inv_sols <- numeric(simtim)
 for (i in 1:simtim){
   objective_function <- function(p) {
@@ -325,11 +369,103 @@ for (i in 1:simtim){
   }
   p_inv_sols[i] <- 1/optimize(objective_function, interval = c(1,20))$minimum
 }
-
-
 plot(density(p_inv_sols), 
      main = "Density Plot of Data",
-     xlab = "Value",
+     xlab = "H=1/p",
      ylab = "Density",
-     col = "blue", 
+     col = "red", 
      lwd = 2)
+
+
+### A fractional Ornstein-Uhlenbeck model
+L = 300*300
+K = 300
+window <- 300
+n <- window*(L+1)
+lchoice <- n*2
+l <- ifelse(lchoice>=n, lchoice, n)
+T <- 1
+dt <- T / n 
+time <- seq(0, T, by = dt)
+
+sigma_0 <- 1
+Y_0 <- 0
+gamma <- 1
+theta <- 1
+S_0 <- 1
+
+sqrt_dt <- sqrt(dt)
+n_plus_1 <- n + 1
+window_length <- floor(n_plus_1 / window)
+sqrt_term <- sqrt(n_plus_1 / (T * window))
+dB <- rnorm(n, mean = 0, sd = sqrt_dt)
+
+output_given_H <- function(H){
+  
+  d_fbm <- Re(fft(compute_a_k(l, H))[1:n])*(T/n)^H
+
+  Y <- numeric(n_plus_1)
+  Y[1] <- Y_0
+  for (i in 1:n){
+    Y[i+1] <- Y[i] -gamma*Y[i]*dt + theta*d_fbm[i]
+  }
+  sigma <- sigma_0 * exp(Y)
+  S <- numeric(n_plus_1)
+  S[1] <- S_0
+  for (i in 1:n){
+    S[i+1] <- S[i]+S[i]*sigma[i]*dB[i]
+  }
+  # Realized volatility
+  log_returns <- diff(log(abs(S)))
+  squared_log_returns <- log_returns^2
+  # Realized volatility calculation (vectorized)
+  real_vol <- sqrt(rowSums(matrix(squared_log_returns, nrow = window_length, ncol = window, byrow = TRUE)))
+  daily_vol <- real_vol * sqrt_term
+  # Average sigma in each window (vectorized)
+  sigma_vol_win <- rowMeans(matrix(sigma[1:n], nrow = window_length, ncol = window, byrow = TRUE))
+  # Average S in each window
+  S_win <- rowMeans(matrix(S[2:n_plus_1], nrow = window_length, ncol = window, byrow = TRUE))
+
+  IV <- sigma_vol_win
+  RV <- daily_vol
+  return(list(S_win = S_win, IV = IV, RV = RV))
+}
+
+H_values <- seq(0.10, 0.80, by = 0.10)
+store_results <- list()
+for (H in H_values) {
+  store_results[[paste0("H_", H)]] <- output_given_H(H)
+}
+
+roughness_fct <- function(X){
+  objective_function <- function(p) {
+    (Wstat(L = L, K = K, p, t=1 , X = X) - T)^2  # Squared difference to minimize
+  }
+  return(1/optimize(objective_function, interval = c(1,30))$minimum)
+}
+
+results <- data.frame(H = numeric(), Instantaneous_volatility = numeric(), Realized_volatility = numeric())
+for (H in H_values) {
+  IV_H_est <- roughness_fct(store_results[[paste0("H_", H)]]$IV)
+  RV_H_est <- roughness_fct(store_results[[paste0("H_", H)]]$RV)
+  # Append the results to the data frame
+  results <- rbind(results, data.frame(H = H, 
+                                       Instantaneous_volatility = IV_H_est, 
+                                       Realized_volatility = RV_H_est))
+}
+# Display the final table using knitr::kable
+kable(results, col.names = c("H", "Instantaneous volatility", "Realized volatility"), 
+      align = "c", caption = "Volatility Table")
+
+par(mfrow = c(2, 3))  # 3 rows, 3 columns layout (adjust for your needs)
+
+# Plot the data for each H (replace the loops with your actual stored data)
+for (H in H_values) {
+  # Simulate three vectors for H (use stored vectors from your list)
+  plot(store_results[[paste0("H_", H)]]$S_win-S_0, type = "l", ylab = "Price S_t", xlab = "", xaxt = "n")
+  plot(store_results[[paste0("H_", H)]]$RV, type = "l", ylab = "Realized volatility", xlab = "", xaxt = "n")
+  plot(store_results[[paste0("H_", H)]]$IV, type = "l", ylab = "Instantaneous volatility", xlab = "", xaxt = "n")
+}
+
+store_results[[paste0("H_", 0.6)]]$RV
+1/20

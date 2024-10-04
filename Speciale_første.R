@@ -106,11 +106,9 @@ for (i in 2:nrow(X)) {
 a_plus <- function(j, lambda) {
   return(2 * pi * j + lambda)
 }
-
 a_minus <- function(j, lambda) {
   return(2 * pi * j - lambda)
 }
-
 # Define the B3(lambda, H) function
 B3_lambda_H <- function(lambda, H) {
   sum_result <- 0
@@ -131,7 +129,6 @@ B3_lambda_H <- function(lambda, H) {
   
   return(sum_result + additional_terms)
 }
-
 # Define the f(lambda) function using the new B3_lambda_H
 f_lambda <- function(lambda, H) {
   # Handle the singularity at lambda = 0
@@ -151,15 +148,8 @@ f_lambda <- function(lambda, H) {
   
   return(f_result)
 }
-
-
-t_k <- 0:l
-f_tk <- 0:l
-for (k in 0:l){
-  t_k[k+1] <- pi * k/l
-  f_tk[k+1] <- B3_lambda_H(t_k[k+1],H)
-}
 # Function to compute a_k sequence
+
 compute_a_k <- function(l, H) {
   # Generate i.i.d. standard normal random variables U^(0) and U^(1)
   U_0 <- rnorm(l)  # U^(0) for k = 0, ..., l-1
@@ -193,26 +183,20 @@ compute_a_k <- function(l, H) {
   
   return(a_k)
 }
+# Final sim fBm function
+fbm_sim <- function(n, l, H, T){
+  d_fbm <- Re(fft(compute_a_k(l, H))[1:n])
+  X <- cumsum(d_fbm)
+  X <- X*(T/n)^H
+  return(X)
+}
 
-n <- 1000
-lchoice <- 20000
-l <- ifelse(lchoice>=n/2, lchoice, n/2)
-H <- 0.5
-
-
-a_k <- compute_a_k(l, H)
-fft_approx <- fft(a_k)[(2*l-n+1):(2*l)]
-fft_approx
-Xn_approx <-Re(fft_approx) #(2*l/pi)^H*
-Xn_approx
-sum(Xn_approx)
-
-
+U_0 <- rnorm(l)  # U^(0) for k = 0, ..., l-1
+U_1 <- rnorm(l)  # U^(1) for k = 0, ..., l-1
 # Function to compute X^{(ell)}_n
 compute_X_n <- function(n, l, H) {
   # Generate i.i.d. standard normal random variables U^(0) and U^(1)
-  U_0 <- rnorm(l)  # U^(0) for k = 0, ..., l-1
-  U_1 <- rnorm(l)  # U^(1) for k = 0, ..., l-1
+
   # Loop over k from 0 to l-1
   com_X_n <- 1:n
     for (i in 0:(n-1)){
@@ -240,25 +224,40 @@ for (i in 2:n){
 testny
 testny <- testny*(T/n)^H
 
-H <- 0.5
-simtim <- 50
-lchoice <- 20000
-l <- ifelse(lchoice>=n/2, lchoice, n/2)
+T <- 10
+n <- 1000
+H <- 0.2
+simtim <- 5
+l <- ifelse(n*3>=30000, n*3, 30000)
+dt <- T / n 
+time <- seq(0, T, by = dt)
+
+X_fft <- Re(fft(compute_a_k(l, H))[1:n])
+X_pure <- compute_X_n(n, l, H)
+plot(X_fft, type = "l", col = "blue", xlab = "time (s)", ylab = "y")
+lines(X_pure, col = "red", lwd = 2)
+
+Y_fft <- c(0,cumsum(X_fft))*dt^H
+Y_pure <- c(0,cumsum(X_pure))*dt^H
+plot(time, Y_fft, type = "l", col = "blue", xlab = "time (s)", ylab = "y")
+lines(time, Y_pure, col = "red", lwd = 2)
+
+sum(X_pure[1:501])
+Y_pure[990:1010]
 
 X_check <- matrix(0,simtim, n)
 
 for (i in 1:simtim){
-  X_check[i,] <- Re(fft(compute_a_k(l, H))[(2*l-n+1):(2*l)]) #(2*l/pi)^H*
+  X_check[i,] <- Re(fft(compute_a_k(l, H))[1:n]) #(2*l/pi)^H*
 } #FFT method
 for (i in 1:simtim){
   X_check[i,] <- compute_X_n(n, l, H)
 } #Pure X_n estimate
-time <- seq(0,T, length.out = n)
+#time <- seq(0,T, length.out = n)
 
-Y <- matrix(0,simtim,n)
-Y[,1] <- X_check[,1]
-for (i in 2:n){
-  Y[,i] <- Y[,i-1]+X_check[,i]
+Y <- matrix(0,simtim,n+1)
+for (i in 2:(n+1)){
+  Y[,i] <- Y[,i-1]+X_check[,i-1]
 }
 
 Y <- Y*(T/n)^H
@@ -267,7 +266,6 @@ plot(time, Y[1,], type = "l", col = "blue", xlab = "time (s)", ylab = "y", ylim 
 for (i in 2:nrow(Y)) {
   lines(time, Y[i, ], col = rainbow(nrow(Y))[i], lwd = 2)
 }
-
 
 #Roughness estimator using simulations of fBm
 L = 300*300
@@ -279,13 +277,9 @@ l <- ifelse(lchoice>=n/2, lchoice, n/2)
 H = 0.1
 T= 1
 #X <- simfbmonce(n,H,T)
-test <- Re(fft(compute_a_k(l, H))[1:n])
-X <- numeric(n)
-X[1] <- test[1]
-for (i in 2:n){
-  X[i] <- X[i-1]+test[i]
-}
-X <- X*(T/n)^H
+
+X <- fbm_sim(n,l,H,T)
+
 
 # Define a sequence of p values
 inv_p_values <- seq(H-0.09, H+0.09, length.out = 1000)  # Avoid p=0 to prevent division by zero
@@ -380,7 +374,7 @@ roughness_fct <- function(K){
   objective_function <- function(p) {
     (Wstat(L = L, K = K, p, t=1 , X = X) - T)^2  # Squared difference to minimize
   }
-  return(1/optimize(objective_function, interval = c(1,15))$minimum)
+  return(1/optimize(objective_function, interval = c(1,20))$minimum)
 }
 
 
