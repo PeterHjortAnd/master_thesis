@@ -3,7 +3,6 @@ library(tidyverse)
 library(complex)
 library(knitr)
 ## Functions used throughout the document
-set.seed(1)
 Wstat <- function(L, K, p, t = 1, X) {
   # Initialize W to 0
   W_value <- 0
@@ -121,40 +120,43 @@ fbm_sim <- function(n, l, H, T){
 # Parameters
 L = 500*500
 K = 500
-n <- L+1
 window <- 300
-n <- window*(L+1)
-T <- 10
+n <- (L+1)/2
+T <- L+1
+delta <- 1/300
+n <- round(T/delta, digits = 0)
 dt <- T / n 
-time <- seq(0, T, by = dt)
+time <- seq(0, T, by = dt)[1:20000]
 
 # Simulate two independent Brownian motions B_t and W_t
+set.seed(1)
 dB <- rnorm(n, mean = 0, sd = sqrt(dt))
-B <- numeric(n+1)
-B[2:(n+1)] <- cumsum(dB)
 dW <- rnorm(n, mean = 0, sd = sqrt(dt))
 W <- numeric(n+1)
 W[2:(n+1)] <- cumsum(dW)
+sigma_vol <- abs(W)
 
+mean_vol <- numeric()
+for (i in 1:T){
+  mean_vol[i] <- mean(sigma_vol[(1+(i-1)*1/delta):(300+(i-1)*1/delta)])
+}
 
 # Simulate the process S_t using Euler-Maruyama
 S <- numeric(n+1)
 S[1] <- 100
 
-sigma_vol <- abs(W)
 for (i in 1:n) {
   S[i + 1] <- S[i] + sigma_vol[i] * S[i] * dB[i]
 }
 
 # Plot the results
-plot(time[1:(20000*window)], S[1:(20000*window)], type = "l", col = "blue", lwd = 2, 
+plot(time[1:20000], S[1:20000], type = "l", col = "blue", lwd = 2, 
      xlab = "Time", ylab = "S_t", main = "Simulated Process S_t")
 
 # Realized volatility
 log_returns <- diff(log(S))
 squared_log_returns <- log_returns^2
-real_vol <- numeric(1)
-window <- 300
+real_vol <- numeric()
 
 #for (i in 1:window){
 #  real_vol[i] <- sqrt(sum(squared_log_returns[1:i]))
@@ -165,40 +167,44 @@ window <- 300
 #daily_vol <- real_vol*sqrt(n/window)
 #sigma_vol <- sigma_vol[1:n]
 
-for (i in 1:(floor((n+1)/window))){
-  real_vol[i] <- sqrt(sum(squared_log_returns[(1+(i-1)*window):(i*window)]))
+for (i in 1:(floor((n+1)/(2*window)))){
+  real_vol[i] <- sqrt(sum(squared_log_returns[(1+(2*(i-1))*window):(2*i*window-window)]))
 }
-daily_vol <- real_vol*sqrt(((n+1)/T)/window)
-sigma_vol_win <- numeric(1)
-for (i in 1:(floor((n+1)/window))){
-  sigma_vol_win[i] <- mean(sigma_vol[(1+(i-1)*window):(i*window)])
-}
-max(sigma_vol_win)
-max(daily_vol)
-min(S)
+daily_vol <- real_vol*sqrt(((n+1)/T^2)/window) # Vol scaled to daily vol
+sigma_vol_win <- numeric()
+for (i in 1:(floor((n+1)/(2*window)))){
+  sigma_vol_win[i] <- mean(sigma_vol[(1+(2*(i-1))*window):(2*i*window-window)])* sqrt(T^-1)
+} # Sigma (vol for whole T) is scaled to daily vol
 
-plot(daily_vol[10000:20000], type = "l", col = "black", lwd = 2, 
+plot(daily_vol[1:20000], type = "l", col = "black", lwd = 2, 
      xlab = "Time",xaxt = "n", ylab = "volatility",  main = "")
-lines(sigma_vol_win[10000:20000], col = "red", lwd = 2)
+lines(sigma_vol_win[1:20000], col = "red", lwd = 2)
 
 IV_minus_RV <- sigma_vol_win-daily_vol
-plot(IV_minus_RV, type = "l", col = "black", lwd = 2, 
+plot(IV_minus_RV[1:20000], type = "l", col = "black", lwd = 2, 
      xlab = "", xaxt = "n", ylab = "IV-RV", main = "")
 log_IV_minus_RV <- log(sigma_vol_win)-log(daily_vol)
-plot(log_IV_minus_RV, type = "l", col = "black", lwd = 2, 
+plot(log_IV_minus_RV[1:20000], type = "l", col = "black", lwd = 2, 
      xlab = "", xaxt = "n", ylab = "log(IV)-log(RV)", main = "")
 
-#X <- sigma_vol_win
+mean(sigma_vol_win)
+mean(daily_vol)
+
+X <- sigma_vol_win
 X <- daily_vol
+X <- sigma_vol[2:(L+2)]
+X <- oxford_real_vol[1:(L+1)]*sqrt()
 objective_function <- function(p) {
   (Wstat(L = L, K = K, p, t=1 , X = X) - T)^2  # Squared difference to minimize
 }
-p_inv_sols <- 1/optimize(objective_function, interval = c(1,20))$minimum
+p_inv_sols <- 1/optimize(objective_function, interval = c(1,30))$minimum
 p_inv_sols
 
-inv_p_values <- seq(p_inv_sols-0.09, p_inv_sols+0.09, length.out = 1000)  # Avoid p=0 to prevent division by zero
-p_values <- 1 / inv_p_values
+L <- 68^2
+K <- 68
 
+inv_p_values <- seq(0.05, 0.6, length.out = 1000)  # Avoid p=0 to prevent division by zero
+p_values <- 1 / inv_p_values
 W_values <- sapply(p_values, function(p) Wstat(L = L, K = K, p, t = 1, X = X))
  
 plot(inv_p_values, W_values, log= "y", type = "l", col = "black", lwd = 1,
@@ -208,19 +214,21 @@ plot(inv_p_values, W_values, log= "y", type = "l", col = "black", lwd = 1,
 
 #y_ticks <- c(10^-0.4, 10^-0.2, 10^0, 10^0.2, 10^0.4, 10^0.6)
 y_ticks <- c(10^-0.5, 10^0, 10^0.5, 10^1, 10^1.5)
+#y_ticks <- c(10^0, 10^5, 10^10, 10^15)
 #axis(2, at = y_ticks, labels = expression(10^-0.4, 10^-0.2, 10^0, 10^0.2, 10^0.4, 10^0.6))
 axis(2, at = y_ticks, labels = expression(10^-0.5, 10^0, 10^0.5, 10^1, 10^1.5))
+#axis(2, at = y_ticks, labels = expression(10^0, 10^5, 10^10, 10^15))
 abline(h = 1, col = "blue", lwd = 1, lty = 1)  #Estimating \hat{p}
 abline(v = p_inv_sols, col = "blue", lwd = 1, lty = 1)
 
 ## W against different values of K
 roughness_fct <- function(K){
   objective_function <- function(p) {
-    (Wstat(L = L, K = K, p, t=1 , X = X, tol = 10^-3) - T)^2  # Squared difference to minimize
+    (Wstat(L = L, K = K, p, t=1 , X = X) - T)^2  # Squared difference to minimize
   }
-  return(1/optimize(objective_function, interval = c(1,15), tol = 10^-3)$minimum)
+  return(1/optimize(objective_function, interval = c(1,30))$minimum)
 }
-K_values <- 2:500 
+K_values <- 10:990 
 roughness_index <- sapply(K_values, function(K) roughness_fct(K))  # apply your function
 
 plot(K_values, roughness_index, type = "l",  # 'l' for lines
@@ -229,7 +237,85 @@ plot(K_values, roughness_index, type = "l",  # 'l' for lines
 abline(h = roughness_fct(sqrt(L)), col = "blue", lwd = 1, lty = 1) 
 abline(v = sqrt(L), col = "blue", lwd = 1, lty = 1)
 
-#Scaling analysis
+
+mqdelta <- function(cap_delta,q, X){
+  m_qdelta <- numeric()
+  for (i in 1:cap_delta){
+    delta_elements <- X[seq(i, length(X), by = cap_delta)]
+    vol_term <- numeric()
+    for (j in 1:(length(delta_elements)-1)){
+      vol_term[j] <- abs(log(delta_elements[j+1])-log(delta_elements[j]))^q 
+    }
+    m_qdelta[i] <- 1/(length(delta_elements)-1)*sum(vol_term)
+  }
+  final_m <- mean(m_qdelta)
+  return(log(final_m))
+}
+# Define a range of cap_delta (Δ) values and q values
+Delta_values <- 1:50
+log_Delta <- log(Delta_values)
+q_values <- c(0.5, 1, 1.5, 2, 3)  # Different q values
+
+dW <- rnorm(10000, mean = 0, sd = 1)
+W <- numeric(1)
+W[2:(10001)] <- cumsum(dW)
+test <- abs(W[2:10001])
+
+# Calculate log(m_q(Δ)) for each q and Δ
+log_mq_list <- lapply(q_values, function(q) {
+  sapply(Delta_values, function(delta) mqdelta(delta, q, X = sqrt(mean_vol)))  # Calculate log_mq for each delta
+})
+log_mq_list
+
+
+# Plot the first q value
+plot(log_Delta, log_mq_list[[1]], type = "p", col = "black", pch = 21,
+     xlab = expression(log(Delta)), 
+     ylab = expression(log(m(q,Delta))),
+     ylim = c(min(sapply(log_mq_list, min)), max(sapply(log_mq_list, max))),
+     xlim = c(min(log_Delta), max(log_Delta))
+)
+
+colors <- c("black", "green", "red", "blue", "purple")
+# Add lines for the remaining q values
+for (i in 2:length(q_values)) {
+  points(log_Delta, log_mq_list[[i]], col = colors[i], pch = 21)  # Add points
+}
+
+# Data
+log_delta <- c(log_Delta, log_Delta, log_Delta, log_Delta, log_Delta)  # Vector of log(Δ) values
+log_m <- c(log_mq_list[[1]], log_mq_list[[2]], log_mq_list[[3]], log_mq_list[[4]], log_mq_list[[5]])      # Vector of log(m(q, Δ)) values
+group <- c(rep(1,length(Delta_values)), rep(2,length(Delta_values)), rep(3,length(Delta_values)), rep(4,length(Delta_values)), rep(5,length(Delta_values)))      # Vector indicating the group (1 to 5 for each set)
+
+# Combine into a data frame
+data <- data.frame(log_delta, log_m, group)
+
+# Split data by group
+data_split <- split(data, data$group)
+
+# Perform linear regression for each group
+models <- lapply(data_split, function(group_data) {
+  lm(log_m ~ log_delta, data = group_data)
+})
+
+# Add regression lines to plot
+for (i in 1:length(q_values)){
+  abline(models[[i]], col = colors[i])
+}
+
+epsilon_q <- numeric()
+for (i in 1:length(q_values)){
+  epsilon_q[i] <- models[[i]]$coefficients[[2]]
+}
+epsilon_q
+
+fit_epsilon <- lm(epsilon_q ~ q_values)
+est_smooth_H <- fit_epsilon$coefficients[[2]]
+
+plot(q_values, epsilon_q, type = "p", pch = 21, main = paste("Estimated H=",round(est_smooth_H, digits = 4)), 
+     xlab = 'q', )
+abline(fit_epsilon)
+
 
 
 ### Example 6 OU-SV model

@@ -3,7 +3,7 @@ library(tidyverse)
 library(complex)
 ## Functions used throughout the document
 set.seed(1)
-Wstat <- function(L, K, p, t=1, X) {
+#Wstat <- function(L, K, p, t=1, X) {
   # Initialize W to 0
   W_value <- 0
   Kseq <- seq(0,t, length.out = K+1)
@@ -94,6 +94,9 @@ T <- 10
 X <- simfbm(n, simtim, H, T)
 time <- seq(0,T, length.out = n)
 time
+seq(0,T, length.out = K+1)
+seq(0,T, by = T/K)
+
 
 plot(time, X[1,], type = "l", col = "blue", xlab = "time (s)", ylab = "y", ylim = c(min(X),max(X)))
 for (i in 2:nrow(X)) {
@@ -186,7 +189,7 @@ compute_a_k <- function(l, H) {
 # Final sim fBm function
 fbm_sim <- function(n, l, H, T){
   d_fbm <- Re(fft(compute_a_k(l, H))[1:n])
-  X <- cumsum(d_fbm)
+  X <- c(0,cumsum(d_fbm))
   X <- X*(T/n)^H
   return(X)
 }
@@ -268,18 +271,17 @@ for (i in 2:nrow(Y)) {
 }
 
 #Roughness estimator using simulations of fBm
+set.seed(1)
 L = 300*300
 K = 300
-n <- L+1
-lchoice <- 500000
-l <- ifelse(lchoice>=n/2, lchoice, n/2)
+n <- L
+l <- ifelse(n*3>=30000, n*3, 30000)
 
-H = 0.1
+H = 0.1 #Start from H=0,1 after set.seed to recreate the saved plots 
 T= 1
 #X <- simfbmonce(n,H,T)
 
 X <- fbm_sim(n,l,H,T)
-
 
 # Define a sequence of p values
 inv_p_values <- seq(H-0.09, H+0.09, length.out = 1000)  # Avoid p=0 to prevent division by zero
@@ -294,19 +296,19 @@ W_values <- sapply(p_values, function(p) Wstat(L = L, K = K, p, t = 1, X = X))
 # Log scale plot of W against 1/p 
 plot(inv_p_values, W_values, log= "y", type = "l", col = "black", lwd = 1,
      main = "",
-     xlab = "1/p",
-     ylab = "W", yaxt = "n")
+     xlab = "H=1/p",
+     ylab = expression(W(L, K, pi, p, t == 1, X)), yaxt = "n")
 # Define where to place the ticks (powers of 10)
-y_ticks <- c(10^-0.2, 10^-0.1, 10^0, 10^0.1, 10^0.2) #H=0,8
+y_ticks <- c(10^-0.3, 10^-0.15, 10^0, 10^0.15, 10^0.3) #H=0,8
 y_ticks <- c(10^-0.4, 10^-0.2, 10^0, 10^0.2, 10^0.4, 10^0.6) #H=0,5
 y_ticks <- c(10^-0.5, 10^0, 10^0.5, 10^1) #H=0,3
-y_ticks <- c(10^0, 10^5, 10^10, 10^15, 10^20, 10^25) #H=0,1
+y_ticks <- c(10^0, 10^10, 10^20, 10^30) #H=0,1
 
 # Add y-axis with labels as powers of 10
-axis(2, at = y_ticks, labels = expression(10^-0.2, 10^-0.1, 10^0, 10^0.1, 10^0.2)) #H=0,8
+axis(2, at = y_ticks, labels = expression(10^-0.3, 10^-0.15, 10^0, 10^0.15, 10^0.3)) #H=0,8
 axis(2, at = y_ticks, labels = expression(10^-0.4, 10^-0.2, 10^0, 10^0.2, 10^0.4, 10^0.6)) #H=0,5
 axis(2, at = y_ticks, labels = expression(10^-0.5, 10^0, 10^0.5, 10^1)) #H=0,3
-axis(2, at = y_ticks, labels = expression(10^0, 10^5, 10^10, 10^15, 10^20, 10^25)) #H=0,1
+axis(2, at = y_ticks, labels = expression(10^0, 10^10, 10^20, 10^30)) #H=0,1
 
 abline(h = 1, col = "blue", lwd = 1, lty = 1)  #Estimating \hat{p}
 abline(v = H, col = "black", lwd = 1, lty = 2)  # True H
@@ -318,75 +320,65 @@ abline(v = x_at_y_0, col = "blue", lwd = 1, lty = 1)
 
 
 ## Histogram of estimated roughness index
+set.seed(1)
 L <- 2000*2000
 K <- 2000
-n <- L+1
-lchoice <- 5000000
-l <- ifelse(lchoice>=n/2, lchoice, n/2)
+n <- L
+l <- ifelse(n*3>=30000, n*3, 30000)
 
 simtim <- 150 #Number of times to simulate the fBm (>1)
 H = 0.1
 T= 1
 
-#X = simfbm(n, simtim, H, T) #Original simulation
-
-X_check <- matrix(0,simtim, n)
-for (i in 1:simtim){
-  X_check[i,] <- Re(fft(compute_a_k(l, H))[1:n])
-} #FFT method
-Y <- matrix(0,simtim,n)
-for (i in 2:n){
-  Y[,i] <- Y[,i-1]+X_check[,i]
-}
-X <- Y*(T/n)^H
 
 p_inv_sols <- numeric(simtim)
 for (i in 1:simtim){
+  X <- fbm_sim(n,l,H,T)
   objective_function <- function(p) {
-    (Wstat(L = L, K = K, p, t=1 , X = X[i,]) - T)^2  # Squared difference to minimize
+    (Wstat(L = L, K = K, p, t=1 , X = X) - T)^2  # Squared difference to minimize
   }
-  p_inv_sols[i] <- 1/optimize(objective_function, interval = c(1,15))$minimum
-}
-hist(p_inv_sols, main = paste("H=",H), xlab = "H=1/p", ylab = "Density")
+  p_inv_sols[i] <- 1/optimize(objective_function, interval = c(1,30))$minimum
+} 
 
+#dens <- density(p_inv_sols) # For K=2000 density
+hist(p_inv_sols, main = paste("H=",H), xlab = "H=1/p", ylab = "Density") #,  ylim=range(dens$y) #add ylim for K=2000
+#lines(dens, col = "blue", lwd = 2) # For K=2000 density plot
 
+quartiles <- as.numeric(quantile(p_inv_sols, probs = c(0.25, 0.75)))
+
+#Only run one of the lines below
+#table_hist <- matrix(0,4,7)
+table_hist[1,] <- c(H, min(p_inv_sols),quartiles[1], median(p_inv_sols), mean(p_inv_sols), quartiles[2], max(p_inv_sols)) #H=0,1
+table_hist[2,] <- c(H, min(p_inv_sols),quartiles[1], median(p_inv_sols), mean(p_inv_sols), quartiles[2], max(p_inv_sols)) #H=0,3
+table_hist[3,] <- c(H, min(p_inv_sols),quartiles[1], median(p_inv_sols), mean(p_inv_sols), quartiles[2], max(p_inv_sols)) #H=0,5
+table_hist[4,] <- c(H, min(p_inv_sols),quartiles[1], median(p_inv_sols), mean(p_inv_sols), quartiles[2], max(p_inv_sols)) #H=0,8
+table_hist
+c(H, min(p_inv_sols),quartiles[1], median(p_inv_sols), mean(p_inv_sols), quartiles[2], max(p_inv_sols))
 
 ##Estimated H plotted against different values of K
+set.seed(1)
 L <- 300*300
-
-n <- L+1
-lchoice <- 200000
-l <- ifelse(lchoice>=n/2, lchoice, n/2)
+n <- L
+l <- ifelse(n*3>=30000, n*3, 30000)
 H = 0.1
 T= 1
 
-
-test <- Re(fft(compute_a_k(l, H))[1:n])
-X <- numeric(n)
-X[1] <- test[1]
-for (i in 2:n){
-  X[i] <- X[i-1]+test[i]
-}
-X <- X*(T/n)^H #Simulated fBm (spectral method)
-
+X <- fbm_sim(n,l,H,T)
 
 roughness_fct <- function(K){
   objective_function <- function(p) {
     (Wstat(L = L, K = K, p, t=1 , X = X) - T)^2  # Squared difference to minimize
   }
-  return(1/optimize(objective_function, interval = c(1,20))$minimum)
+  return(1/optimize(objective_function, interval = c(1,30))$minimum)
 }
 
-
-K_values <- 2:500 
+K_values <- 2:1000 
 roughness_index <- sapply(K_values, function(K) roughness_fct(K))  # apply your function
 
 # Create the plot
-plot(K_values, roughness_index, type = "l",  # 'l' for lines
-     xlab = "K", ylab = "Estimated Roughness Index", 
+plot(K_values, roughness_index, type = "l", xlab = "K", ylab = "Estimated roughness index", 
      main = "")
-
-abline(h = roughness_fct(sqrt(L)), col = "blue", lwd = 1, lty = 1) 
+abline(h = H, col = "blue", lwd = 1, lty = 1) 
 abline(v = sqrt(L), col = "blue", lwd = 1, lty = 1)
 
 
