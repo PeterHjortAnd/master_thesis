@@ -277,11 +277,11 @@ K = 300
 n <- L
 l <- ifelse(n*3>=30000, n*3, 30000)
 
-H = 0.1 #Start from H=0,1 after set.seed to recreate the saved plots 
+H = 0.8 #Start from H=0,1 after set.seed to recreate the saved plots 
 T= 1
 #X <- simfbmonce(n,H,T)
 
-X <- fbm_sim(n,l,H,T)
+X <- fbm_sim(n+1,l,H,T)
 
 # Define a sequence of p values
 inv_p_values <- seq(H-0.09, H+0.09, length.out = 1000)  # Avoid p=0 to prevent division by zero

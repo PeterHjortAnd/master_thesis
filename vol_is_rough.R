@@ -134,8 +134,8 @@ T <- 2000
 delta <- 1/20000
 n <- round(T/delta, digits = 0)
 H <- 0.4
-nu <- 0.3
-m <- -5
+nu <- 0.2 # 0.3 in vol is rough replication
+m <- -8 #-5 in vol is rough replication
 alpha <- 5*10^(-4)
 l <- ifelse(n*3>=30000, n*3, 30000)
 dt <- T / n 
@@ -156,16 +156,16 @@ vol <- exp(X) #Simulated volatility
 
 U <- rnorm(n)
 P <- numeric()
-P[1] <- 2
+P[1] <- 2 # 2 seems to be working in vol is rough replication
 for (i in 2:n) {
   P[i] <- P[i-1] + P[i-1] * vol[i-1] * sqrt(delta) * U[i-1]
 } #Efficient price simulation
 
 eta <- 0.25
-tick_size <- 5*10^-4
+tick_size <- 5*10^-6 # 5*10^-4
 
 X_price <- numeric()
-X_price[1] <- round(P[1], digits = 3)
+X_price[1] <- round(P[1], digits = 5) # 3 digits
 for (i in 2:n){
   if(P[i]>(X_price[i-1]+(1/2+eta)*tick_size)){
     X_price[i] <- X_price[i-1]+tick_size
@@ -184,6 +184,11 @@ for (i in 2:n){
 
 plot(time[1:1000], P[1:1000], type = "l", col = "blue", xlab = "", ylab = "")
 lines(time[1:1000], X_price[1:1000], col = "red", lwd = 2)
+
+plot_P <- P[seq(1, length(P), by = 100)]
+plot_time <- time[seq(1, length(P), by = 100)]
+plot(plot_time, plot_P, type = "l", col = "blue", xlab = "", ylab = "")
+min(P)
 
 price_changes <- function(X){
   price <- numeric(2)
@@ -239,6 +244,7 @@ for (i in 1:T){
   int_var_est[i] <- sum_term
 } #Make vol estimate 10 am to 11 am daily
 daily_vol_est <- sqrt(int_var_est) * sqrt(n/hour_total_points) #Daily volatility estimate (normalized values)
+daily_vol_est
 
 int_var_est <- numeric()
 for (i in 1:T){
@@ -282,6 +288,28 @@ for (i in 1:T){
   mean_vol[i] <- mean(vol[(8334+(i-1)*1/delta):(9167+(i-1)*1/delta)])
 }
 daily_vol_est <- mean_vol #Test using directly simulated volatility instead of estimating
+
+mean_vol <- numeric()
+for (i in 1:T){
+  mean_vol[i] <- mean(vol[(1+(i-1)*1/delta):(i*1/delta)])
+}
+daily_vol_est <- mean_vol #Test using directly simulated volatility as mean of the whole day
+
+int_var_est <- numeric()
+for (i in 1:T){
+  X_eff_hat <- numeric(1)
+  ten_to_11 <- X_price[(1+(i-1)*1/delta):(i*1/delta)]
+  change_points <- ten_to_11[c(TRUE, diff(ten_to_11) != 0)]  # Include the first element, then select changes
+  eta_hat <- estimate_eta(ten_to_11)
+  X_eff_hat[1] <- ten_to_11[1]
+  sum_term <- 0
+  for (k in 2:(length(change_points))){
+    X_eff_hat[k] <- change_points[k] - sign(change_points[k]-change_points[k-1])*(1/2-eta_hat)*tick_size
+    sum_term <- sum_term+((X_eff_hat[k]-X_eff_hat[k-1])/X_eff_hat[k-1])^2
+  }
+  int_var_est[i] <- sum_term
+} #Make vol estimate 10 am to 11 am daily
+daily_vol_est <- sqrt(int_var_est) * sqrt(n*delta) #Daily volatility estimate (only tau terms) using the whole day
 
 selected_data <- subset(oxfordmanrealizedvolatilityindices, Symbol == ".SPX")
 oxford_real_vol <- selected_data$bv #Using oxford data
@@ -392,6 +420,8 @@ plot(inv_p_values, W_values, log= "y", type = "l", col = "black", lwd = 1,
 # Define where to place the ticks (powers of 10)
 y_ticks <- c(10^0, 10^1, 10^2, 10^3) 
 axis(2, at = y_ticks, labels = expression(10^0, 10^1, 10^2, 10^3))
+y_ticks <- c(10^-0.5, 10^0, 10^0.5, 10^1) #H=0,3
+axis(2, at = y_ticks, labels = expression(10^-0.5, 10^0, 10^0.5, 10^1)) #H=0,3
 
 abline(h = 1, col = "blue", lwd = 1, lty = 1)  #Estimating \hat{p}
 crossing_index <- which.min(abs(W_values-1))
