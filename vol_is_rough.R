@@ -130,12 +130,12 @@ Wstat <- function(L, K, p, t = 1, X) {
 
 
 set.seed(1)
-T <- 2000
-delta <- 1/20000
+T <- 4900 #2000 in volis rep
+delta <- 1/5000 #1/20000 in volis rep
 n <- round(T/delta, digits = 0)
-H <- 0.4
+H <- 0.5 # 0.14
 nu <- 0.2 # 0.3 in vol is rough replication
-m <- -8 #-5 in vol is rough replication
+m <- -7 #-5 in vol is rough replication
 alpha <- 5*10^(-4)
 l <- ifelse(n*3>=30000, n*3, 30000)
 dt <- T / n 
@@ -148,7 +148,7 @@ X <- numeric()
 X[1] <- m
 for (i in 2:n){
   X[i] = nu*(W[i]-W[i-1])+alpha*delta*(m-X[i-1])+X[i-1]
-} #RSFV simulation
+} #RFSV simulation
 vol <- exp(X) #Simulated volatility
 
 #plot(time, vol, type = "l", col = "blue", xlab = "", ylab = "")
@@ -156,7 +156,7 @@ vol <- exp(X) #Simulated volatility
 
 U <- rnorm(n)
 P <- numeric()
-P[1] <- 2 # 2 seems to be working in vol is rough replication
+P[1] <- 1 # 2 seems to be working in vol is rough replication
 for (i in 2:n) {
   P[i] <- P[i-1] + P[i-1] * vol[i-1] * sqrt(delta) * U[i-1]
 } #Efficient price simulation
@@ -308,7 +308,7 @@ for (i in 1:T){
     sum_term <- sum_term+((X_eff_hat[k]-X_eff_hat[k-1])/X_eff_hat[k-1])^2
   }
   int_var_est[i] <- sum_term
-} #Make vol estimate 10 am to 11 am daily
+} 
 daily_vol_est <- sqrt(int_var_est) * sqrt(n*delta) #Daily volatility estimate (only tau terms) using the whole day
 
 selected_data <- subset(oxfordmanrealizedvolatilityindices, Symbol == ".SPX")
@@ -342,7 +342,6 @@ q_values <- c(0.5, 1, 1.5, 2, 3)  # Different q values
 log_mq_list <- lapply(q_values, function(q) {
   sapply(Delta_values, function(delta) mqdelta(delta, q))  # Calculate log_mq for each delta
 })
-log_mq_list
 
 colors <- c("black", "green", "red", "blue", "purple")
 # Plot the first q value
