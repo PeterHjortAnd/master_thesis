@@ -355,6 +355,45 @@ table_hist[4,] <- c(H, min(p_inv_sols),quartiles[1], median(p_inv_sols), mean(p_
 table_hist
 c(H, min(p_inv_sols),quartiles[1], median(p_inv_sols), mean(p_inv_sols), quartiles[2], max(p_inv_sols))
 
+## Sequential scale estimator
+small_n <- 12
+capital_N <- small_n + 6
+n <- 2^capital_N # Excluding T=0
+T <- 1
+l <- ifelse(n*3>=30000, n*3, 30000)
+#dt_new <- T/number_of_points
+W <- fbm_sim(n,l,H,T)
+sum_terms <- cumsum(W)
+# Compute indices for 2^4 * k where k = 1, 2, ..., 2^(n+2)
+k <- 1:(2^(n+2))  # Sequence for k
+indices <- 2^4 * k  # Compute the desired indices
+# Extract the elements
+result <- sum_terms[indices]
+y_t <- c(0, 2^-capital_N * result)
+
+rough_expo <- function(n, y_t){
+  vartheta <- numeric(2^n)
+  for (k in 0:(2^n-1)){
+    var_theta[k+1] <- 2^(3*n/2+3) * (y_t[4*k/2^(n+2)+1] - 2*y_t[(4*k+1)/2^(n+2)+1] + 2*y_t[(4*k+3)/2^(n+2)+1] - y_t[(4*k+4)/2^(n+2)+1])
+  }
+  sum_theta_terms <- sum(vartheta^2)
+  r_hat <- 1 - 1/n * log2(sqrt(sum_theta_terms)) # Roughness exponent
+  return(r_hat)
+}
+m <- 10
+alpha_values <- runif(m, min = 0, max = 1)
+alpha_all <- c(1, alpha_values)
+obj_funct <- function(lambda){
+  sum <- 0
+  for (k in (n-m):n){
+    sum <- sum + alpha_all[n-k+1]*(rough_expo(n = k, y_t = lambda*y_t) - rough_expo(n = k-1, y_t = lambda*y_t))^2
+  }
+  return(sum)
+}
+lambda_opt <- optimize(obj_funct, interval = c(0.00001,30))$minimum
+scale_est <- rough_expo(n = small_n, y_t = lambda_opt*y_t)
+
+
 ##Estimated H plotted against different values of K
 set.seed(1)
 L <- 300*300

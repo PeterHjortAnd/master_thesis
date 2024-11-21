@@ -2,6 +2,7 @@ library(MASS)
 library(tidyverse)
 library(complex)
 library(knitr)
+library(data.table)
 ## Functions used throughout the document
 Wstat <- function(L, K, p, t = 1, X) {
   # Initialize W to 0
@@ -50,13 +51,14 @@ f_lambda <- function(lambda, H, start_term = 2 * gamma(2 * H + 1) * sin(pi * H))
 }
 compute_a_k <- function(l, H) {
   #f_tk <- sapply(t_k[1:(l_plus_one)], f_lambda, H = H)
-  i <- which(H_values == H)
   # Check if H is in H_values
-  if (length(i) == 0) {
+  if (!H %in% H_values) {
     stop("The provided H value is not in the precomputed H_values.")
   }
-  # Extract the precomputed f_tk for this H value
-  f_tk <- f_tk_mat[i, ]
+  
+  # Read the f_tk values for this H from the appropriate file
+  f_tk_file <- paste0("f_tk_H_", H, ".csv")
+  f_tk <- unlist(fread(f_tk_file))  # Load the row for the given H
   
   # Initialize a_k as a vector of complex numbers
   a_k <- complex(real = rep(0, two_l), imaginary = rep(0, two_l))
@@ -211,60 +213,50 @@ plot(K_values, roughness_index, type = "l",  # 'l' for lines
 abline(h = roughness_fct(sqrt(L)), col = "blue", lwd = 1, lty = 1) 
 abline(v = sqrt(L), col = "blue", lwd = 1, lty = 1)
 
+small_n <- 18
+number_of_points <- 2^(small_n+2) # Excluding T=0
+T <- 1
+dt_new <- T/number_of_points
+#Rescale Brownian motions
+dB_new <- sqrt(dt_new)*1/sqrt(dt)*dB
+dW_new <- sqrt(dt_new)*1/sqrt(dt)*dW
 
+W <- c(0, cumsum(dW_new))
+sigma_vol <- abs(W)
 
-# Define a range of cap_delta (Δ) values and q values
-Delta_values <- 1:50
-log_Delta <- log(Delta_values)
-q_values <- c(0.5, 1, 1.5, 2, 3)  # Different q values
+# Simulate the process S_t using Euler-Maruyama
+S <- numeric(number_of_points+1)
+S[1] <- S0
 
-# Calculate log(m_q(Δ)) for each q and Δ
-log_mq_list <- lapply(q_values, function(q) {
-  sapply(Delta_values, function(delta) mqdelta(delta, q, X = X))  # Calculate log_mq for each delta
-})
-
-colors <- c("black", "green", "red", "blue", "purple")
-# Plot the first q value
-plot(log_Delta, log_mq_list[[1]], type = "p", col = colors[1], pch = 21,
-     xlab = expression(log(Delta)), 
-     ylab = expression(log(m(q,Delta))),
-     ylim = c(min(sapply(log_mq_list, min)), max(sapply(log_mq_list, max))),
-     xlim = c(min(log_Delta), max(log_Delta))
-)
-
-# Add lines for the remaining q values
-for (i in 2:length(q_values)) {
-  points(log_Delta, log_mq_list[[i]], col = colors[i], pch = 21)  # Add points
+for (i in 1:n) {
+  S[i + 1] <- S[i] + sigma_vol[i] * S[i] * dB_new[i]
 }
 
-legend("bottomright", legend = paste("q =", q_values), col = colors, pch = 21, cex = 0.7)
-
-# Data
-log_delta <- c(log_Delta, log_Delta, log_Delta, log_Delta, log_Delta)  # Vector of log(Δ) values
-log_m <- c(log_mq_list[[1]], log_mq_list[[2]], log_mq_list[[3]], log_mq_list[[4]], log_mq_list[[5]])      # Vector of log(m(q, Δ)) values
-group <- c(rep(1,length(Delta_values)), rep(2,length(Delta_values)), rep(3,length(Delta_values)), rep(4,length(Delta_values)), rep(5,length(Delta_values)))      # Vector indicating the group (1 to 5 for each set)
-# Combine into a data frame
-data <- data.frame(log_delta, log_m, group)
-data_split <- split(data, data$group)
-# Perform linear regression for each group
-models <- lapply(data_split, function(group_data) {
-  lm(log_m ~ log_delta, data = group_data)
-})
-# Add regression lines to plot
-for (i in 1:length(q_values)){
-  abline(models[[i]], col = colors[i])
+log_returns <- diff(log(S))
+squared_log_returns <- log_returns^2
+y_t <- c(0, cumsum(squared_log_returns)) # Realized variance
+# Estimate roughness from realized variance
+rough_expo <- function(n, y_t){
+  vartheta <- numeric(2^n)
+  for (k in 0:(2^n-1)){
+    var_theta[k+1] <- 2^(3*n/2+3) * (y_t[4*k/2^(n+2)+1] - 2*y_t[(4*k+1)/2^(n+2)+1] + 2*y_t[(4*k+3)/2^(n+2)+1] - y_t[(4*k+4)/2^(n+2)+1])
+  }
+  sum_theta_terms <- sum(vartheta^2)
+  r_hat <- 1 - 1/n * log2(sqrt(sum_theta_terms)) # Roughness exponent
+return(r_hat)
 }
-epsilon_q <- numeric()
-for (i in 1:length(q_values)){
-  epsilon_q[i] <- models[[i]]$coefficients[[2]]
+m <- 10
+alpha_values <- runif(m, min = 0, max = 1)
+alpha_all <- c(1, alpha_values)
+obj_funct <- function(lambda){
+  sum <- 0
+  for (k in (n-m):n){
+    sum <- sum + alpha_all[n-k+1]*(rough_expo(n = k, y_t = lambda*y_t) - rough_expo(n = k-1, y_t = lambda*y_t))^2
+  }
+  return(sum)
 }
-fit_epsilon <- lm(epsilon_q ~ q_values)
-est_smooth_H <- fit_epsilon$coefficients[[2]]
-est_smooth_H
-
-plot(q_values, epsilon_q, type = "p", pch = 21, main = paste("Estimated H=",round(est_smooth_H, digits = 4)), 
-     xlab = 'q', ylab = expression(zeta[q]), xlim = c(0,max(q_values)), ylim = c(0,max(epsilon_q)))
-abline(fit_epsilon)
+lambda_opt <- optimize(obj_funct, interval = c(0.00001,30))$minimum
+scale_est <- rough_expo(n = small_n, y_t = lambda_opt*y_t)
 
 
 simtim <- 100
@@ -481,14 +473,15 @@ L = 300*300
 K = 300
 window <- 300
 n <- window*(L+1)
-l <- ifelse(n*3>=30000, n*3, 30000)
+l <- ifelse(n*2.5>=30000, n*2.5, 30000)
 T <- 1
 dt <- T / n 
-time <- seq(0, T, by = dt)
+#time <- seq(0, T, by = dt)
 
 set.seed(1)
 U_0 <- rnorm(l)  # U^(0) for k = 0, ..., l-1
 U_1 <- rnorm(l)  # U^(1) for k = 0, ..., l-1
+
 t_k <- 0:l
 for (k in 0:l){
   t_k[k+1] <- pi * k/l
@@ -517,12 +510,18 @@ sqrt_term <- sqrt(n_plus_1 / (T * window))
 dB <- rnorm(n, mean = 0, sd = sqrt_dt)
 Y_decay_factor <- 1 - gamma * dt
 
-roughness_fct <- function(X){
-  objective_function <- function(p) {
-    (Wstat(L = L, K = K, p, t=1 , X = X) - 1)^2  # Squared difference to minimize
+roughness_fct <- function(X, threshold = 0.1) {
+  objective_function <- function(H_hat) {
+    (Wstat(L = L, K = K, 1 / H_hat, t = 1, X = X) - 1)^2
   }
-  return(1/optimize(objective_function, interval = c(1,30))$minimum)
+  
+  # Perform optimization
+  result <- optimize(objective_function, interval = c(0.0001, 0.9999))
+  
+  # Return roughness estimate if objective is within threshold, else 0
+  return(ifelse(result$objective <= threshold, result$minimum, 0))
 }
+
 Delta_values <- 1:50
 log_Delta <- log(Delta_values)
 q_values <- c(0.5, 1, 1.5, 2, 3)
@@ -582,13 +581,42 @@ output_given_H <- function(H){
 }
 
 H_values <- seq(0.10, 0.80, by = 0.10)
-f_tk_mat <- matrix(0, nrow = length(H_values), ncol = l_plus_one)
-
-# Loop over H values with indexing
+# Save each row for each H separately
 for (i in seq_along(H_values)) {
   H <- H_values[i]
-  f_tk_mat[i, ] <- sapply(t_k[1:l_plus_one], f_lambda, H = H)
+  row_values <- sapply(t_k[1:(l + 1)], f_lambda, H = H)
+  
+  # Save each row as a separate file (e.g., "f_tk_H_0.1.csv")
+  fwrite(as.list(row_values), file = paste0("f_tk_H_", H, ".csv"), buffMB = 1 , nThread = 1)
 }
+
+
+chunk_size <- 1e6  # Define the chunk size
+for (i in seq_along(H_values)) {
+  H <- H_values[i]
+  row_values <- sapply(t_k[1:(l + 1)], f_lambda, H = H)
+  
+  # Open the file for writing
+  file_conn <- file(paste0("f_tk_H_", H, ".csv"), open = "wt")
+  
+  # Write in chunks
+  for (start_idx in seq(1, length(row_values), by = chunk_size)) {
+    end_idx <- min(start_idx + chunk_size - 1, length(row_values))
+    chunk <- as.list(row_values[start_idx:end_idx])
+    write.table(chunk, file = file_conn, sep = ",", row.names = FALSE, col.names = FALSE, append = TRUE)
+  }
+  
+  # Close the file
+  close(file_conn)
+}
+
+#f_tk_mat <- matrix(0, nrow = length(H_values), ncol = l_plus_one)
+## Loop over H values with indexing
+#for (i in seq_along(H_values)) {
+#  H <- H_values[i]
+#  f_tk_mat[i, ] <- sapply(t_k[1:l_plus_one], f_lambda, H = H)
+#}
+# Read the f_tk values for this H from the appropriate file
 
 store_results <- list()
 for (H in H_values) {
@@ -704,22 +732,23 @@ for (i in seq_along(simulation_results)) {
   instantaneous_vol_matrix[, i] <- simulation_results[[i]]$Instantaneous.volatility
 }
 
+# Calculate the mean, lower bound, and upper bound for realized and instantaneous volatilities
 mean_realized_vol <- rowMeans(realized_vol_matrix)
+lower_bound_realized_vol <- apply(realized_vol_matrix, 1, quantile, probs = 0.125)
+upper_bound_realized_vol <- apply(realized_vol_matrix, 1, quantile, probs = 0.875)
+
 mean_instantaneous_vol <- rowMeans(instantaneous_vol_matrix)
+lower_bound_instantaneous_vol <- apply(instantaneous_vol_matrix, 1, quantile, probs = 0.125)
+upper_bound_instantaneous_vol <- apply(instantaneous_vol_matrix, 1, quantile, probs = 0.875)
 
-se_realized_vol <- apply(realized_vol_matrix, 1, sd) / sqrt(ncol(realized_vol_matrix))
-se_instantaneous_vol <- apply(instantaneous_vol_matrix, 1, sd) / sqrt(ncol(instantaneous_vol_matrix))
-# Confidence intervals (95%)
-z_value <- qnorm(0.875)  # for a 75% confidence interval
-ci_upper_realized <- mean_realized_vol + z_value * se_realized_vol
-ci_lower_realized <- mean_realized_vol - z_value * se_realized_vol
-ci_upper_instantaneous <- mean_instantaneous_vol + z_value * se_instantaneous_vol
-ci_lower_instantaneous <- mean_instantaneous_vol - z_value * se_instantaneous_vol
+# Plotting
+lines(H_values, mean_realized_vol, type = "l", col = "black", lwd = 2)
+lines(H_values, lower_bound_realized_vol, col = "black", lty = 2)
+lines(H_values, upper_bound_realized_vol, col = "black", lty = 2)
 
-lines(H_values, mean_realized_vol, col = "black", lwd = 2)
 lines(H_values, mean_instantaneous_vol, col = "black", lwd = 2)
-lines(H_values, ci_upper_instantaneous, col = "black", lty = 2)  # Upper bound for instantaneous volatility
-lines(H_values, ci_lower_instantaneous, col = "black", lty = 2)  # Lower bound for instantaneous volatility
-lines(H_values, ci_upper_realized, col = "black", lty = 2)  # Upper bound for realized volatility
-lines(H_values, ci_lower_realized, col = "black", lty = 2)
+lines(H_values, lower_bound_instantaneous_vol, col = "black", lty = 2)
+lines(H_values, upper_bound_instantaneous_vol, col = "black", lty = 2)
+
+
 
