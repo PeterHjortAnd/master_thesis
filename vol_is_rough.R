@@ -130,12 +130,12 @@ Wstat <- function(L, K, p, t = 1, X) {
 
 
 set.seed(1)
-T <- 4900 #2000 in volis rep
-delta <- 1/5000 #1/20000 in volis rep
+T <- 2000 #2000 in volis rep
+delta <- 1/20000 #1/20000 in volis rep
 n <- round(T/delta, digits = 0)
-H <- 0.5 # 0.14
-nu <- 0.2 # 0.3 in vol is rough replication
-m <- -7 #-5 in vol is rough replication
+H <- 0.14 # 0.14
+nu <- 0.3 # 0.3 in vol is rough replication
+m <- -5 #-5 in vol is rough replication
 alpha <- 5*10^(-4)
 l <- ifelse(n*3>=30000, n*3, 30000)
 dt <- T / n 
@@ -162,7 +162,7 @@ for (i in 2:n) {
 } #Efficient price simulation
 
 eta <- 0.25
-tick_size <- 5*10^-6 # 5*10^-4
+tick_size <- 5*10^-4 # 5*10^-4
 
 X_price <- numeric()
 X_price[1] <- round(P[1], digits = 5) # 3 digits
@@ -243,8 +243,8 @@ for (i in 1:T){
   }
   int_var_est[i] <- sum_term
 } #Make vol estimate 10 am to 11 am daily
-daily_vol_est <- sqrt(int_var_est) * sqrt(n/hour_total_points) #Daily volatility estimate (normalized values)
-daily_vol_est
+daily_vol_est1 <- sqrt(int_var_est) * sqrt(n/hour_total_points) #Daily volatility estimate (normalized values)
+daily_vol_est <- daily_vol_est1
 
 int_var_est <- numeric()
 for (i in 1:T){
@@ -260,8 +260,8 @@ for (i in 1:T){
   }
   int_var_est[i] <- sum_term
 } #Make vol estimate 10 am to 11 am daily
-daily_vol_est <- sqrt(int_var_est) * sqrt(n/hour_total_points) #Daily volatility estimate (only tau terms)
-daily_vol_est
+daily_vol_est2 <- sqrt(int_var_est) * sqrt(1/delta/hour_total_points) #Daily volatility estimate (only tau terms)
+daily_vol_est <- daily_vol_est2
 
 int_var_est <- numeric()
 for (i in 1:T){
@@ -270,8 +270,8 @@ for (i in 1:T){
   squared_log_returns <- log_returns^2
   int_var_est[i] <- sqrt(sum(squared_log_returns))
 } #Make vol estimate 10 am to 11 am daily
-daily_vol_est <- int_var_est * sqrt(n/hour_total_points) #Daily volatility estimate using RV def from roughvol
-daily_vol_est
+daily_vol_est3 <- int_var_est * sqrt(1/delta/hour_total_points) #Daily volatility estimate using RV def from roughvol
+daily_vol_est <- daily_vol_est3
 
 int_var_est <- numeric(T)
 for (i in 1:T){
@@ -280,20 +280,34 @@ for (i in 1:T){
   squared_log_returns <- log_returns^2
   int_var_est[i] <- sqrt(sum(squared_log_returns))
 } #Make vol estimate 10 am to 11 am daily
-daily_vol_est <- int_var_est*sqrt(n/hour_total_points) #Using efficient price directly and RV def from roughvol
-daily_vol_est
+daily_vol_est4 <- int_var_est*sqrt(1/delta/hour_total_points) #Using efficient price directly and RV def from roughvol
+daily_vol_est <- daily_vol_est4
 
 mean_vol <- numeric()
 for (i in 1:T){
   mean_vol[i] <- mean(vol[(8334+(i-1)*1/delta):(9167+(i-1)*1/delta)])
 }
-daily_vol_est <- mean_vol #Test using directly simulated volatility instead of estimating
+daily_vol_est5 <- mean_vol #Test using directly simulated volatility instead of estimating
+daily_vol_est <- daily_vol_est5
+
+plot(daily_vol_est9, type = "l", ylab = "Daily vol estimates", xlab = "", xaxt = "n")
+lines(daily_vol_est3, col = "red", lwd = 2)
+lines(daily_vol_est4, col = "blue", lwd = 2)
+lines(daily_vol_est5, col = "yellow", lwd = 2)
+lines(daily_vol_est6, col = "purple", lwd = 2)
+lines(daily_vol_est7, col = "orange", lwd = 2)
+lines(daily_vol_est8, col = "green", lwd = 2)
 
 mean_vol <- numeric()
 for (i in 1:T){
   mean_vol[i] <- mean(vol[(1+(i-1)*1/delta):(i*1/delta)])
 }
-daily_vol_est <- mean_vol #Test using directly simulated volatility as mean of the whole day
+daily_vol_est6 <- mean_vol #Test using directly simulated volatility as mean of the whole day
+daily_vol_est <- daily_vol_est6
+
+seq_vol <- vol[seq(1, length(vol), by = 1/delta)]
+daily_vol_est7 <- seq_vol #Test using the first directly simulated volatility of the day
+daily_vol_est <- daily_vol_est7
 
 int_var_est <- numeric()
 for (i in 1:T){
@@ -309,7 +323,18 @@ for (i in 1:T){
   }
   int_var_est[i] <- sum_term
 } 
-daily_vol_est <- sqrt(int_var_est) * sqrt(n*delta) #Daily volatility estimate (only tau terms) using the whole day
+daily_vol_est8 <- sqrt(int_var_est) #Daily volatility estimate (only tau terms) using the whole day
+daily_vol_est <- daily_vol_est8
+
+int_var_est <- numeric(T)
+for (i in 1:T){
+  ten_to_11 <- P[(1+(i-1)*1/delta):(i*1/delta)]
+  log_returns <- diff(log(ten_to_11))
+  squared_log_returns <- log_returns^2
+  int_var_est[i] <- sqrt(sum(squared_log_returns))
+} #Make vol estimate 10 am to 11 am daily
+daily_vol_est9 <- int_var_est #Using efficient price directly for whole day and RV def
+daily_vol_est <- daily_vol_est9
 
 selected_data <- subset(oxfordmanrealizedvolatilityindices, Symbol == ".SPX")
 oxford_real_vol <- selected_data$bv #Using oxford data

@@ -1,0 +1,57 @@
+\begin{thebibliography}{8}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Comte and Renault(1998)]{comte}
+Fabienne Comte and Eric Renault.
+\newblock Long memory in continuous-time stochastic volatility models.
+\newblock \emph{Mathematical finance}, 8\penalty0 (4):\penalty0 291--323, 1998.
+
+\bibitem[Cont and Das(2024)]{cont}
+Rama Cont and Purba Das.
+\newblock Rough volatility: fact or artefact?
+\newblock \emph{Sankhya B}, 86\penalty0 (1):\penalty0 191--223, 2024.
+
+\bibitem[Cont and Perkowski(2019)]{cont2}
+Rama Cont and Nicolas Perkowski.
+\newblock Pathwise integration and change of variable formulas for continuous
+  paths with arbitrary regularity.
+\newblock \emph{Transactions of the American Mathematical Society, Series B},
+  6\penalty0 (5):\penalty0 161--186, 2019.
+
+\bibitem[Dieker and Mandjes(2003)]{dieker}
+Antonius~Bernardus Dieker and Michael Mandjes.
+\newblock On spectral simulation of fractional brownian motion.
+\newblock \emph{Probability in the Engineering and Informational Sciences},
+  17\penalty0 (3):\penalty0 417--434, 2003.
+
+\bibitem[Fukasawa et~al.(2022)Fukasawa, Takabatake, and Westphal]{fukasawa}
+Masaaki Fukasawa, Tetsuya Takabatake, and Rebecca Westphal.
+\newblock Consistent estimation for fractional stochastic volatility model
+  under high-frequency asymptotics.
+\newblock \emph{Mathematical Finance}, 32\penalty0 (4):\penalty0 1086--1132,
+  2022.
+
+\bibitem[Gatheral et~al.(2018)Gatheral, Jaisson, and Rosenbaum]{gatheral}
+Jim Gatheral, Thibault Jaisson, and Mathieu Rosenbaum.
+\newblock Volatility is rough.
+\newblock \emph{Quantitative finance}, 18\penalty0 (6):\penalty0 933--949,
+  2018.
+
+\bibitem[Han and Schied(2023)]{han}
+Xiyue Han and Alexander Schied.
+\newblock Estimating the roughness exponent of stochastic volatility from
+  discrete observations of the realized variance.
+\newblock \emph{arXiv preprint arXiv:2307.02582}, 2023.
+
+\bibitem[Paxson(1997)]{paxson}
+Vern Paxson.
+\newblock Fast, approximate synthesis of fractional gaussian noise for
+  generating self-similar network traffic.
+\newblock \emph{ACM SIGCOMM Computer Communication Review}, 27\penalty0
+  (5):\penalty0 5--18, 1997.
+
+\end{thebibliography}

@@ -1,0 +1,18 @@
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
+\contentsline {section}{\numberline {2}Fractional Brownian motion}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Simulation of fractional Brownian motion}{2}{subsection.2.1}%
+\contentsline {section}{\numberline {3}Estimating the roughness of volatility}{4}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Roughness index estimator via $p$-th variation}{5}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Estimating the roughness from discrete observations}{7}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Behaviour of the roughness estimator based on simulations}{7}{subsubsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.2}Instantaneous volatility and realized volatility}{11}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Smoothness of a path by logarithmic regression}{13}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Sequential scale estimator of roughness exponent}{17}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Numerical Experiments}{20}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Simple stochastic volatility diffusion model}{21}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}OU-SV model}{25}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}A fractional Ornstein-Uhlenbeck model}{28}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}RFSV model}{33}{subsection.4.4}%
+\contentsline {section}{\numberline {5}Appendix}{35}{section.5}%
+\contentsline {subsection}{\numberline {5.1}A Spectral Method FFT}{35}{subsection.5.1}%
+\contentsline {section}{References}{37}{subsection.5.1}%

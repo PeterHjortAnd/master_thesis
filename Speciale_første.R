@@ -106,50 +106,25 @@ for (i in 2:nrow(X)) {
 ## Simulate fBm by spectral simulation
 
 # Define a+ and a- terms
-a_plus <- function(j, lambda) {
-  return(2 * pi * j + lambda)
-}
-a_minus <- function(j, lambda) {
-  return(2 * pi * j - lambda)
-}
+a_plus <- function(j, lambda) 2 * pi * j + lambda
+a_minus <- function(j, lambda) 2 * pi * j - lambda
 # Define the B3(lambda, H) function
 B3_lambda_H <- function(lambda, H) {
-  sum_result <- 0
-  # First sum from j=1 to 3
-  for (j in 1:3) {
-    term1 <- (a_plus(j, lambda))^(-2 * H - 1)
-    term2 <- (a_minus(j, lambda))^(-2 * H - 1)
-    sum_result <- sum_result + term1 + term2
-  }
+  j_values <- 1:3
+  term1 <- (a_plus(j_values, lambda))^(-2 * H - 1)
+  term2 <- (a_minus(j_values, lambda))^(-2 * H - 1)
+  sum_result <- sum(term1 + term2)
   
   # Additional terms for j=3 and j=4
-  term3_1 <- (a_plus(3, lambda))^(-2 * H)
-  term3_2 <- (a_minus(3, lambda))^(-2 * H)
-  term4_1 <- (a_plus(4, lambda))^(-2 * H)
-  term4_2 <- (a_minus(4, lambda))^(-2 * H)
-  
-  additional_terms <- (term3_1 + term3_2 + term4_1 + term4_2) / (8 * H * pi)
+  additional_terms <- sum((a_plus(c(3, 4), lambda))^(-2 * H) + (a_minus(c(3, 4), lambda))^(-2 * H)) / (8 * H * pi)
   
   return(sum_result + additional_terms)
 }
 # Define the f(lambda) function using the new B3_lambda_H
-f_lambda <- function(lambda, H) {
-  # Handle the singularity at lambda = 0
-  if (lambda == 0) {
-    return(Inf)  # In practice, you may want to set a very large number instead of Inf
-  }
-  
-  gamma_term <- gamma(2 * H + 1)  # Gamma(2H + 1)
-  sine_term <- sin(pi * H)  # sin(pi * H)
-  cos_term <- 1 - cos(lambda)  # (1 - cos(lambda))
-  
-  # Compute the B3(lambda, H) term
+f_lambda <- function(lambda, H, start_term = 2 * gamma(2 * H + 1) * sin(pi * H)) {
+  if (lambda == 0) return(Inf)  # Handle singularity
   B3_term <- B3_lambda_H(lambda, H)
-  
-  # Compute the full f(lambda)
-  f_result <- 2 * sine_term * gamma_term * cos_term * (abs(lambda)^(-2 * H - 1) + B3_term)
-  
-  return(f_result)
+  start_term * (1 - cos(lambda)) * (abs(lambda)^(-2 * H - 1) + B3_term)
 }
 # Function to compute a_k sequence
 
@@ -157,12 +132,12 @@ compute_a_k <- function(l, H) {
   # Generate i.i.d. standard normal random variables U^(0) and U^(1)
   U_0 <- rnorm(l)  # U^(0) for k = 0, ..., l-1
   U_1 <- rnorm(l)  # U^(1) for k = 0, ..., l-1
-  t_k <- 0:l
-  f_tk <- 0:l
-  for (k in 0:l){
-    t_k[k+1] <- pi * k/l
-    f_tk[k+1] <- f_lambda(t_k[k+1],H)
-  }
+  #t_k <- 0:l
+  #f_tk <- 0:l
+  #for (k in 0:l){
+  #  t_k[k+1] <- pi * k/l
+  #  f_tk[k+1] <- f_lambda(t_k[k+1],H)
+  #}
   
   # Initialize a_k as a vector of complex numbers
   a_k <- complex(real = rep(0, 2 * l), imaginary = rep(0, 2 * l))
@@ -356,44 +331,199 @@ table_hist
 c(H, min(p_inv_sols),quartiles[1], median(p_inv_sols), mean(p_inv_sols), quartiles[2], max(p_inv_sols))
 
 ## Sequential scale estimator
-small_n <- 12
+small_n <- 13
 capital_N <- small_n + 6
 n <- 2^capital_N # Excluding T=0
 T <- 1
+H <- 0.7
 l <- ifelse(n*3>=30000, n*3, 30000)
-#dt_new <- T/number_of_points
+dt <- T/n
+
+t_k <- 0:l
+f_tk <- 0:l
+for (k in 0:l){
+  t_k[k+1] <- pi * k/l
+  f_tk[k+1] <- f_lambda(t_k[k+1],H)
+}
+
 W <- fbm_sim(n,l,H,T)
-sum_terms <- cumsum(W)
+sum_terms <- cumsum(W[2:(n+1)])
 # Compute indices for 2^4 * k where k = 1, 2, ..., 2^(n+2)
-k <- 1:(2^(n+2))  # Sequence for k
+k <- 1:(2^(small_n+2))  # Sequence for k
 indices <- 2^4 * k  # Compute the desired indices
 # Extract the elements
 result <- sum_terms[indices]
 y_t <- c(0, 2^-capital_N * result)
 
-rough_expo <- function(n, y_t){
-  vartheta <- numeric(2^n)
-  for (k in 0:(2^n-1)){
-    var_theta[k+1] <- 2^(3*n/2+3) * (y_t[4*k/2^(n+2)+1] - 2*y_t[(4*k+1)/2^(n+2)+1] + 2*y_t[(4*k+3)/2^(n+2)+1] - y_t[(4*k+4)/2^(n+2)+1])
+rough_expo <- function(k, y_t, n_max) {
+  # k: Current level
+  # y_t: Observations at the finest resolution (n_max)
+  # n_max: Maximum level of discretization (finest resolution)
+  
+  var_theta <- numeric(2^k)  # Initialize the ϑ_k,j array
+  
+  # Number of points in y_t corresponds to the finest resolution
+  num_points <- 2^(n_max + 2) + 1
+  
+  # Time step at the finest resolution
+  dt_fine <- 1 / (2^(n_max + 2))
+  
+  # Scaling factor for time points to match the current k
+  dt_current <- 1 / (2^(k + 2))
+  scale_factor <- dt_current / dt_fine  # Should equal 2^(n_max - k)
+  
+  for (j in 0:(2^k - 1)) {
+    # Compute indices for current resolution
+    idx1 <- round(4 * j * scale_factor) + 1
+    idx2 <- round((4 * j + 1) * scale_factor) + 1
+    idx3 <- round((4 * j + 3) * scale_factor) + 1
+    idx4 <- round((4 * j + 4) * scale_factor) + 1
+    
+    # Ensure indices are within bounds
+    if (idx4 > num_points) {
+      stop("Index out of bounds: Ensure y_t has enough points for the maximum level n_max.")
+    }
+    
+    # Compute var_theta for the current j
+    var_theta[j + 1] <- 2^(3 * k / 2 + 3) * (
+      y_t[idx1] - 2 * y_t[idx2] + 2 * y_t[idx3] - y_t[idx4]
+    )
   }
-  sum_theta_terms <- sum(vartheta^2)
-  r_hat <- 1 - 1/n * log2(sqrt(sum_theta_terms)) # Roughness exponent
+  
+  # Compute the sum of squared θ terms
+  sum_theta_terms <- sum(var_theta^2)
+  
+  # Compute R_k(y_t)
+  r_hat <- 1 - 1/k * log2(sqrt(sum_theta_terms))
   return(r_hat)
 }
-m <- 10
-alpha_values <- runif(m, min = 0, max = 1)
-alpha_all <- c(1, alpha_values)
-obj_funct <- function(lambda){
+
+m <- 3
+alpha_all <- c(1,1,1,1)
+obj_funct <- function(lambda) {
   sum <- 0
-  for (k in (n-m):n){
-    sum <- sum + alpha_all[n-k+1]*(rough_expo(n = k, y_t = lambda*y_t) - rough_expo(n = k-1, y_t = lambda*y_t))^2
+  for (k in (small_n - m):small_n) {
+    r_k <- rough_expo(k, lambda * y_t, n_max = small_n)
+    r_k_minus_1 <- rough_expo(k - 1, lambda * y_t, n_max = small_n)
+    sum <- sum + alpha_all[small_n - k + 1] * (r_k - r_k_minus_1)^2
   }
   return(sum)
 }
-lambda_opt <- optimize(obj_funct, interval = c(0.00001,30))$minimum
-scale_est <- rough_expo(n = small_n, y_t = lambda_opt*y_t)
+
+set.seed(123)
+simtim <- 1000
+expo_est_sols <- numeric(simtim)
+scale_est_sols <- numeric(simtim)
+for (i in 1:simtim){
+  W <- fbm_sim(n,l,H,T)
+  sum_terms <- cumsum(W[2:(n+1)])
+  result <- sum_terms[indices]
+  
+  y_t <- c(0, 2^-capital_N * result)
+  expo_est_sols[i] <- rough_expo(k = small_n, y_t = y_t, n_max = small_n)
+  lambda_opt <- optimize(obj_funct, interval = c(0.001,30))$minimum
+  scale_est_sols[i] <- rough_expo(k = small_n, y_t = lambda_opt*y_t, n_max = small_n)
+} 
 
 
+## Fractional OU
+small_n <- 13
+capital_N <- small_n + 6
+n <- 2^capital_N # Excluding T=0
+T <- 1
+H <- 0.3
+l <- ifelse(n*3>=30000, n*3, 30000)
+dt <- T/n
+
+t_k <- 0:l
+f_tk <- 0:l
+for (k in 0:l){
+  t_k[k+1] <- pi * k/l
+  f_tk[k+1] <- f_lambda(t_k[k+1],H)
+}
+
+d_fbm <- Re(fft(compute_a_k(l, H))[1:n])*(dt)^H
+rho <- 0.2
+mu <- 2
+Y_0 <- 0
+
+Y <- numeric(n + 1)
+Y[1] <- Y_0
+for (i in seq_len(n)) {
+  Y[i + 1] <- Y[i] + rho * (mu - Y[i]) * dt + d_fbm[i]
+}
+
+sum_terms <- cumsum(exp(2*Y[2:(n+1)]))
+# Compute indices for 2^4 * k where k = 1, 2, ..., 2^(n+2)
+k <- 1:(2^(small_n+2))  # Sequence for k
+indices <- 2^4 * k  # Compute the desired indices
+# Extract the elements
+result <- sum_terms[indices]
+y_t <- c(0, 2^-capital_N * result)
+
+lambda_opt <- optimize(obj_funct, interval = c(0.001,30))$minimum
+scale_est <- rough_expo(k = small_n, y_t = lambda_opt*y_t, n_max = small_n)
+scale_est
+rough_expo(k = small_n, y_t = y_t, n_max = small_n)
+
+set.seed(123)
+simtim <- 100
+expo_est_sols <- numeric(simtim)
+scale_est_sols <- numeric(simtim)
+for (i in 1:simtim){
+  d_fbm <- Re(fft(compute_a_k(l, H))[1:n])*(dt)^H
+  Y <- numeric(n + 1)
+  Y[1] <- Y_0
+  for (j in seq_len(n)) {
+    Y[j + 1] <- Y[j] + rho * (mu - Y[j]) * dt + d_fbm[j]
+  }
+  
+  sum_terms <- cumsum(exp(2*Y[2:(n+1)]))
+  result <- sum_terms[indices]
+  
+  y_t <- c(0, 2^-capital_N * result)
+  expo_est_sols[i] <- rough_expo(k = small_n, y_t = y_t, n_max = small_n)
+  lambda_opt <- optimize(obj_funct, interval = c(0.001,30))$minimum
+  scale_est_sols[i] <- rough_expo(k = small_n, y_t = lambda_opt*y_t, n_max = small_n)
+} 
+
+expo12 <- expo_est_sols
+scale12 <- scale_est_sols
+#expo13 <- expo_est_sols
+#scale13 <- scale_est_sols
+#expo14 <- expo_est_sols
+#scale14 <- scale_est_sols
+#expo15 <- expo_est_sols
+#scale15 <- scale_est_sols
+#expo16 <- expo_est_sols
+#scale16 <- scale_est_sols
+
+expo_data <- data.frame(
+  value = c(expo12, expo13, expo14, expo15, expo16),
+  group = rep(12:16, each = simtim)
+)
+scale_data <- data.frame(
+  value = c(scale12, scale13, scale14, scale15, scale16),
+  group = rep(12:16, each = simtim)
+)
+boxplot(expo_est_sols)
+
+# Plot boxplot
+boxplot(value ~ group, data = expo_data, 
+        range = 0,
+        col = "orange", # Fill color
+        #border = "black", # Border color
+        boxwex = 0.6, # Width of boxes
+        #ylim = c(0.255, 0.275), # Y-axis limits
+        #outline = FALSE,
+        xlab = "", ylab = "", # Axis labels
+        main = "", # Title
+        medlwd = 1.5, # Adjust thickness of median line
+        las = 1) # Rotate Y-axis labels for better readability
+
+
+boxplot(expo_est_sols)
+expo_est_sols
 ##Estimated H plotted against different values of K
 set.seed(1)
 L <- 300*300
