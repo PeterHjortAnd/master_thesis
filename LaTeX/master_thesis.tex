@@ -11,6 +11,9 @@
 \usepackage{url}
 \usepackage{hyperref}
 \graphicspath{ {./Billeder/} }
+\usepackage{amsthm}
+\newtheorem{definition}{Definition}
+
 
 \hypersetup{
     colorlinks=true,
@@ -25,164 +28,179 @@
 \newpage
 \pagenumbering{arabic}
 \section{Introduction}
-When modelling prices of financial assets, modelling the volatility process itself plays a crucial role. In the derivates world, log-prices are often modelled as continuous semi-martingales. For a given asset with log-price $Y_t$, such a process takes the form
+When modelling prices of financial assets, modelling the volatility process itself plays a crucial role. For the price of an asset $S_t$ price dynamics are often given by a stochastic volatility model driven by a Brownian motion on the form
 \begin{align}
-dY_t = \mu_tdt+\sigma_tdW_t
+dS_t = \mu_tS_t dt+\sigma_tS_t dB_t \label{eq:price_gen}
 \end{align}
-where $\mu_t$ is a drift term and $W_t$ is a one-dimensional Brownian motion. The term $\sigma_t$ represents the volatility process, and it is a very important ingredient in the model \cite{gatheral}. However, modelling the volatility process itself is also a complex task. Different approaches to estimate $\sigma_t$ is used in the literature. In the simplest models, the volatility is either constant or a deterministic function of time. In more popular stochastic volatility models, the volatility process is modelled as a stochastic process itself. In notable models such as the Hull and White model, the Heston model, and the SABR model, the volatility $\sigma_t$ is modelled as a continuous Brownian semi-martingale \cite{gatheral}. The stochastic volatility models seem way more realistic but generated prices from these models are in many cases not consistent with observed prices. (33, 46)\\\\
-Various authors have proposed other kinds of models to model the volatility. A popular one is stochastic volatility models driven  by fractional Brownian motion. A well-known example of such a fractional stochastic volatility model is the one proposed by \cite{comte} who models the dynamics of the volatility $\sigma_t$ of an asset as:
-\begin{align}
+where $\mu_t$ is a drift term and $B_t$ is a one-dimensional Brownian motion. The term $\sigma_t$ represents the volatility process, and it is a very important ingredient in the model . However, modelling the volatility process itself is also a complex task. Different approaches to estimate $\sigma_t$ is used throughout the literature. In the simplest models, the volatility is either constant or a deterministic function of time but in most models the volatility process is modelled as a stochastic process itself \cite{gatheral}. \\\\
+Various authors have proposed various approaches to modelling volatility. The use of fractional Brownian motions and fractional Gaussian noise in volatility modelling was in early applications such as \cite{Bollerslev} and \cite{comte} introduced to model long-range dependence in financial time series. A well-known example of such a fractional stochastic volatility model is the one proposed by \cite{comte} who models the dynamics of the volatility $\sigma_t$ of an asset as:
+\begin{align*}
 Y_t = \ln\sigma_t, \quad dY_t = -\gamma Y_t dt+\theta dB^H_t
-\end{align}
-where $B^H$ is a fractional Brownian motion with Hurst exponent $H$. The model was first introduced in order to model long range dependence effect observed in financial time series. The long range dependence is modelled by choosing $1>H>\frac{1}{2}$ \cite{comte}. In recent literature starting with \cite{gatheral}, it has been suggested to use the fractional stochastic volatility models with $H<\frac{1}{2}$ for modelling volatility. Processes driven by a fractional Brownian motion with $H<\frac{1}{2}$ are referred to as 'rough processes' since these fractional Brownian motion have trajectories rougher than a standard Brownian motion \cite{cont}, and \cite{gatheral} concludes that volatility is rough. It is important to note that \cite{gatheral} unlike previous literature rely on the behaviour of volatility estimators over short intraday time scales in order to asses the 'roughness'.\\\\
-\cite{cont} challenges the conclusions of \cite{gatheral} and similar articles concluding that volatility is rough. \cite{cont} simulates from models where the true spot volatility is known and shows that measures of roughness for realized volatility based on the data from these simulations are in many cases much rougher than those of the underlying true spot volatility. This difference solely lies in the estimation error, and challenges the use of high-frequency volatility estimators when measuring the roughness.\\\\
-In this thesis, we will take a similar approach as in \cite{cont} and investigate further if volatility appears to be rough even when the true model does not exhibit rough behaviour. 
+\end{align*}
+where $B^H$ is a fractional Brownian motion with Hurst exponent $H$. The long range dependence is modelled by choosing $1>H>\frac{1}{2}$ \cite{comte}. Fractional Brownian motions can be useful building blocks in stochastic volatility models for several reasons. Firstly, a fractional Brownian motion has the ability to model long range dependence which is measured by the slow decay $~T^{2H-2}$ of auto-correlation of functions. Secondly, it can generate trajectories of varying level of roughness (Hölder regularity) which is also governed by the Hurst exponent $H$. The long-range dependence is manifested over long time scales while roughness is manifested over short time scales. These two properties are therefore very different, and are not necessarily related. However, for a fractional Brownian motion they are linked through self-similarity and are both governed by the Hurst exponent $H$.\\\\
+In more recent literature starting with \cite{gatheral}, it has been suggested to use fractional stochastic volatility models with $H<\frac{1}{2}$ for modelling volatility. Processes driven by a fractional Brownian motion with $H<\frac{1}{2}$ are referred to as 'rough processes' since these fractional Brownian motion have trajectories rougher than a standard Brownian motion. The reasoning for the choice of $H<\frac{1}{2}$ rely on empirical estimates of the roughness of realized volatility over short intraday time scales. \cite{gatheral} asses the roughness of realized volatility and find that realized volatility exhibit rough behaviour and concludes that 'volatility is rough'. Since then several rough fractional stochastic volatility models have been suggested such as the rough Heston model \cite{el2019} and the rough Bergomi model \cite{bayer2016} using a Hurst exponent $H$ near 0.1. \\\\
+In practice, true spot volatility of the underlying model cannot be observed. Only realized volatility can be observed. Therefore, one cannot necessarily conclude that true spot volatility is rough just because realized volatility exhibit rough behaviour. \cite{fukasawa} and \cite{cont} show that estimation errors when estimating volatility can substantially distort the outcome of roughness estimation and lead to a downward bias in the measurement of roughness such that realized volatility appears to be rough even when instantaneous volatility is not. \\\\
+To overcome this problem of "illusive roughness" caused by volatility discretization error, roughness estimators taking into account and controlling the measurement error have been introduced by \cite{han} and \cite{bolko2023}. Both of these estimators take cumulative integrated variance as input. \\\\
+In this thesis, we extend the analysis from \cite{cont} and investigate further if there is statistical evidence to conclude that 'volatility is rough'. We use the roughness estimators described in both \cite{cont} and \cite{gatheral} to asses the validity of roughness estimates based on realized volatility through detailed simulation studies. Furthermore, we introduce the sequential scale roughness estimator from \cite{han} to our numerical examples which take cumulative integrated variance as input. We investigate the performance of all three estimators for measuring the roughness of sample paths of stochastic processes based on fractional Brownian motions and other stochastic processes. We then estimate the roughness from realized volatility signals and cumulative realized variance based on high-frequency observations.\\\\
+Our results are broadly consistent with the findings of \cite{cont}. When using our two roughness estimators that take instantaneous or realized volatility as input, we find that even when instantaneous volatility has diffusive dynamics or is smooth (i.e. $H\geq \frac{1}{2}$) realized volatility exhibits rough behaviour corresponding to a Hurst exponent much smaller than $0.5$. In all our numerical examples realized volatility is estimated to be rough no matter what the true roughness of the underlying model is. Especially, we show that in some cases diffusive models or even smooth processes are consistent with an apparent Hurst exponent $H\simeq 0.1$ for realized volatility, similar to the values reported in empirical studies in 'rough volatility' literature. This indicates that the claim 'volatility is rough' is far from an established fact.\\\\
+For the sequential scale estimator, we find that it performs well when integrated variance approximated directly from instantaneous volatility is used as input. With minor modifications, the estimator also performs reasonably well when using realized variance as input. In particular, for diffusive models, it estimates the true roughness with high accuracy. \\
+However, the sequential scale estimator remains somewhat susceptible to estimation errors in the cumulative integrated variance. Although this estimation error is small, it is sufficient to distort the outcome of the roughness estimation. Specifically, for smooth processes (i.e., $H > \frac{1}{2}$), the roughness estimates derived from realized variance are often near $0.5$, suggesting diffusive behaviour. Similarly, rough processes are estimated to be closer to diffusive behaviour (i.e., $H = \frac{1}{2}$) than they actually are. \\
+Thus, while we do not observe 'illusory roughness' in realized data when using the sequential scale estimator, it does not fully mitigate the distortion caused by estimation errors.
+
 \section{Fractional Brownian motion}
-A fractional Brownian motion (fBm) $(B_t^H)_{t\in\mathbb{R}}$ with Hurst parameter $H\in(0,1)$ is a centered continuous Gaussian process with covariance function
+Fractional Brownian motions work well as building blocks for stochastic volatility models. In this section, we will define the fractional Brownian motion, and briefly discuss some of fBm's most important properties. The definitions and properties will mainly follow the theory in \cite{biagini2008}.\\\\ 
+A fractional Brownian motion (fBm for short) $(B_t^H)_{t\in\mathbb{R}}$ with Hurst parameter $H\in(0,1)$ is a centered continuous Gaussian process with covariance function
 \begin{align}
-\mathbb{E}\left[B_t^HB_s^H\right] = \frac{1}{2}\left(t^{2H}+S^{2H}-\vert t-s\vert ^{2H} \right)
+\mathbb{E}\left[B_t^HB_s^H\right] = \frac{1}{2}\left(t^{2H}+S^{2H}-\vert t-s\vert ^{2H} \right) \label{eq:fbm}
 \end{align}
-for $s,t\geq 0$. Note that $B_t^H$ reduces to an ordinary Brownian motion for $H = \frac{1}{2}$ \cite{dieker}. The incremental process of a fractional Brownian motion is called fractional Gaussian noise, and it is a stationary discrete-time process. We define the fractional Gaussian noise $X=\{X_k: k=0,1,...\}$ by 
-\begin{align}
-X_k:= B^H_{t_{k+1}}-B^H_{t_k}.
-\end{align}
-With this definition, we immediately see that every $X_k$ is normally distribution with mean 0 and variance 
+for $s,t\geq 0$. For $H = \frac{1}{2}$ the fractional Brownian motion reduces to an ordinary Brownian motion. The incremental process of a fractional Brownian motion is called fractional Gaussian noise.\\
+From \eqref{eq:fbm} it can be seen that a fractional Brownian motion has the following properties:
+\begin{enumerate}
+    \item $B_0^H = 0$ and $\mathbb{E}[B^H_t] = 0$ for all $t\geq 0$.
+    \item $B^H$ has homogeneous increments i.e. $B^H_{t+s}-B^H_s$ has the same law of $B^H_t$ for $s,t\geq0$.
+    \item $B^H$ is a Gaussian process and $\mathbb{E}[(B^H_t)^2]=t^{2H}$, $t\geq 0$ for all $H\in (0,1)$.
+    \item $B^H$ has continuous trajectories.
+\end{enumerate}
+The fractional Brownian motion can be divided into three very different families corresponding to $0<H<\frac{1}{2}$, $H=\frac{1}{2}$ and $\frac{1}{2}<H<1$. Looking at the correlation between two increments, we have that for $H=\frac{1}{2}$ the increments are independent since it is a Brownian motion. For $H\neq \frac{1}{2}$ the increments are not independent. From \eqref{eq:fbm} it can be seen that the covariance between the increments $B^H_{t+h}-B^H_{t}$ and $B^H_{s+h}-B^H_{s}$ with $s+h\leq t$ and $t-s=nh$ is
 \begin{align*}
-&\mathbb{E}\left[ (B^H_{t_{k+1}}-B^H_{t_k})^2 \right] = Var (B^H_{t_{k+1}}) + Var(B^H_{t_k}) - 2Cov(B^H_{t_{k+1}}, B^H_{t_k})\\
-&= t_{k+1}^{2H}+t_k^{2H} - \left( t_{k+1}^{2H}+t_k^{2H} - (t_{k+1}-t_k)^{2H} \right) = (t_{k+1}-t_k)^{2H}
+\rho_H(n) = \frac{1}{2}h^{2H} \left( (n+1)^{2H} +(n-1)^{2H} -2n^{2H}\right).
 \end{align*}
- using the covariance function (3). Thus, the fractional Gaussian noise is standard normal distributed when the time step is 1. 
-\subsection{Simulation of fractional Brownian motion}
-Throughout this thesis we will be simulating from the fractional Brownian motion by using a spectral method which can be used for stationary processes. The idea is to analyse the stochastic process in the spectral domain rather than the time domain. The spectral density is computed as follows for frequencies $-\pi\leq \lambda \leq \pi$:
-\begin{align}
-f(\lambda):= \sum_{j=-\infty}^\infty \gamma(j) \exp(ij\lambda)
-\end{align}
-where $\gamma(\cdot)$ represent the autocovariance function. It can be shown that the spectral density of fractional Gaussian noise is given by
-\begin{align}
-f(\lambda) = 2\sin(\pi H)\Gamma(2H+1)(1-\cos\lambda)[\vert\lambda\vert ^{-2H-1}+B(\lambda, H)]
-\end{align}
-where $\Gamma(\cdot)$ denotes the Gamma function and 
-\begin{align}
-B(\lambda, H) := \sum_{j=1}^\infty \left((2\pi j+\lambda)^{-2H-1}+(2\pi j-\lambda)^{-2H-1}\right)
-\end{align}
-for $-\pi\leq \lambda \leq \pi$. The infinite sum makes direct numerical evaluation almost impossible. However, a useful approximation of the sum is made by \cite{paxson}. They show that by using
+In particular, we have for $n=1$ meaning two increments of the form $B^H_{t+h}-B^H_{t}$ and $B^H_{t+2h}-B^H_{t+h}$ that the increments are positively correlated for $H>\frac{1}{2}$ and negatively correlated for $H<\frac{1}{2}$.\\
+When $h=1$ meaning that the incremental process has time step 1 we have that
 \begin{align*}
-&\tilde{B}_3(\lambda, H) :=\\ 
-&\sum_{j=1}^3 \left(\left(a_j^+\right)^{-2H-1}+\left(a_j^-\right)^{-2H-1}\right)+\frac{\left(a_3^+\right)^{-2H}+\left(a_3^-\right)^{-2H}+\left(a_4^+\right)^{-2H}+\left(a_4^-\right)^{-2H}}{8H\pi}
+\rho_H(n) = \frac{1}{2}\left( (n+1)^{2H} +(n-1)^{2H} -2n^{2H}\right) \sim H(2H-1)n^{2H-2}
 \end{align*}
-where $a^{\pm}_j=2\pi j\pm \lambda$, $f(\lambda)$ is approximated quite well.\\\\
-Now, consider a stationary Gaussian discrete-time process $X=\{X_n: n = 0,...,N-1\}$ where $N$ is the required sample size. The spectral theorem states that it can be represented in terms of the spectral density as
-\begin{align}
-X_n\overset{d}{=}\int_0^\pi \sqrt{\frac{f(\lambda)}{\pi}}\cos(n\lambda)dB_1(\lambda)-\int_0^\pi \sqrt{\frac{f(\lambda)}{\pi}}\sin(n\lambda)dB_2(\lambda)
-\end{align}
-where $B_1$ and $B_2$ are two mutually independent Brownian motions \cite{dieker}. We wish to approximate (8). The integrand is replaced by a simpler function. Fix some integer $l$ and set $t_k = \pi k/l$ for $k=0,...,l$. Now, define a simple function $\xi_n^{(l)}$ on $[0,\pi]$ for $0\leq n\leq N-1$ by 
-\begin{align}
-\xi_n^{(\ell)}(\lambda)= \sqrt{\frac{f(t_1)}{\pi}}\cos(nt_1)\mathbf{1}_{\{0\}}(\lambda)+\sum_{k=0}^{l-1} \sqrt{\frac{f(t_{k+1})}{\pi}}\cos(nt_{k+1})\mathbf{1}_{(t_k,t_{k+1}]}(\lambda).
-\end{align}
-The first integral in $(8)$ can be approximated by $\int_0^\pi \xi_n^{(\ell)}(\lambda)dB_1(\lambda)$. Since $\xi_n^{(\ell)}$ is a simple function the stochastic integral can be computed as
-\begin{align}
-\int_0^\pi \xi_n^{(l)}(\lambda)dB_1(\lambda) = \sum _{j=0}^{\ell-1} \xi_n^{(l)} (B(t_{j+1})-B(t_j)).
-\end{align} 
-Thus, we obtain 
+as $n\rightarrow \infty$. Thus, we see that $\sum_{n=1}^\infty \rho_H(n) =\infty$ for $H>\frac{1}{2}$ and $\sum_{n=1}^\infty \lvert \rho_H(n) \rvert <\infty$ for $H<\frac{1}{2}$. The non-summable autocovariance function in the case $H>\frac{1}{2}$ is equivalent to long-range dependence and it indicates slow decay of the covariance function. That is, for $H>\frac{1}{2}$ the fBm has long-range dependence but for $H<\frac{1}{2}$ it does not. \\\\
+Furthermore, we have that the covariance function of the fBm is homogeneous of order $2H$. That is, 
 \begin{align*}
-&\int_0^\pi \xi_n^{(l)}(\lambda)dB_1(\lambda) = \sum_{j=0}^{\ell-1}\sum_{k=0}^{\ell-1} \sqrt{\frac{f(t_{k+1})}{\pi}} \cos(n t_{k+1}) \mathbf{1}_{(t_k,t_{k+1}]}(B_1(t_{j+1})-B_1(t_j))\\
-&= \sum_{k=0}^{l-1} \sqrt{\frac{f(t_{k+1})}{\pi}} \cos(n t_{k+1}) 
-(B_1(t_{k+1})-B_1(t_k)) \\
-&= \sum_{k=0}^{\ell-1} \sqrt{\frac{f(t_{k+1})}{\pi}} \cos(n t_{k+1})U_k^{(0)} \sqrt{\frac{\pi}{l}} = \sum_{k=0}^{\ell-1} \sqrt{\frac{f(t_{k+1})}{\ell}} \cos(n t_{k+1})U_k^{(0)}
+\mathbb{E}\left[B_{at}^HB_{as}^H\right] = a^{2H} \mathbb{E}\left[B_t^HB_s^H\right].
 \end{align*}
-where $U_k^{(0)}$ is an i.i.d. standard normal random variable for $k=0,...,\ell-1$. The $U_k^{(0)}\sqrt{\pi/\ell}$ represent the Brownian motion increments which per definition are normally distributed with mean $0$ and variance $t_{k+1}-t_k$.\\\\
-The second integral in $(8)$ can be approximated in a similar way by replacing the cosine terms with sine terms. Thus, we obtain the following approximation of $X_n$:
-\begin{align}
-\hat{X}_n^{(\ell)} := \sum_{k=0}^{\ell-1} \sqrt{\frac{f(t_{k+1})}{\ell}}\left( \cos(nt_{k+1})U_k^{(0)}-\sin (nt_{k+1}) U_k^{(1)}\right).
-\end{align}
-The two vectors $U^{(0)}$ and $U^{(1)}$ are mutually independent since $B_1$ and $B_2$ are independent as well. In order to calculate $\hat{X}_n^{(\ell)}$ efficiently we will be using the fast Fourier transform (FFT). To this end, we define the sequence $(a_k)_{k=0,...,2\ell-1}$ by
-
-\[
-a_k := \begin{cases}
-0 & k = 0; \\
-\frac{1}{2} \left( U^{(0)}_{k-1} + i U^{(1)}_{k-1} \right) \sqrt{\frac{f(t_k)}{\ell}} & k = 1, \dots, \ell - 1; \\
-U^{(0)}_{k-1} \sqrt{\frac{f(t_k)}{\ell}} & k = \ell; \\
-\frac{1}{2} \left( U^{(0)}_{2\ell - k - 1} - i U^{(1)}_{2\ell - k - 1} \right) \sqrt{\frac{f(t_{2\ell - k})}{\ell}} & k = \ell + 1, \dots, 2\ell - 1.
-\end{cases}
-\]
-It is shown in appendix that the Fourier transform of $a_k$ is indeed real and equals $\hat{X}_n^{(\ell)}$. From this approximated fractional Gaussian noise we can generate the fBm. \\
-
-\cite{dieker} shows that the finite-dimensional distributions of $\hat{X}^{(\ell)}$ converge in probability to the corresponding finite-dimensional distributions of $X$ as $\ell\rightarrow \infty$. The rate of convergence is, however, quite slow. Therefore, we will be using a $\ell \geq 30000$ when simulating from the fBm by the spectral method in this thesis in order to make sure that our simulations are reliable. Figure \ref{fig:fbmsim} shows three simulations of fractional Brownian motions with different Hurst parameters generated by the spectral method. 
-\begin{figure}[h]
-    \centering
-    \begin{subfigure}{0.32\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{specsim1.jpeg}
-        \caption{H=0.2}
-    \end{subfigure}\hfill
-    \begin{subfigure}{0.32\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{specsim2.jpeg}
-        \caption{H=0.5}
-    \end{subfigure}\hfill
-    \begin{subfigure}{0.32\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{specsim3.jpeg}
-        \caption{H=0.8}
-    \end{subfigure}
-    \caption{Fractional Brownian motions generated by the spectral method.}
-    \label{fig:fbmsim}
-\end{figure}
+That implies that $B_{at}^H$ has the same distribution law as $a^{-H}B_t^H$ for all $H\in (0,1)$. This is known as statistical self-similarity with Hurst index $H$.\\\\
+Furthermore, it can be shown that $B_t^H$ is almost surely Hölder continuous of order $\alpha$ for any $\alpha < H$. Hölder continuity is also known as Hölder regularity or simply as the roughness or smoothness of a sample path. Therefore, the roughness of $B_t^H$ completely follows the Hurst exponent $H$. Thus, we have that a fractional Brownian motion with Hurst exponent $\frac{1}{2}<H<1$ has long range dependence in increments and trajectories smoother than a Brownian motion while for $0<H<\frac{1}{2}$ the fBm has negatively correlated increments (without long range dependence) and trajectories rougher than a Brownian motion \cite{biagini2008}.\\\\
+In this thesis, we will be simulating high-frequency data based on fractional Brownian motions when performing numerical experiments. Exact simulation of a fractional Brownian motion is computationally challenging, and we will in this thesis simulate paths from the fBm by using a spectral method. More details on this method is described in Appendix \ref{sec:sim_fbm}.
 
 \section{Estimating the roughness of volatility}
-Determining the roughness of volatility plays a crucial role in order to make proper model specification and design estimators. In practice when estimating the roughness, we observe only a singe price path, and we need to measure the roughness of this path. Estimating the roughness from discrete observation is not an easy task and multiple ways of estimating the roughness exist in the literature. In this thesis, we will be working with high frequency data, and we will introduce three different roughness estimators that works on high frequency data. In section 4 we will conduct numerical experiments, and we will compare the three estimators. 
-\subsection{Roughness index estimator via $p$-th variation}
-In this section, we will describe the roughness index estimator via normalized $p$-th variation which was introduced in \cite{cont}. We will closely follow the theory and methodology behind the estimator described in \cite{cont}.\\
+Measuring the roughness of volatility is in practice not an easy task. 
+In practice, we observe only a singe price path with discrete observation times, and we need to determine the roughness of this path sampled at high frequency. In order to design proper estimators it is crucial to be able to determine the roughness of realized volatility, and multiple ways of measuring the roughness exist in literature. In this section we will introduce three different roughness estimators and the theory behind them. Firstly, we will be using the roughness index estimator via $p$-th variation $\widehat{H}_{L,K}$ which was first introduced by \cite{cont}. Secondly, we will describe the roughness estimator via log regression $\widehat{H}_{R}$ introduced by \cite{gatheral}. Thirdly, we will be using the sequential scale estimator $\widehat{\mathscr{R}}_n^s$ originally developed by \cite{han}. The explained theory and rationale behind the estimators will closely follow the theory from the original articles. In Section \ref{sec:num_exp} we will conduct numerical experiments, and we will compare the performance of the three roughness estimators. 
+\subsection{Instantaneous volatility and realized volatility}
+Before we introduce the details of our roughness estimators we will start by explaining the concepts of instantaneous volatility and realized volatility. As mentioned in \eqref{eq:price_gen} price dynamics are often modelled on the form
+\begin{align*}
+dS_t = \mu_tS_t dt+\sigma_tS_t dB_t.
+\end{align*}
+The term $\sigma_t$ represents the volatility process, and $\sigma_t$ is also called instantaneous volatility or spot volatility. Thus, instantaneous volatility $\sigma_t$ is the true volatility of the underlying model. In stochastic volatility models, $\sigma_t$ is represented as a stochastic process itself often driven by a Brownian motion or a fractional process. Contrary to prices of an asset, instantaneous volatility cannot be directly observed and needs to be estimated from prices.\\\\
+In a practical situation, the price of the asset $S_t$ at time $t$ is usually observed over a non-uniform time grid of $[0,T]$:
+\begin{align*}
+\pi^n = \left(0=t^n_0<t^n_1<...<t^n_{N(\pi^n)}=T\right)
+\end{align*}
+where $n$ is the sample frequency and $N(\pi^n)$ denotes the number of intervals in the partition $\pi^n$. In order to study high-frequency asymptotics of roughness estimators, it is often assumed that
+\begin{align}
+\lvert \pi^n \rvert := \sup_{i=1, \dots, N(\pi^n)} \lvert t_i^n - t_{i-1}^n \rvert  {\overset{n \to \infty}{\longrightarrow}} 0. \label{eq:time_assumption}
+\end{align}
+That is, the size of the largest interval of $\pi^n$ will converge to 0 as $n\rightarrow \infty$ where $n$ can be thought of as a sampling frequency i.e. the number of samples per second (or per other unit).\\\\
+Instantaneous volatility $\sigma_t$ can then be recovered from integrated variance or quadratic variation of log-prices $\log S$ along this time grid by
+\begin{align*}
+\sigma_t^2 =  \frac{d}{dt} [\log S]_\pi (t)
+\end{align*} 
+where the quadratic variation of the log-price $[\log S]_\pi (t)$ is defined as 
+\begin{align*}
+[\log S]_\pi (t) = \lim_{n\rightarrow \infty} \sum_{\pi^n \cap [0,t]} \left( \log \frac{S(t^n_{i+1})}{S(t^n_i)}\right)^2 = \lim_{n\rightarrow \infty} RV_t^2(\pi^n)^2
+\end{align*}
+where $RV_t^2(\pi^n)^2$ is realized variance along the sampling grid $\pi^n$. Hence, $\sigma_t$ can be recovered from a high-frequency limit of realized variance where the realized variance along the sampling grid $\pi_n$, $RV_t^2(\pi^n)^2$, is defined as
+\begin{align*}
+RV_t(\pi^n)^2 = \sum_{\pi^n \cap [0,t]}\left(\log \frac{S(t^n_{i+1})}{S(t^n_i)}\right)^2.
+\end{align*} 
+We then simply define realized volatility as the square root of realized variance. This leads to the following formal definition: 
+\begin{definition}
+Realized volatility of a price process $S$ over the time interval $[t,t+\Delta]$ along the sampling grid $\pi^n$ is defined as 
+\begin{align*}
+RV_{t,t+\Delta}(\pi^n) = \sqrt{\sum_{\pi^n \cap [t,t+\Delta]}\left(\log \frac{S(t^n_{i+1})}{S(t^n_i)}\right)^2}. 
+\end{align*}
+\label{def:real_vol}
+\end{definition}
+If the price $S_t$ is a continuous semimartingale then the quadratic variation equals the integrated variance of $\log S$ which is given by
+\begin{align*}
+\left\langle log S \right\rangle = \int_0^t \sigma_s^2 ds.
+\end{align*}
+Furthermore, if $S_t$ follows a stochastic volatility model given by price dynamics as in \eqref{eq:price_gen}, it is known that the realized variance converges in probability to the integrated variance of $\log S$ as sampling frequency increases \cite{jacod2012}. That is,
+\begin{align*}
+RV_t^2(\pi^n)^2 (\pi^n) \overset{\mathbb{P}}{\underset{n \to \infty}{\longrightarrow}} \int_0^t \sigma_s^2 ds.
+\end{align*} 
+From that we immediately obtain that realized volatility converges to
+\begin{align*}
+ RV_{t,t+\Delta} (\pi^n) \overset{\mathbb{P}}{\underset{n \to \infty}{\longrightarrow}} \sqrt{\int^{t+\Delta}_t\sigma^2_s ds}.
+\end{align*}
+Hence, along a single price path observed at high-frequency, we can compute the realized volatility as in Definition \ref{def:real_vol} and use this as an indicator of volatility
+\begin{align*}
+ RV_{t,t+\Delta} (\pi^n)\simeq \sqrt{\Delta} \sigma_t.
+\end{align*}
+More precisely, rescaled realized volatility $\frac{1}{\sqrt{\Delta}}RV_{t,t+\Delta}$ can be used as proxy values $\hat{\sigma}_t$ of instantaneous volatility $\sigma_t$. As $n$ increases the estimation becomes more accurate \cite{cont}.\\\\
+Several empirical studies including \cite{gatheral} have attempted to estimate roughness of volatility by estimating the roughness of realized volatility signals (i.e. proxy values $\hat{\sigma}_t$) using high-frequency data. Since carried out on high-frequency data, it is then assumed that the difference between $\hat{\sigma}_t$ and $\sigma_t$ is relatively small, and that the estimated roughness of realized volatility signals also works as a good estimation of the roughness of the instantaneous volatility process $\sigma_t$. However, there is no guarantee that $\hat{\sigma}_t$ and $\sigma_t$ exhibits same kind of roughness behaviour, and as we will illustrate later on estimation error in proxy values $\hat{\sigma}_t$ can substantially distort the roughness estimation.
 
-We will be working with partitions of our time interval. Consider a sequence of partitions $\pi = (\pi^n) _{n\geq 1}$ of $[0,T]$ where
+\subsection{Roughness index estimator via $p$-th variation}
+In this section, we will describe the roughness index estimator via normalized $p$-th variation which was introduced in \cite{cont}. We will closely follow the theory and methodology behind the estimator described in \cite{cont}.\\\\
+We are working with partitions of our time interval. Consider a sequence of partitions $\pi = (\pi^n) _{n\geq 1}$ of $[0,T]$ where
 \[
 \pi^n = \left( 0 = t_0^n < t_1^n < ... < t^n_{N(\pi^n)}=T \right)
 \]
-represents observation times at frequency $n$. Here $N(\pi^n)$ denotes the number of intervals in the partition $\pi^n$. For the time partitions we will be working with in this thesis we will assume that 
-\begin{align}
-\lvert \pi^n \rvert := \sup_{i=1, \dots, N(\pi^n)} \lvert t_i^n - t_{i-1}^n \rvert \xrightarrow{n \to \infty} 0.
-\end{align}
-That is, the size of the largest interval of $\pi^n$ will converge to 0 as $n\rightarrow \infty$.
-
-We will now define the concept of $p$-th variation along a sequence of partitions $(\pi^n) _{n\geq 1}$. The definition follows the definition from \cite{cont2}.\\\\ 
-\textbf{Definition 1.} \textit{(p-th variation along a sequence of partitions) 
+represents observation times at frequency $n$. We again let $N(\pi^n)$ denotes the number of intervals in the partition $\pi^n$. We assume that assumption \eqref{eq:time_assumption} is fulfilled for all time partitions considered. That is, the size of the largest interval of $\pi^n$ will converge to 0 as the sampling frequency increases $n\rightarrow \infty$.\\\\
+We will now define the concept of $p$-th variation along a sequence of partitions $(\pi^n) _{n\geq 1}$:
+\begin{definition}
+\textnormal{(p-th variation along a sequence of partitions)}\\
 $x \in C^0([0,T], \mathbb{R})$ has finite p-th variation along the sequence of partitions 
 $\pi = (\pi^n, n \geq 1)$ if there exists a continuous increasing function $[x]_{\pi}^{(p)}: [0,T] \to \mathbb{R}_+$ such that
-\[
+\begin{align}
 \forall t \in [0,T], \quad \sum_{\{t_j^n, t_{j+1}^n\} \in \pi^n: t_j^n \leq t} \lvert x(t_{j+1}^n) - x(t_j^n) \rvert^p 
-\xrightarrow{n \to \infty} [x]_{\pi}^{(p)}(t). \tag{3}
-\]
-If this property holds, then the convergence in (3) is uniform. We call $[x]_{\pi}^{(p)}$ the p-th variation of $x$ along the sequence of partitions $\pi$. We denote $V_\pi^p([0,T], \mathbb{R})$ the set of all continuous paths with finite p-th variation along $\pi$.}\\\\
-We further define the concepts of variation index and roughness index of a path following \cite{cont}. \\\\
-\textbf{Definition 2} (Variation index). \textit{The variation index of a path $x$ along a partition sequence $\pi$ is defined as the smallest $p \geq 1$ for which $x$ has finite p-th variation along $\pi$:}
-\[
+{\overset{n \to \infty}\longrightarrow} [x]_{\pi}^{(p)}(t). \label{eq:pth_def}
+\end{align}
+If this property holds, then the convergence in \eqref{eq:pth_def} is uniform. We call $[x]_{\pi}^{(p)}$ the p-th variation of $x$ along the sequence of partitions $\pi$. We denote $V_\pi^p([0,T], \mathbb{R})$ the set of all continuous paths with finite p-th variation along $\pi$.
+\label{def:pth_var}
+\end{definition}
+The concept of roughness will then be formalized using the notion of variation index and roughness index.
+\begin{definition}
+\textnormal{(Variation index)}\\
+The variation index of a path $x$ along a partition sequence $\pi$ is defined as the smallest $p \geq 1$ for which $x$ has finite p-th variation along $\pi$:
+\begin{align*}
 p^{\pi}(x) = \inf \left\{ p \geq 1 : x \in V_{\pi}^p([0,T], \mathbb{R}) \right\}.
-\]\\
-\textbf{Definition 3} (Roughness index). \textit{The roughness index of a path $x$ (along $\pi$) is defined as}
-\[
+\end{align*}
+\label{def:var_index}
+\end{definition}
+\begin{definition}
+\textnormal{(Roughness index)}\\
+The roughness index of a path $x$ (along $\pi$) is defined as
+\begin{align*}
 H^{\pi}(x) = \frac{1}{p^{\pi}(x)}.
-\]\\
+\end{align*}
+\label{def:rough_index}
+\end{definition}
 When the underlying sequence of partitions is clear, we will simply denote these indexes as $p(x)$ and $H(x)$. \\\\
-For a real-valued stochastic process $X: [0,T]\times \Omega \rightarrow \mathbb{R}$ the variation index (hence also the roughness index) $p^\pi (X(.,\omega))$ of each sample path $X(.,\omega)$ may in principle be different. However, there are many important classes of stochastic processes which have an almost-sure roughness index. This holds for example for a fractional Brownian motion where the roughness index matches with the corresponding Hurst parameter \cite{cont}.\\\\
-When estimating roughness from empirical data based on discrete observations, using the $p$-th variation directly is difficult since it involves checking convergence to an unknown limit. To this end, we introduce the concept of normalized $p$-th variation.\\\\
-\textbf{Definition 4} (Normalized p-th variation along a sequence of partitions). 
-\textit{Let $\pi$ be a sequence of partitions of $[0, T]$ with mesh $\lvert \pi^n \rvert \to 0$ and 
+For a real-valued stochastic process $X: [0,T]\times \Omega \rightarrow \mathbb{R}$ the variation index $p^\pi (X(.,\omega))$ of each sample path $X(.,\omega)$ may in principle be different. However, there are many important classes of stochastic processes which have an almost-sure roughness index. For example we have that along the dyadic partition sequence 
+\begin{align}
+\pi^n = \left( t_i^n = \frac{iT}{2^n}, i=0,1,...,2^n \right), \label{eq:dya_part}
+\end{align}
+the fractional Brownian motion $B_t^H$ has roughness index $H^\pi(x) = H$  matching the Hurst exponent $H$ and the Hölder regularity \cite{cont}.\\
+However, existence of variation index is in general not obvious. Further details can be seen in \cite{han2022hurst}.\\\\
+When estimating roughness from empirical data based on discrete observations, using the $p$-th variation directly is difficult since it involves checking convergence to an unknown limit. To this end, \cite{cont} introduce the concept of normalized $p$-th variation which has better asymptotics:
+\begin{definition}
+\textnormal{(Normalized p-th variation along a sequence of partitions)}\\
+Let $\pi$ be a sequence of partitions of $[0, T]$ with mesh $\lvert \pi^n \rvert \to 0$ and 
 $\pi^n = \{ 0 = t_1^n < t_2^n < \cdots < t_{N(\pi^n)}^n = T \}$. 
 $x \in V_{\pi}^p([0, T], \mathbb{R})$ is said to have normalized p-th variation along $\pi$ 
-if there exists a continuous function $w(x, p, \pi) : [0, T] \to \mathbb{R}$ such that:}
-\[
+if there exists a continuous function $w(x, p, \pi) : [0, T] \to \mathbb{R}$ such that:
+\begin{align*}
 \forall t \in [0, T], \quad \sum_{\pi^n \cap [0,t]} \lvert x(t_{j+1}^n) - x(t_j^n) \rvert^p \to w(x, p, \pi)(t).
-\]
-(Cont and Das 2022) shows that for a large class of functions with $p$-th variation, the normalized $p$-th variation exists and is linear. Furthermore, \cite{cont} shows that the normalized $p$th variation is a 'sharp' statistic meaning that if a function has finite $p$-th variation then for all $q\neq p$ the normalized $p$-th variation is either zero or infinite. Additionally, it is shown that a fractional Brownian motion has normalized $p$-th variation along the dyadic partition $\mathbb{T}= (\mathbb{T}^n)_{n\geq 1}$ almost-surely.
+\end{align*}
+\label{def:norm_pth_var}
+\end{definition}
+\cite{cont} justify the terminology by a result that shows that for a large class of functions with $p$-th variation, the normalized $p$-th variation exists and is linear. Furthermore, it can be shown that the normalized $p$-th variation is a 'sharp' statistic meaning that if a function has finite $p$-th variation then for all $q\neq p$ the normalized $p$-th variation is either zero or infinite. Additionally, it is shown that a fractional Brownian motion has normalized $p$-th variation along the dyadic partition $\pi^n$ as in \eqref{eq:dya_part} almost-surely.
 \subsubsection{Estimating the roughness from discrete observations}
-With these concepts defined we now proceed to explaining how roughness can be estimated from discrete observations. Given discrete observations on a refining partition $\pi^L$ we define the 'normalized $p$-th variation statistic' which is the discrete counterpart of the normalized $p$-th variation:
+With these concepts defined we now proceed to explaining how roughness can be estimated from discrete observations. Given discrete observations on a refining partition $\pi^L$ we define the 'normalized $p$-th variation statistic' which is the discrete counterpart of the normalized $p$-th variation as
 \begin{align}
-W(L, K, \pi, p, t, X) := \sum_{\pi^K\cap [0,t] } \frac{\lvert X(t_{i+1}^K)-X(t_i^K)\rvert^p}{\sum_{\pi^L\cap [t_i^K, t_{i+1}^K]}\lvert X(t_{j+1}^L)-X(t_j^L)\rvert^p} \times (t_{i+1}^K-t_i^K).
+W(L, K, \pi, p, t, X) := \sum_{\pi^K\cap [0,t] } \frac{\lvert X(t_{i+1}^K)-X(t_i^K)\rvert^p}{\sum_{\pi^L\cap [t_i^K, t_{i+1}^K]}\lvert X(t_{j+1}^L)-X(t_j^L)\rvert^p} \times (t_{i+1}^K-t_i^K). \label{eq:w_stat_def}
 \end{align}
 This definition involves two frequencies $K$ and $L>>K$. We can consider $L$ as the sample frequency while $K$ is a block frequency such that $\pi^K$ is a subpartition of $\pi^L$. Thus, we are grouping the sample size $L$ into $K$ many groups where each group contains exactly $\frac{L}{K}$ consecutive points. It can be seen that the normalized $p$-th variation statistic converges to the normalized $p$-th variation as $L$ and $K$ increase. That is,
-\begin{align}
+\begin{align*}
 \lim_{K\rightarrow\infty}\lim_{L\rightarrow\infty} W(L, K, \pi, p, t, X) = w(x, p, \pi)(t).
-\end{align}
+\end{align*}
 The variation index estimator $\hat{p}^\pi_{L,K}(X)$ associated with data sampled on $\pi^L$ can then be obtained by computing $W(L, K, \pi, p, t, X)$ for different values of $p$ such that the following equation can be solved for $p^\pi_{L,K}(X)$
 \begin{align}
 W(L, K, \pi, \hat{p}^\pi_{L,K}(X), t, X) = T. \label{eq:wpth}
@@ -191,36 +209,60 @@ The corresponding roughness index estimator is then defined as
 \begin{align*}
 \hat{H}^\pi_{L,K}(X) = \frac{1}{\hat{p}^\pi_{L,K}(X)}.
 \end{align*}
-If the underlying dataset and partition is clear we will also denote these estimators as $\hat{p}_{L,K}$ and $\hat{H}_{L,K}$. Asymptotic properties of these estimators under high-frequency sampling are studied in (cont and das 2022). 
-\subsubsection{Behaviour of the roughness estimator based on simulations}
-We will now study the behaviour of the roughness estimator based on high-frequency simulated data. We will be simulating from a fractional Brownian motion and compute the roughness estimator based on the data. In this simulation section we will be using a uniform partition of the time interval $[0,1]$ with
+If the underlying dataset and partition is clear we will also denote this estimator simply as $\widehat{H}_{L,K}$. We will refer to $\widehat{H}_{L,K}$ as the roughness index estimator via $p$-th variation. 
+\subsubsection{Sample behaviour of $\widehat{H}_{L,K}$}
+We will now study the behaviour of the roughness estimator based on high-frequency simulated data. We will be simulating from a fractional Brownian motion $B_t^H$ where the true roughness is known to be $H$. For the simulated paths we then compute the roughness index estimator via $p$-th variation $\widehat{H}_{L,K}$ and investigate its performance. We will in these examples be using a uniform partition of the time interval $[0,1]$ with
 \begin{align*}
 \pi^n = \left( 0 < \frac{1}{n}< \frac{2}{n}<...< 1\right).
 \end{align*}
-We will be simulating from four fractional Brownian motions with four different Hurst exponents $H=\{0.1,0.3,0.5,0.8\}$ in order to investigate the accuracy of the roughness estimator $\hat{H}^\pi_{L,K}(X)$. First, we plot $\log(W(L=300\times 300, K=300, \pi, p, t=1, X=B^H))$ against $H=1/p$ to visualize the estimation. The results are presented in Figure \ref{fig:checkw}. The solid black line is the value of $\log(W(L=300\times 300, K=300, \pi, p, t=1, X=B^H))$ for different values of $1/p$. The blue vertical line represents the estimated roughness index whereas the black dotted vertical line represent the true Hurst parameter. The blue horizontal line represents $W(L, K, \pi, p, t, X) = T$. The estimated roughness index $\hat{H}_{L,K}$ is the crossing between $\log(W(L=300\times 300, K=300, \pi, p, t=1, X=B^H))$ and $W(L, K, \pi, p, t, X) = T$. \\\\
+We generate data from four fractional Brownian motions with different Hurst exponents $H=\{0.1,0.3,0.5,0.8\}$. For every simulated path we compute the statistic $W(L=300\times 300, K=300, \pi, p, t=1, X=B^H)$ for different values of $p$. Thus, we use $\pi^L$ as our partition of time and generate $L=300\times 300$ points uniformly on the interval $[0,1]$.\\
+The roughness estimator $\widehat{H}_{L,K}$ solves equation \eqref{eq:wpth} with $T=1$. To visualize this we plot $\log(W(L=300\times 300, K=300, \pi, p, t=1, X=B^H))$ against $H=1/p$. The results are presented in Figure \ref{fig:checkw}. The solid black line is the value of $\log(W(L=300\times 300, K=300, \pi, p, t=1, X=B^H))$ for different values of $1/p$. The blue vertical line represents the estimated roughness index whereas the black dotted vertical line represent the true Hurst parameter of the underlying model. The blue horizontal line represents $W(L, K, \pi, p, t, X) = 1$ which is the equation $\widehat{H}_{L,K}$ solves. Thus, the estimated roughness index $\widehat{H}_{L,K}$ is found in the crossing between $\log(W(L=300\times 300, K=300, \pi, p, t=1, X=B^H))$ (solid black line) and $W(L, K, \pi, p, t, X) = 1$ (blue horizontal line).
 \begin{figure}[htbp]
     \centering
     
     \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\linewidth]{wagainstp_H01.jpeg}
+        \includegraphics[width=\linewidth]{wagainstp_H01.png}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\linewidth]{wagainstp_H03.jpeg}
+        \includegraphics[width=\linewidth]{wagainstp_H03.png}
     \end{subfigure}
     \vskip 0em
     \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\linewidth]{wagainstp_H05.jpeg}
+        \includegraphics[width=\linewidth]{wagainstp_H05.png}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\linewidth]{wagainstp_H08.jpeg}
+        \includegraphics[width=\linewidth]{wagainstp_H08.png}
     \end{subfigure}
     
-    \caption{Log-scale plot of the normalized $p$-th variation statistic for fBm with Hurst parameter $H=\{0.1,0.3,0.5,0.8\}$. The black solid line represents the value of $\log(W(L=300\times 300, K=300, \pi, p, t=1, X=B^H))$ plotted against $H=1/p$. The blue vertical line represents $\hat{H}_{L,K}$ using the normalized $p$-th variation statistic with $L=300\times 300$ and $K=300$. The vertical black dotted line represents the true Hurst parameter. }
+    \caption{Log-scale plot of the normalized $p$-th variation statistic for fBm with Hurst parameter $H=\{0.1,0.3,0.5,0.8\}$. The black solid line represents the value of $\log(W(L=300\times 300, K=300, \pi, p, t=1, X=B^H))$ plotted against $H=1/p$. The blue vertical line represents $\widehat{H}_{L,K}$ using the normalized $p$-th variation statistic with $L=300\times 300$ and $K=300$. The vertical black dotted line represents the true Hurst parameter. }
     \label{fig:checkw}
-\end{figure}
-In Figure \ref{fig:checkhist}, we have created histograms of the estimator $\hat{H}_{L,K}$ again by using $W(L=300\times 300, K=300, \pi, p, t=1, X=B^H)$ from 150 independent simulations. In addition to this, Table \ref{tab:checkhist} provides the summary statistics for the estimated roughness index $\hat{H}_{L,K}$ shown in the histograms. Based on Figure \ref{fig:checkw} and \ref{fig:checkhist}, and Table \ref{tab:checkhist}, we conclude that the estimated roughness index $\hat{H}_{L,K}$ seems to be fairly accurate when used on a data set with length $L=300\times 300$ generated from a fractional Brownian motion. All the estimated  $\hat{H}_{L,K}$ are within a distance $0.05$ from the true Hurst parameter, and the mean and median of the estimated roughness are in all cases very close to the true Hurst parameter indicating that our estimator is quite accurate. Only exception is for the fBm with Hurst parameter $H=0.8$ where even the upper quartile of $\hat{H}_{L,K}$ is smaller than the true Hurst parameter as seen in Table \ref{tab:checkhist}. This suggest that the estimated roughness index might be biased downwards in the case of $H=0.8$. The estimate is, however, still quite accurate even for $H=0.8$.
+\end{figure}\\\\
+We now repeat the estimation procedure for 150 independent sample paths using again $W(L=300\times 300, K=300, \pi, p, t=1, X=B^H)$. In Figure \ref{fig:checkhist} we have generated histograms of the final estimates $\widehat{H}_{L,K}$ for these 150 independent paths. In addition to this, we provide the corresponding summary statistics of the estimated roughness index $\widehat{H}_{L,K}$ for the 150 paths in Table \ref{tab:checkhist}. \\\\
+Figure \ref{fig:checkw}, \ref{fig:checkhist} and Table \ref{tab:checkhist} all indicate that the estimated roughness index via $p$-th variation $\widehat{H}_{L,K}$ seems to be a fairly accurate roughness estimator when used on a data set with of $L=300\times 300$ generated from the fractional Brownian motion. All the roughness estimates $\widehat{H}_{L,K}$ are within a distance $0.05$ from the true Hurst parameter as seen in Figure \ref{fig:checkhist}. The mean and median of the estimated roughness provided in Table \ref{tab:checkhist} are in all four cases very close to the true Hurst parameter. However, for the fBm with Hurst parameter $H=0.8$ even the upper quartile of $\widehat{H}_{L,K}$ is smaller than the true Hurst parameter. This suggest that the estimated roughness index might be slightly biased downwards in the case of $H=0.8$. The estimate is, however, still quite accurate also for $H=0.8$, and we conclude that the roughness estimator $\widehat{H}_{L,K}$ performs very well in these simulation examples.
+\begin{figure}[htbp]
+    \centering
+    
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{hist_H01.jpeg}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{hist_H03.jpeg}
+    \end{subfigure}
+    \vskip -1em
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{hist_H05.jpeg}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{hist_H08.jpeg}
+    \end{subfigure}
+    
+    \caption{Histogram of estimated roughness index $\widehat{H}_{L,K}$ with $L=300\times 300$ and $K=300$ generated from 150 independent simulation of fractional Brownian motions with Hurst parameter $H=\{0.1,0.3,0.5,0.8\}$. }
+    \label{fig:checkhist}
+\end{figure}\\
 \begin{table}[htbp]
     \centering
     \begin{tabular}{ccccccc}
@@ -233,44 +275,10 @@ In Figure \ref{fig:checkhist}, we have created histograms of the estimator $\hat
         0.8 & 0.7657 & 0.7797 & 0.7856 & 0.7865 & 0.7937 & 0.8239 \\
         \bottomrule
     \end{tabular}
-    \caption{Summary of statistics for estimated roughness index $\hat{H}_{L,K}$ from 150 independent simulations of fBm with $L=300\times 300$ and $K=300$.}
+    \caption{Summary of statistics for estimated roughness index $\widehat{H}_{L,K}$ from 150 independent simulations of fBm with $L=300\times 300$ and $K=300$.}
     \label{tab:checkhist}
-\end{table}
-\begin{figure}[htbp]
-    \centering
-    
-    \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\linewidth]{hist_H01.jpeg}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\linewidth]{hist_H03.jpeg}
-    \end{subfigure}
-    \vskip 0em
-    \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\linewidth]{hist_H05.jpeg}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\linewidth]{hist_H08.jpeg}
-    \end{subfigure}
-    
-    \caption{Histogram of estimated roughness index $\hat{H}_{L,K}$ with $L=300\times 300$ and $K=300$ generated from 150 independent simulation of fractional Brownian motions with Hurst parameter $H=\{0.1,0.3,0.5,0.8\}$. }
-    \label{fig:checkhist}
-\end{figure}\\
-In Figure \ref{fig:check2000} we have used $L=2000\times 2000$ and $K=2000$ to make similar plots to those in Figure \ref{fig:checkw} and Figure \ref{fig:checkhist} for a fractional Brownian motion with Hurst parameter $H=0.1$. Table \ref{tab:check2000} provides the summary statistics for the estimated roughness index $\hat{H}_{L,K}$ corresponding to the histogram in Figure \ref{fig:check2000}. We observe that the results are similar to those we obtained for $L=300\times 300$ and $K=300$ but that the estimated roughness index $\hat{H}_{L,K}$ seems to be even more accurate as seen in Figure \ref{fig:check2000} and Table \ref{tab:check2000}. This is not surprising since we know that the normalized $p$-th variation statistic converges to the normalized $p$-th variation as $L$ and $K$ increase. However, increasing $L$ and $K$ is also computationally more demanding. The accuracy of $\hat{H}_{L,K}$ when using $L=300\times 300$ and $K=300$ is satisfactory for many of our purposes. Therefore, we will be using at least $L=300\times 300$ and $K=300$ for the remainder of the thesis.
-\begin{table}[htbp]
-    \centering
-    \begin{tabular}{ccccccc}
-        \toprule
-        H & Min. & Lower quartile & Median & Mean & Upper quartile & Max. \\
-        \midrule
-        0.1 & 0.0892 & 0.0963 & 0.0996 & 0.0998 & 0.1031 & 0.1145 \\
-        \bottomrule
-    \end{tabular}
-    \caption{Summary of statistics for estimated roughness index $\hat{H}_{L,K}$ from 150 independent simulations of fBm with $H=0.1$, $L=2000\times 2000$ and $K=2000$.}
-    \label{tab:check2000}
-\end{table}
+\end{table}\\
+We now set $L=2000\times 2000$ and $K=2000$, and simulate data from a fBm with Hurst parameter $H=0.1$. We compute $\hat{H}_{L,K}$ and as before we generate a histogram of the roughness estimates based on 150 independent paths. The results are presented in Figure \ref{fig:check2000}. Table \ref{tab:check2000} provides the summary statistics for the estimated roughness index $\widehat{H}_{L,K}$ corresponding to the histogram in Figure \ref{fig:check2000}. We observe that the results are similar to those we obtained for $L=300\times 300$ and $K=300$ but that the estimated roughness index $\hat{H}_{L,K}$ seems to be even more accurate. This is not surprising since we know that the normalized $p$-th variation statistic converges to the normalized $p$-th variation as $L$ and $K$ increase. However, increasing $L$ and $K$ is also computationally more demanding. The accuracy of $\widehat{H}_{L,K}$ obtained when using $L=300\times 300$ and $K=300$ is also satisfactory for many purposes in this thesis.
 \begin{figure}[htbp]
     \centering
     
@@ -282,10 +290,22 @@ In Figure \ref{fig:check2000} we have used $L=2000\times 2000$ and $K=2000$ to m
         \includegraphics[width=\linewidth]{H01_2000_2.jpeg}
     \end{subfigure}
     
-    \caption{Simulation results for fractional Brownian motion with Hurst parameter $H=0.1$. \textbf{Left:} The value of $\log(W(L=2000\times 2000, K=2000, \pi, p, t=1, X=B^H))$ plotted against $H=1/p$ in black. The blue vertical line represents the estimated roughness $\hat{H}_{L,K}$ using $L=2000\times 2000$ and $K=2000$. The vertical black dotted line represents the true Hurst parameter. \textbf{Right:} Histogram of estimated roughness index $\hat{H}_{L,K}$ using $L=2000\times 2000$ and $K=2000$ generated by 150 independent simulations of fBm with Hurst parameter $H=0.1$. The blue line represents a kernel estimator for density. }
+    \caption{Simulation results for fractional Brownian motion with Hurst parameter $H=0.1$. \textbf{Left:} The value of $\log(W(L=2000\times 2000, K=2000, \pi, p, t=1, X=B^H))$ plotted against $H=1/p$ in black. The blue vertical line represents the estimated roughness $\hat{H}_{L,K}$ using $L=2000\times 2000$ and $K=2000$. The vertical black dotted line represents the true Hurst parameter. \textbf{Right:} Histogram of estimated roughness index $\widehat{H}_{L,K}$ using $L=2000\times 2000$ and $K=2000$ generated by 150 independent simulations of fBm with Hurst parameter $H=0.1$. The blue line represents a kernel estimator for density. }
     \label{fig:check2000}
 \end{figure}\\
-We further investigate how the choice of $K<<L$ affects the estimated roughness index $\hat{H}_{L,K}$. In Figure \ref{fig:checkk}, we have plotted the estimated roughness $\hat{H}_{300\times 300,K}$ for a fractional Brownian motion with Hurst parameter $H=0.1$ for different values of $K$ with a fixed $L=300\times 300$. Note that when $\frac{L}{K}$ is not an integer, the $K$ many groups from the definition of normalized $p$-th variation statistic (13) do not contain exactly $\frac{L}{K}$ consecutive points. The code is implemented such that each group will contain either $\lceil \frac{L}{K} \rceil$ or $\lfloor \frac{L}{K} \rfloor$ consecutive points. Figure \ref{fig:checkk} shows that when $K$ is too low, the estimator $\hat{H}_{300\times 300,K}$ seems to be underestimating the true Hurst parameter whereas when $K$ is too high the Hurst parameter is overestimated. For $K\approx \sqrt{L}$ the estimated roughness index is quite consistent and close to the true Hurst parameter $H=0.1$. It is thus natural to use $K=\sqrt{L}$ since $\frac{L}{K}$ will be an integer and the estimator $\hat{H}_{L,K}$ seems to be accurate and consistent in that range.
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{ccccccc}
+        \toprule
+        H & Min. & Lower quartile & Median & Mean & Upper quartile & Max. \\
+        \midrule
+        0.1 & 0.0892 & 0.0963 & 0.0996 & 0.0998 & 0.1031 & 0.1145 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Summary of statistics for estimated roughness index $\widehat{H}_{L,K}$ from 150 independent simulations of fBm with $H=0.1$, $L=2000\times 2000$ and $K=2000$.}
+    \label{tab:check2000}
+\end{table}\\
+We further investigate how the choice of $K<<L$ affects the estimated roughness index $\hat{H}_{L,K}$. In Figure \ref{fig:checkk}, we have plotted the estimated roughness $\hat{H}_{300\times 300,K}$ for a fractional Brownian motion with Hurst parameter $H=0.1$ for different values of $K$ with a fixed $L=300\times 300$. Note that when $\frac{L}{K}$ is not an integer, the $K$ many groups from the definition of normalized $p$-th variation statistic \eqref{eq:w_stat_def} do not contain exactly $\frac{L}{K}$ consecutive points. The code is implemented such that each group will contain either $\lceil \frac{L}{K} \rceil$ or $\lfloor \frac{L}{K} \rfloor$ consecutive points. Figure \ref{fig:checkk} shows that when $K$ is too low, the estimator $\hat{H}_{300\times 300,K}$ seems to be underestimating the true Hurst parameter whereas when $K$ is too high the Hurst parameter is overestimated. For $K\approx \sqrt{L}$ the estimated roughness index is quite consistent and close to the true Hurst parameter $H=0.1$. It is thus natural to use $K=\sqrt{L}$ since $\frac{L}{K}$ will be an integer and the estimator $\widehat{H}_{L,K}$ seems to be accurate and consistent in that range.
 \begin{figure}[htbp]
     \centering
     
@@ -295,42 +315,10 @@ We further investigate how the choice of $K<<L$ affects the estimated roughness 
     
     \caption{The solid black line represents the estimated roughness index $\hat{H}_{300\times 300,K}$ plotted against different values of $K$ for a simulation from a fBm with Hurst parameter $H=0.1$. The blue vertical line represents $K=\sqrt{L}=300$ whereas the blue horizontal line represents the true Hurst parameter $H=0.1$.}
     \label{fig:checkk}
-\end{figure}\\
+\end{figure}\\\\
+In summary, these simulation examples show that for realistic sample sizes and frequencies encountered in high-frequency financial data, the roughness estimator via $p$-th variation $\widehat{H}_{L,K}$ is quite accurate and not sensitive to the block size $K$ in the range $K\approx \sqrt{L}$.
 
-\subsection{Instantaneous volatility and realized volatility}
-As mentioned in (1) log-prices are often modelled as continuous semi-martingales where the derivative of the log-price $Y_t$ takes the form
-\begin{align*}
-dY_t = \mu_tdt+\sigma_tdW_t.
-\end{align*}
-The term $\sigma_t$ represents the volatility process, and $\sigma_t$ is also called instantaneous volatility or spot volatility. In stochastic volatility models, $\sigma_t$ is represented as a stochastic process itself often driven by a fractional process. Contrary to prices of an asset, instantaneous volatility cannot be directly observed and needs to be estimated from prices.\\
-In a practical situation, the price of the asset $S_t$ at time $t$ is usually observed over a non-uniform time grid of $[0,T]$:
-\begin{align*}
-\pi^n = \left(0=t^n_0<t^n_1<...<t^n_{N(\pi^n)}=T\right).
-\end{align*}
-For high-frequency data the assumption (12) is often assumed. That is, $\rvert \pi^n\lvert\rightarrow 0$ as $n$ increases where $n$ can be thought of as a sampling frequency i.e. the number of samples per second (or per other unit).\\\\
-For $Y_t= \log(S_t)$ the instantaneous volatility $\sigma_t$ can be recovered by 
-\begin{align*}
-\sigma_t^2 =  \frac{d}{dt} \lim_{n\rightarrow \infty} \sum_{\pi^n \cap [0,t]} \left( Y(t_{i+1}^n)-Y(t_i^n)\right)^2 = \lim_{n\rightarrow \infty} RV_t^2(\pi^n)^2
-\end{align*} 
-where the realized variance along the sampling grid $\pi^n$ is defined as
-\begin{align}
-RV_t(\pi^n)^2 = \sum_{\pi^n \cap [0,t]}\left(Y(t_{i+1}^n )-Y(t_i^n)\right)^2. \label{eq:reavardef}
-\end{align} 
-The realized volatility over time interval $[t,t+\Delta]$ along the sampling grid $\pi^n$ is then defined as 
-\begin{align}
-RV_{t,t+\delta}(\pi^n) = \sqrt{\sum_{\pi^n \cap [t,t+\Delta]}\left(Y(t_{i+1}^n )-Y(t_i^n)\right)^2}. \label{eq:rvdef}
-\end{align}
-If the price $S_t$ follows a stochastic volatility model as, it is known that the realized variance converges to the quadratic variation of $Y$ as sampling frequency increases (Jacod and Protter)
-\begin{align*}
- RV_{t,t+\Delta} (\pi^n) \overset{\mathbb{P}}{\underset{n \to \infty}{\longrightarrow}} \sqrt{\int^{t+\Delta}_t\sigma^2_u du}.
-\end{align*}
-Hence, along a single price path observed at high-frequency, we can compute the realized volatility \eqref{eq:rvdef} and use this as an indicator of volatility
-\begin{align*}
- RV_{t,t+\Delta} (\pi^n)\simeq \sqrt{\Delta} \sigma_t.
-\end{align*}
-As $n$ increases the estimation becomes more accurate \cite{cont}.
-
-\subsection{Smoothness of a path by logarithmic regression} 
+\subsection{Roughness estimator via logarithmic regression} 
 In this section we will introduce the smoothness estimator via logarithmic regression used in \cite{gatheral}. Consider a volatility process on a time grid $[0,T]$. First we pretend that we have access to discrete observations of the spot volatility process with mesh $\Delta$ such that the observations are $\sigma_0, \sigma_\Delta, ..., \sigma_{k\Delta},...$ for $k \in \{0, \lfloor T / \Delta \rfloor\}$. Here $\Delta$ is a natural number and $\Delta\geq 1$. If we set $N=\lfloor T / \Delta \rfloor$, then for $q\geq 0$ we define
 \begin{align*}
 m(q,\Delta) = \frac{1}{N} \sum_{k=1}^N \lvert \log(\sigma_{k\Delta})-\log(\sigma_{(k-1)\Delta})\rvert^q.
@@ -439,11 +427,11 @@ where $S$ denotes the price process that $\widetilde{\mathscr{R}}_n$ estimates f
 \widetilde{\mathscr{R}}_n^s (\widehat{Y}_t^{(n)}) := \widetilde{\mathscr{R}}_n (\lambda_n^s \widehat{Y}_t^{(n)})
 \end{align*} 
 where $\lambda_n^s$ is computed in the same manner as (\ref{eq:scale_lambda}) just using $\widetilde{\mathscr{R}}_n(\widehat{Y}_t^{(n)})$ instead of $\widehat{\mathscr{R}}_n(Y)$.\\\\
-We will now illustrate the performance of $\hat{\mathscr{R}}_n^s (y)$ and $\hat{\mathscr{R}}_n (y)$ in a simple example by replicating a simulation example from \cite{han}. We let $x$ follow a sample path of a fractional Brownian motion $W^H_t$ and set $g(x)=x$. For the computation of $\hat{\mathscr{R}}_n (y)$ we require observations of $y$ at all values of the time grid $\mathbb{T}_{n+2}:= \{k 2^{-n-2} : k=0,1,...,2^{n+2}\}$. In order to approximate $y(t)=\int_0^t W^H_s ds$ we are simulating the values of $W^H_t$ on a finer time grid $\mathbb{T}_N$ with $N=n+6$. Then we put
+We will now illustrate the performance of $\hat{\mathscr{R}}_n^s (y)$ and $\hat{\mathscr{R}}_n (y)$ in a simple example by replicating a simulation example from \cite{han}. We let $x$ follow a sample path of a fractional Brownian motion $B^H_t$ and set $g(x)=x$. For the computation of $\hat{\mathscr{R}}_n (y)$ we require observations of $y$ at all values of the time grid $\mathbb{T}_{n+2}:= \{k 2^{-n-2} : k=0,1,...,2^{n+2}\}$. In order to approximate $y(t)=\int_0^t B^H_s ds$ we are simulating the values of $B^H_t$ on a finer time grid $\mathbb{T}_N$ with $N=n+6$. Then we put
 \begin{align}
-Y_{k2^{-n-2}}:= 2^{-N} \sum_{j=1}^{2^{N-n-2}k} W^H_{j2^{-N}}, \quad k=0,1,...,2^{n+2} \label{eq:scaley}
+Y_{k2^{-n-2}}:= 2^{-N} \sum_{j=1}^{2^{N-n-2}k} B^H_{j2^{-N}}, \quad k=0,1,...,2^{n+2} \label{eq:scaley}
 \end{align}
-which is an approximation of $y(t)=\int_0^t W^H_s ds$ by Riemann sums. In Figure \ref{fig:scaleplot} we display the results for the estimators $\hat{\mathscr{R}}_n (y)$ and $\hat{\mathscr{R}}_n^s (y)$ for 1000 independent paths of a fractional Brownian motion for different values of $n$. The left plot of Figure \ref{fig:scaleplot} is based on paths from a fractional Brownian motion with Hurst exponent $H=0.3$ while the right plot is for a fBm with $H=0.7$. The top plots are from the original estimator $\hat{\mathscr{R}}_n (y)$ whereas the bottom plots are box plots of the sequential scale estimates $\hat{\mathscr{R}}_n^s (y)$. We observe from the top plots in Figure \ref{fig:scaleplot} that $\hat{\mathscr{R}}_n (y)$ performs relatively well and seems to converge to the true roughness exponent as $n$ increases. However, the estimator also exhibits a certain bias. The corresponding results for the sequential scale estimator $\hat{\mathscr{R}}_n^s (y)$ are displayed in the bottom plots of Figure \ref{fig:scaleplot}. We observe that by passing to the sequential scale estimator we completely remove the bias observed for $\hat{\mathscr{R}}_n (y)$. Overall, $\hat{\mathscr{R}}_n^s (y)$ seems to be performing very well especially for $n\geq 15$. We will be using the sequential scaling estimate $\hat{\mathscr{R}}_n^s (y)$ with $n\geq 15$ when performing numerical experiments in section 4.
+which is an approximation of $y(t)=\int_0^t B^H_s ds$ by Riemann sums. In Figure \ref{fig:scaleplot} we display the results for the estimators $\hat{\mathscr{R}}_n $ and $\hat{\mathscr{R}}_n^s $ for 1000 independent paths of a fractional Brownian motion for different values of $n$. The left plot of Figure \ref{fig:scaleplot} is based on paths from a fractional Brownian motion with Hurst exponent $H=0.3$ while the right plot is for a fBm with $H=0.7$. The top plots are from the original estimator $\hat{\mathscr{R}}_n$ whereas the bottom plots are box plots of the sequential scale estimates $\hat{\mathscr{R}}_n^s (y)$. We observe from the top plots in Figure \ref{fig:scaleplot} that $\hat{\mathscr{R}}_n$ performs relatively well and seems to converge to the true roughness exponent as $n$ increases. However, the estimator also exhibits a certain bias. The corresponding results for the sequential scale estimator $\hat{\mathscr{R}}_n^s$ are displayed in the bottom plots of Figure \ref{fig:scaleplot}. We observe that by passing to the sequential scale estimator we completely remove the bias observed for $\hat{\mathscr{R}}_n$. Overall, $\hat{\mathscr{R}}_n^s $ seems to be a quite accurate estimate especially for $n\geq 15$. 
 \begin{figure}[htbp]
     \centering
     
@@ -463,10 +451,44 @@ which is an approximation of $y(t)=\int_0^t W^H_s ds$ by Riemann sums. In Figure
         \includegraphics[width=\linewidth]{box2.png}
     \end{subfigure}
     
-    \caption{Box plots of the original estimates $\hat{\mathscr{R}}_n (y)$ (top) and the sequential scale estimates $\hat{\mathscr{R}}_n^s (y)$ (bottom) for $n=12,...,16$ based on 1000 independent simulations of a fractional Brownian motion with $H=0.3$ (left) and $H=0.7$ (right) and with $Y$ as in (\ref{eq:scaley}). The other parameters are chosen to be $m=3$ and $\alpha_k = 1$ for $k=0,1,2,3$.} \label{fig:scaleplot}
+    \caption{Box plots of the original estimates $\hat{\mathscr{R}}_n (Y)$ (top) and the sequential scale estimates $\hat{\mathscr{R}}_n^s (Y)$ (bottom) for $n=12,...,16$ based on 1000 independent simulations of a fractional Brownian motion with $H=0.3$ (left) and $H=0.7$ (right) and with $Y$ as in (\ref{eq:scaley}). The other parameters are chosen to be $m=3$ and $\alpha_k = 1$ for $k=0,1,2,3$.} \label{fig:scaleplot}
 \end{figure}\\
-
-\section{Numerical Experiments}
+We now make a bit more complicated simulation example. We let log volatility, $\log\sigma_t$ be given by a fractional Ornstein-Uhlenbeck process on the form 
+\begin{align}
+dX_t = +\rho(\mu - X_t) \, dt + dB^H_t\label{eq:scale_fou}
+\end{align}
+where $B^H_t$ is a fractional Brownian motion. In this example we use the parameters $\rho=0.2$, $X_0=0$ and $\mu=2$. As input to the estimator we need discrete observations of 
+\begin{align*}
+\int_0^t \sigma^2_s ds = \int_0^t e^{2X_s} ds, \quad 0\leq t \leq 1.
+\end{align*}
+To this end, we take again $N=n+6$ and simulate the values of $X_t$ on the finer time grid $\mathbb{T}_{N}:= \{k 2^{-N} : k=0,1,...,2^{N}\}$ by an Euler scheme. We then compute
+\begin{align}
+Y_{k2^{-n-2}}:= 2^{-N} \sum_{j=1}^{2^{N-n-2}k} exp\left(2X_{j2^{-N}}\right), \quad k=0,1,...,2^{n+2} \label{eq:scaley_fou}
+\end{align} 
+as an approximation of $\int_0^t e^{2X_s} ds$. In Figure \ref{fig:scaleplot_fou} we display the results for the estimators $\hat{\mathscr{R}}_n$ and $\hat{\mathscr{R}}_n^s$ for 1000 independent paths of (\ref{eq:scale_fou}) with $n = 12,...,16$. The left plot of Figure \ref{fig:scaleplot_fou} is based on paths from a Ornstein-Uhlenbeck process with Hurst exponent $H=0.3$ while the right plot is for a fOU with $H=0.7$. The top plots are from the original estimator $\hat{\mathscr{R}}_n (y)$ whereas the bottom plots are box plots of the sequential scale estimates $\hat{\mathscr{R}}_n^s$. We observe from the top plots in Figure \ref{fig:scaleplot} that the original estimator $\hat{\mathscr{R}}_n$ performs poorly in this case. However, the sequential scale estimator $\hat{\mathscr{R}}_n^s$ performs almost as well as in the simple case illustrated in Figure \ref{fig:scaleplot}. This is likely due to tha fact that $g(t)=e^{2t}$ used in \eqref{eq:scaley_fou} substantially distort the scale of the underlying process. Since the original estimator is not scale-invariant this leads to poor estimates. However, passing to $\hat{\mathscr{R}}_n^s (y)$ seems to completely remedy this distortion. 
+\begin{figure}[htbp]
+    \centering
+    
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{03fou_expo.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{07fou_expo.png}
+    \end{subfigure}
+    \vskip 0em
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{03fou_scale.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{07fou_scale.png}
+    \end{subfigure}
+    
+    \caption{Box plots of the original estimates $\hat{\mathscr{R}}_n (Y)$ (top) and the sequential scale estimates $\hat{\mathscr{R}}_n^s (Y)$ (bottom) for $n=12,...,16$ based on 1000 independent simulations of a fractional Ornstein-Uhlenbeck process \eqref{eq:scale_fou} with $H=0.3$ (left) and $H=0.7$ (right) and with $Y$ as in (\ref{eq:scaley_fou}). The other parameters are chosen to be $m=3$ and $\alpha_k = 1$ for $k=0,1,2,3$.} \label{fig:scaleplot_fou}
+\end{figure}\\
+Both of these simulation examples illustrate how the sequential scale estimator $\widehat{\mathscr{R}}_n^s$ improves the estimator $\widehat{\mathscr{R}}_n$. Overall, $\widehat{\mathscr{R}}_n^s$ seems to be performing very well and provide an accurate estimate of the true roughness of the underlying model especially for $n\geq 15$. We will be using $\widehat{\mathscr{R}}_n^s$ and $\widehat{\mathscr{R}}_n$ with $n\geq 15$ when performing numerical experiments in section 4.
+\section{Numerical Experiments} \label{sec:num_exp}
 In this section we will be performing a number of numerical experiments. We will be estimating the roughness index for stochastic models based directly on the instantaneous volatility $\sigma_t$ and based on the realized volatility by using price trajectories simulated from the models. By doing this we can investigate how estimation errors impact the estimated roughness index. We will be performing these experiments for stochastic models with various degrees of roughness.
 
 \subsection{Simple stochastic volatility diffusion model}
@@ -542,7 +564,7 @@ We then compute the realized variance as in (\ref{eq:rvforscale}). In order to c
 \begin{align}
 Y_{k2^{-n-2}}:= 2^{-N} \sum_{j=1}^{2^{N-n-2}k} \sigma^2_{j2^{-N}}, \quad k=0,1,...,2^{n+2}. \label{eq:ex5y}
 \end{align}
-In Figure \ref{fig:ex5scale} we have plotted these two approximations of integrated variance $y(t)$ and their difference. The left plot of Figure \ref{fig:ex5scale} represent the realized variance in black and the approximation $Y$ directly from $\sigma_t$ as in (\ref{eq:ex5y}) in red. The middle plot shows the difference between these two approximations of integrated variance, and the right plot shows the difference between the log of the two approximations. Figure \ref{fig:ex5scale} indicates that these two ways of computing the integrated variance yield very similar results, and the difference between realized variance and $Y$ is very small. On the left plot it is difficult to distinguish the red and the black line from each other since they fall directly on top of each other. However, there is a small difference as seen on the two plots to the right, and especially the log difference is quite big in the beginning when the integrated variance is very small. \\
+In Figure \ref{fig:ex5scale} we have plotted these two approximations of integrated variance $y(t)$ and their difference. The left plot of Figure \ref{fig:ex5scale} represent the realized variance in black and the approximation $Y$ directly from $\sigma_t$ as in (\ref{eq:ex5y}) in red. The middle plot shows the difference between these two approximations of integrated variance, and the right plot shows the difference between the log of the two approximations. Figure \ref{fig:ex5scale} indicates that these two ways of computing the integrated variance yield very similar results, and the difference between realized variance and $Y$ is very small. On the left plot it is difficult to distinguish the red and the black line from each other since they fall directly on top of each other. However, there is a small difference as seen on the two plots to the right, and especially the log difference is somewhat big in the very beginning when the integrated variance is very small.
 \begin{figure}[h]
     \centering
     \begin{subfigure}{0.32\textwidth}
@@ -557,7 +579,7 @@ In Figure \ref{fig:ex5scale} we have plotted these two approximations of integra
         \centering
         \includegraphics[width=\textwidth]{ex5_scale3.jpeg}
     \end{subfigure}
-    \caption{Integrated variance of the original path from model \eqref{eq:simple} rescaled to fit the sequential scale estimator. \textbf{Left:} The red line represents $Y$ computed directly from instantaneous volatility $\sigma_t$ whereas the black line represents realized variance $RV_t^2$. \textbf{Middle:} Corresponding difference between the lines in the left plot. \textbf{Right:} Corresponding log difference.}
+    \caption{Integrated variance of the original path from model \eqref{eq:simple} rescaled to fit the sequential scale estimator. \textbf{Left:} The red line represents $Y$ computed directly from instantaneous volatility $\sigma_t$ whereas the black line represents realized variance $\hat{Y}_t^{(n)}$. \textbf{Middle:} Corresponding difference between the lines in the left plot. \textbf{Right:} Corresponding log difference.}
     \label{fig:ex5scale}
 \end{figure}\\\\
 We now proceed to estimating the roughness by using respectively realized variance and spot variance $Y(\sigma_t)$. We denote the sequential scale estimator based directly on realized variance by $\widetilde{\mathscr{R}}_n^s (S)$ whereas the roughness estimated from $Y(\sigma_t)$ is denoted by $\widehat{\mathscr{R}}_n^s (Y)$. Table \ref{tab:ex5scaleest} provides the roughness estimates obtained from the sequential scale estimator for the rescaled path from model (\ref{eq:simple}). Furthermore, the table also provides the results from the original estimators $\widetilde{\mathscr{R}}_n (S)$ and $\widehat{\mathscr{R}}_n (Y)$ that are used for the computations of $\widetilde{\mathscr{R}}_n^s (S)$ and $\widehat{\mathscr{R}}_n^s (Y)$. Even though the difference between realized variance $\widehat{Y}_t^{(n)}$ and $Y(\sigma_t)$ is small, the sequential scale estimator yields very different results when used for these two variances as seen in Table \ref{tab:ex5scaleest}. The estimated roughness when using spot variance $Y(\sigma_t)$ is very close to the true roughness of the model $H=\frac{1}{2}$. However, when using realized variance the estimated roughness is $\widetilde{\mathscr{R}}_n^s (S)=-0.1073$ which is a value that roughness can never take. This indicates that the estimator $\widetilde{\mathscr{R}}_n^s (S)$ is very vulnerable to estimation errors in sense of difference between realized variance and integrated variance. This is surprising since the sequential scale estimator has been developed with the focus of avoiding the problems in roughness estimation caused by estimation errors. It is clear that the estimation error is smaller for the sequential scale estimator in the sense that the difference between realized variance $\widehat{Y}_t^{(n)}$ and $Y(\sigma_t)$ observed in Figure \ref{fig:ex5scale} is much smaller than the difference between realized volatility and instantaneous volatility observed in Figure \ref{fig:ex5IVRV}. However, the small difference between $\widehat{Y}_t^{(n)}$ and $Y(\sigma_t)$ is enough to substantially distort the outcomes of the roughness estimation. Furthermore, we observe from Table \ref{tab:ex5scaleest} that the original estimator $\widetilde{\mathscr{R}}_n(S)$ actually performs better than the sequential scale estimator $\widetilde{\mathscr{R}}_n^s(S)$ when used for realized variance. This is surprising since we illustrated in our simulation examples from section 3.5 how passing to the sequential scale estimator could remove bias and make the estimator converge faster. However, both $\widetilde{\mathscr{R}}_n^s(S)$ and $\widetilde{\mathscr{R}}_n(S)$ performs very poorly in this example.
@@ -567,14 +589,29 @@ We now proceed to estimating the roughness by using respectively realized varian
         \toprule
          & Realized variance & Spot variance $Y(\sigma_t)$ \\
         \midrule
-        Sequential scale estimator & $\widetilde{\mathscr{R}}_n^s (S) = -0.1073 $ & $\widehat{\mathscr{R}}_n^s (Y) = 0.5029$ \\
-        Original estimator &$\widetilde{\mathscr{R}}_n (S) = 0.1813 $ & $\widehat{\mathscr{R}}_n (Y) = 0.5332$ \\
+        Sequential scale estimator & $\widetilde{\mathscr{R}}_n^s (S) = -0.4938 $ & $\widehat{\mathscr{R}}_n^s (Y) = 0.5029$ \\
+        Original scale estimator &$\widetilde{\mathscr{R}}_n (S) = 0.1813 $ & $\widehat{\mathscr{R}}_n (Y) = 0.5332$ \\
+        Absolute scale estimator &$\lvert \widetilde{\mathscr{R}}_n^s (S)\rvert = 0.4938 $ & $\lvert \widehat{\mathscr{R}}_n^s (Y)\rvert = 0.5029$ \\
         \bottomrule
     \end{tabular}
     \caption{The roughness estimates from the sequential scale roughness estimator with $n=17$ and $m_{17}=2^5$ for model (\ref{eq:simple}) by using respectively realized variance and the approximation of integrated variance from instantaneous volatility $Y(\sigma_t)$. The results for the scale-invariant sequential scale estimator are displayed in the top row whereas the corresponding estimates from the original estimator are displayed in the bottom row.}
     \label{tab:ex5scaleest}
 \end{table}\\\\
-We are now 
+In Figure \ref{fig:ex5dens} we have repeated the estimation procedure across 150 independent paths drawn from model \eqref{eq:simple} and computed $\widehat{H}_{L,K}$, $\widetilde{\mathscr{R}}_n^s$, $\widehat{\mathscr{R}}_n$ and $\lvert \widetilde{\mathscr{R}}_n^s (S)\rvert$ for all paths. The left plot of Figure \ref{fig:ex5dens} displays density plots of the estimators when used on realized volatility and realized variance whereas the right plot displays density plots when using instantaneous volatility and $Y(\sigma_t)$ as input to the estimators. For $\widehat{H}_{L,K}$ we observe that when using realized volatility the estimator $\widehat{H}_{L,K}(RV)$ systematically underestimates the true roughness exponent of $H=\frac{1}{2}$. However, when used on instantaneous volatility $\widehat{H}_{L,K}(IV)$ is very accurate and estimates the true roughness of the model very well. 
+\begin{figure}[htbp]
+    \centering
+    
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{ex5_densRV.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{ex5_densIV.png}
+    \end{subfigure}
+    
+    \caption{Density plots of the roughness estimators $\widehat{H}_{L,K}$ (red), $\widetilde{\mathscr{R}}_n^s$ (blue), $\widehat{\mathscr{R}}_n$ (green) and $\lvert \widetilde{\mathscr{R}}_n^s (S)\rvert$ (yellow) across 150 independent paths drawn from model \eqref{eq:simple}. \textbf{Left:} Using realized volatility and realized variance as input. \textbf{Right:} Using instantaneous volatility $\sigma_t$ and $Y(\sigma_t)$ as input.}
+    \label{fig:ex5dens}
+\end{figure}\\\\
 \subsection{OU-SV model}
 Now, we will simulate from the following OU-SV model:
 \begin{align}
@@ -599,6 +636,84 @@ We are using the same procedure as described in section 4.1 to generate our real
     \caption{Simulation from the OU-SV model. \textbf{Left:} The red line represents instantaneous volatility $\sigma_t$ whereas the black line represents realized volatility $RV_t$. \textbf{Middle:} Corresponding estimation error for the left simulated path. \textbf{Right:} Corresponding log estimation error.}
     \label{fig:example}
 \end{figure}\\\\
+In Figure \ref{fig:ex6w} we have estimated the roughness index via normalized $p$-th variation for realized and instantaneous volatility. In the left plot, we have used the realized volatility as input to the normalized $p$-th variation statistic and plotted $\log(W(K=300, L= 300\times 300, \pi, p, t=1, X = RV))$ against $H=\frac{1}{p}$. The right graph is a similar plot using instantaneous volatility instead of realized volatility. The obtained roughness estimators are very different for instantaneous and realized volatility. For realized volatility we obtain an estimated roughness of $\hat{H}_{L=300\times 300, K=300}(RV)=0.155$ which is much lower than the estimated roughness index for instantaneous volatility $\hat{H}_{L=300\times 300, K=300}(\sigma)=0.501$. The true roughness of the model is $H=0.5$. Thus, also for this example the roughness estimator is very accurate when using instantaneous volatility. However, the estimated roughness when using realized volatility is much rougher than the true roughness, and realized variance appear even rougher in this example compared to the previous one. As this is a simulation study this rougher behaviour of realized volatility purely comes from the estimation error, and this illustrates how estimation errors can substantially distort the roughness estimate.
+\begin{figure}[htbp]
+    \centering
+    
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{ex6_RVw.jpeg}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{ex6_IVw.jpeg}
+    \end{subfigure}
+    
+    \caption{The value of $\log(W(L=300\times 300, K=300, \pi, p, t=1, X))$ plotted against $H=1/p$ in black. The blue vertical line represents the estimated roughness $\hat{H}_{L,K}$. \textbf{Left:} Estimated roughness index $\hat{H}_{L,K}$ for realized volatility derived from the stochastic volatility model \eqref{eq:simple}. \textbf{Right:} Estimated roughness index for instantaneous volatility of the same price path.}
+    \label{fig:ex6w}
+\end{figure}\\\\
+Now we use the roughness estimator by logarithmic regression $\hat{H}_R$ for the same instantaneous volatility and realized volatility data. In Figure \ref{fig:ex6logIV} we display the results for the roughness estimator when using instantaneous volatility. The estimated roughness index is $\hat{H}_R=0.498$ which is very close to the true roughness of the model $H=\frac{1}{2}$. This indicates that the roughness estimator performs well for instantaneous volatility. In Figure \ref{fig:ex6logRV} we display the corresponding results for the log regression estimator $\hat{H}_R$ when using realized volatility as input. Here we obtain an estimated roughness of $\hat{H}_R=0.089$ which is even rougher than the estimate we obtained for the estimator $\hat{H}_{L,K}$ via $p$-th variation. This rougher behaviour purely comes from the estimation error, and this once again illustrates that using realized volatility for roughness estimation can lead to a dramatic underestimation of the true roughness of the underlying model.
+\begin{figure}[htbp]
+    \centering
+    
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{ex6_logIV1.jpeg}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{ex6_logIV2.jpeg}
+    \end{subfigure}
+    
+    \caption{Roughness estimation by log regression using instantaneous volatility simulated from model \eqref{eq:ousv}. \textbf{Left:} $\log(m(q,\Delta))$ plotted against $\log(\Delta)$. \textbf{Right:} Regression coefficients $\zeta_q$ plotted against $q$. The estimated roughness index is $\hat{H}_R=0.498$.}
+    \label{fig:ex6logIV}
+\end{figure}\\\\
+\begin{figure}[htbp]
+    \centering
+    
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{ex6_logRV1.jpeg}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{ex6_logRV2.jpeg}
+    \end{subfigure}
+    
+    \caption{Roughness estimation by log regression using realized volatility for a price path simulated from model \eqref{eq:ousv}. \textbf{Left:} $\log(m(q,\Delta))$ plotted against $\log(\Delta)$. \textbf{Right:} Regression coefficients $\zeta_q$ plotted against $q$. The estimated roughness index is $\hat{H}_R=0.089$.}
+    \label{fig:ex6logRV}
+\end{figure}\\\\
+We will now use the sequential scale estimator for the same price path. We will be using $n=17$ and $m_{17}=2^5$ for the estimation. Furthermore, we use the parameters $m=4$ and $\alpha_k=1$ for $k=0,1,2,3$ for the computation of $\widehat{\mathscr{R}}_n^s$. As in section 4.1 we will rescale the price process such that our observed data points fit the required input for the sequential scale estimator. To this end, we need $2^{n+7}$ data points on the time interval $[0,1]$. We set $dt=2^{-n-7}$ and rescale our $dB_t$ and $dB_t'$ to this new $dt$. We then compute $S_t$ as in \eqref{eq:ousv} using these rescaled $dt$, $dB_t$ and $dB_t'$. We compute realized variance $\hat{Y}_t^{(n)}$ as in \eqref{eq:rvforscale} and $Y(\sigma_t)$ as in \eqref{eq:ex5y}. \\
+In Figure \ref{fig:ex6scale} we have plotted these two approximations of integrated variance $y(t)$ and their difference. The left plot of Figure \ref{fig:ex5scale} represent the realized variance in black and the approximation $Y(\sigma_t)$ as in (\ref{eq:ex5y}) in red. The middle plot shows the difference between these two approximations of integrated variance, and the right plot shows the difference between the log of the two approximations. Just as in the previous example we observe that these two ways of computing the integrated variance yield very similar results, and the difference between realized variance $\hat{Y}_t^{(n)}$ and $Y(\sigma_t)$ is very small. However, the log difference is much bigger in the very beginning when the integrated variance is very small.
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{ex6_scale1.jpeg}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{ex6_scale2.jpeg}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{ex6_scale3.jpeg}
+    \end{subfigure}
+    \caption{Integrated variance of the original path from model \eqref{eq:ousv} rescaled to fit the sequential scale estimator. \textbf{Left:} The red line represents $Y$ computed directly from instantaneous volatility $\sigma_t$ whereas the black line represents realized variance $\hat{Y}_t^{(n)}$. \textbf{Middle:} Corresponding difference between the lines in the left plot. \textbf{Right:} Corresponding log difference.}
+    \label{fig:ex6scale}
+\end{figure}\\\\
+In Table \ref{tab:ex6scaleest} we display the result from the sequential scale roughness estimation. As in the previous example we observe that the sequential scale estimator $\widehat{\mathscr{R}}_n^s$ provides an accurate roughness estimation close to the true roughness of the model $H=\frac{1}{2}$ when using $Y(\sigma_t)$ as input. It also significantly improves the original scale estimator $\widehat{\mathscr{R}}_n$. However, when using realized variance as input we obtain the roughness estimate $\widetilde{\mathscr{R}}_n^s (S) = -0.5012$ for the sequential scale estimator which is close to the negative of the true roughness of the model. The small difference between $\hat{Y}_t^{(n)}$ and $Y(\sigma_t)$ observed in Figure \ref{fig:ex6scale} completely changes the estimates $\widehat{\mathscr{R}}_n^s$ and $\widehat{\mathscr{R}}_n$. However, when simply using $\lvert \widetilde{\mathscr{R}}_n^s \rvert$ we obtain a very accurate roughness estimate for both realized variance and $Y(\sigma_t)$. These results indicate that $\lvert \widetilde{\mathscr{R}}_n^s \rvert$ could be a very robust estimator that is unaffected by the estimation error between realized and integrated variance.
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{ccc}
+        \toprule
+         & Realized variance & Spot variance $Y(\sigma_t)$ \\
+        \midrule
+        Sequential scale estimator & $\widetilde{\mathscr{R}}_n^s (S) = -0.5012 $ & $\widehat{\mathscr{R}}_n^s (Y) = 0.4988$ \\
+        Original scale estimator &$\widetilde{\mathscr{R}}_n (S) = 0.0529 $ & $\widehat{\mathscr{R}}_n (Y) = 0.5407$ \\
+        Absolute scale estimator &$\lvert \widetilde{\mathscr{R}}_n^s (S)\rvert = 0.5012 $ & $\lvert \widehat{\mathscr{R}}_n^s (Y)\rvert = 0.4988$ \\
+        \bottomrule
+    \end{tabular}
+    \caption{The roughness estimates from the sequential scale roughness estimator with $n=17$ and $m_{17}=2^5$ for model (\ref{eq:ousv}) by using respectively realized variance and the approximation of integrated variance from instantaneous volatility $Y(\sigma_t)$.}
+    \label{tab:ex6scaleest}
+\end{table}\\\\
 We now compute the distributions of the estimated roughness index via normalized $p$-th statistic $\hat{H}_{L,K}$ with $L=300\times 300$ and $K=300$ for realized volatility and instantaneous volatility. We generate the distributions across 2500 independent paths drawn from the OU-SV model \eqref{eq:ousv}. The left plot of Figure \ref{fig:ex6dens} is the distribution of $\hat{H}_{L,K}$ for realized volatility whereas the right plot is the corresponding distribution for instantaneous volatility as data in the roughness estimator. In addition to this, Table \ref{tab:ex6dens} provides the summary statistics for the roughness estimator $\hat{H}_{L,K}$ for realized and instantaneous volatility respectively across the 2500 independent paths. We observe that realized volatility systematically exhibit much rougher behaviour than instantaneous volatility. The roughness estimates based on instantaneous volatility are very close to the roughness of the true model $H=0.5$. However, the roughness estimates generated from realized volatility are much smaller with a mean of $\hat{H}_{L,K}=0.1549$ across the 2500 independent simulations.
 \begin{figure}[htbp]
     \centering
@@ -631,8 +746,22 @@ We now compute the distributions of the estimated roughness index via normalized
     \caption{Summary of statistics for estimated roughness index $\hat{H}_{L,K}$ for realized and instantaneous volatility across 2500 independent simulations the OU-SV model \eqref{eq:ousv} with $L=300\times 300$ and $K=300$.}
     \label{tab:ex6dens}
 \end{table}\\\\
-Note that our results deviates slightly from the results in \cite{cont} for a similar model. This might be caused by \cite{cont} using the mean of $\sigma_t$ across the 300 consecutive data points as their instantaneous volatility which seems to create a slightly smoother volatility process. Furthermore, \cite{cont} might be using a different $T$ than us which in the OU-SV model will significantly impact the size of the estimation error and thus the estimated roughness index for realized volatility when all other parameters are kept constant. The conclusions are however the same. Realized volatility does systematically exhibit much rougher behaviour than instantaneous volatility and than the true roughness of the model. This rougher behaviour is solely caused by the estimation error, and it indicates that roughness estimated based on realized volatility can be unreliable.
-
+Note that our results deviates slightly from the results in \cite{cont} for a similar model. This might be caused by \cite{cont} using the mean of $\sigma_t$ across the 300 consecutive data points as their instantaneous volatility which creates a slightly smoother volatility process. Furthermore, \cite{cont} might be using a different $T$ than us which in the OU-SV model will significantly impact the size of the estimation error and thus the estimated roughness index for realized volatility when all other parameters are kept constant. The conclusions are however the same. Realized volatility does systematically exhibit much rougher behaviour than instantaneous volatility and than the true roughness of the model. This rougher behaviour is solely caused by the estimation error, and it indicates that roughness estimated based on realized volatility can be unreliable.\\\\
+In Figure \ref{fig:ex6dens} we have made density plots for the other roughness estimators across 150 independent paths generated from the OU-SV model \eqref{eq:ousv}. The left plot of Figure \ref{fig:ex6dens} displays density plots of the estimators when used on realized volatility and realized variance whereas the right plot displays density plots when using instantaneous volatility and $Y(\sigma_t)$ as input to the estimators. The density plot of the roughness estimator by log regression $\widehat{H}_R$ is represented by the red line. It provides very constant results. For instantaneous volatility it accurately estimates the true roughness of the underlying model whereas it for realized volatility systematically provides a roughness estimate near $0.09$ which is much rougher than the true roughness exponent $H=\frac{1}{2}$. Furthermore, we observe that the sequential scale estimator $\widetilde{\mathscr{R}}_n^s(S)$ systematically estimate the roughness of realized variance near $-0.5$. Consequently, we observe that $\lvert \widetilde{\mathscr{R}}_n^s\rvert$ is very accurate both when used for realized variance $\hat{Y}_t^{(n)}$ and for spot variance $Y(\sigma_t)$, and it is the only estimator in this example which accurately estimate the true roughness of the underlying model based on observations of the actual price process $S_t$.
+\begin{figure}[htbp]
+    \centering
+    
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{ex6_densRV.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{ex6_densIV.png}
+    \end{subfigure}
+    
+    \caption{Density plots of the roughness estimators $\widehat{H}_R$ (red), $\widetilde{\mathscr{R}}_n^s$ (blue), $\widehat{\mathscr{R}}_n$ (green) and $\lvert \widetilde{\mathscr{R}}_n^s (S)\rvert$ (yellow) across 150 independent paths drawn from the OU-SV model \eqref{eq:ousv}. \textbf{Left:} Using realized volatility and realized variance as input. \textbf{Right:} Using instantaneous volatility $\sigma_t$ and $Y(\sigma_t)$ as input.}
+    \label{fig:ex6dens}
+\end{figure}\\\\
 \subsection{A fractional Ornstein-Uhlenbeck model}
 In the two previous models, instantaneous volatility follows a diffusive behaviour similar to a Brownian motion with $H=0.5$. We now consider a more general case of a stochastic volatility model where the volatility process has a general roughness index $H\in(0,1)$ generated from a fractional Brownian motion. We investigate the model for different roughness indexes and explore how this affect the estimation error and estimated roughness index. Consider the following process where the volatility is described by a fractional Ornstein-Uhlenbeck model:
 \begin{align}
@@ -774,7 +903,7 @@ It seems that our two roughness estimates coincides and generate similar estimat
     \caption{Estimated roughness indexes for realized and instantaneous volatility from a fractional OU model (\ref{eq:fou}) plotted for price paths generated by different values of $H$. The solid lines are roughness indexes via $p$-th variation $\hat{H}_{L,K}$ with $L = 300\times 300$ and $K= 300$ while the dashed lines represents estimated roughness by logarithmic regression.}
     \label{fig:ex7single}
 \end{figure}\\\\
-In Figure \ref{fig:ex7plot100} we have repeated the above analyses for 100 independent simulated prices processes generated by the fractional Ornstein-Uhlenbeck model \ref{eq:fou} but only for the estimated roughness index via $p$-th variation $\hat{H}_{L,K}$ with $L = 100\times 100$ and $K= 100$. The figure shows the estimators $\hat{H}_{L,K}(RV)$ and $\hat{H}_{L,K}(\sigma)$ plotted against Hurst exponents $H=\{0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8\}$ for every independent path. The bold black lines represent the mean across 100 independent simulations whereas the dotted lines represent the corresponding 75\% confidence interval. If equation \ref{eq:wpth} have no solution for $H\in (0,1)$ we set $\hat{H}_{L,K}=0$.
+In Figure \ref{fig:ex7plot100} we have repeated the above analyses for 100 independent simulated prices processes generated by the fractional Ornstein-Uhlenbeck model \eqref{eq:fou} but only for the estimated roughness index via $p$-th variation $\hat{H}_{L,K}$ with $L = 100\times 100$ and $K= 100$. The figure shows the estimators $\hat{H}_{L,K}(RV)$ and $\hat{H}_{L,K}(\sigma)$ plotted against Hurst exponents $H=\{0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8\}$ for every independent path. The bold black lines represent the mean across 100 independent simulations whereas the dotted lines represent the corresponding 75\% confidence interval. If equation \eqref{eq:wpth} have no solution for $H\in (0,1)$ we set $\hat{H}_{L,K}=0$.
 \begin{figure}[htbp]
     \centering
     
@@ -785,8 +914,45 @@ In Figure \ref{fig:ex7plot100} we have repeated the above analyses for 100 indep
     \caption{Estimated roughness index via $p$-th variation for realized and instantaneous volatility plotted against different values of $H$ for 100 independent price paths from a fractional OU model (\ref{eq:fou}). The solid black lines represent the mean across the 100 paths and the dashed black lines represent the corresponding 75\% confidence interval.}
     \label{fig:ex7plot100}
 \end{figure}\\\\
-From Figure \ref{fig:ex7plot100} we observe that for all 100 independent simulations the roughness estimators exhibit a similar behaviour. Our conclusions about the poorness of roughness estimates for realized volatility still hold and was not just a matter of the single price path we studied before. In particular, for the fractional Ornstein-Uhlenbeck model \ref{eq:fou} realized volatility always exhibit rough behaviour (i.e. $H<\frac{1}{2}$) no matter what the true roughness of the volatility process is. The estimated roughness based on instantaneous volatility is quite accurate and as this is a simulation study we have no measurement errors so the inaccuracy of the estimators for realized volatility solely comes from the estimation error. \\\\
-In practice, instantaneous volatility cannot be observed, and roughness estimates are based on realized volatility. However, the above examples illustrate that one cannot necessarily draw the conclusion that (spot) volatility is rough just because realized volatility exhibit rough behaviour with $\hat{H}_{L,K}(RV)<\frac{1}{2}$ even if the estimated roughness is well below $\frac{1}{2}$.
+From Figure \ref{fig:ex7plot100} we observe that for all 100 independent simulations the roughness estimators exhibit a similar behaviour. Our conclusions about the poorness of roughness estimates for realized volatility still hold and was not just a matter of the single price path we studied before. In particular, for the fractional Ornstein-Uhlenbeck model \eqref{eq:fou} realized volatility always exhibit rough behaviour (i.e. $H<\frac{1}{2}$) no matter what the true roughness of the volatility process is. The estimated roughness based on instantaneous volatility is quite accurate and as this is a simulation study we have no measurement errors so the inaccuracy of the estimators for realized volatility solely comes from the estimation error. \\\\
+We now introduce the absolute sequential scale estimator $\lvert \widehat{\mathscr{R}}_n^s\rvert$ to this example. We take a slightly different approach than in the previous examples and simulate directly the required observations needed for the sequential scale estimator from model \eqref{eq:fou} with $T=1$. We use $n=16$ and $m_n = 2^4$ for the estimation. For the same price path we also compute the roughness index via $p$-th variation $\hat{H}_{L,K}$ and the roughness estimator via log regression $\widehat{H}_R$ by computing instantaneous and realized volatility for every 300 consecutive points. Thus, we use $L=13980$ and $K=\sqrt{L}$ for the estimator $\hat{H}_{L,K}$. In Table \ref{tab:ex7tableincl_scale} we display the roughness estimates obtained for Hurts exponent $H=\{0.1,.0.2,0.3,0.4,0.5,0.6,0.7,0.8\}$. We have used the same seed for all $H$ values. The estimates from $\lvert \widehat{\mathscr{R}}_n^s\rvert$ are displayed in the two columns furthest to the right in Table \ref{tab:ex7tableincl_scale}. IV should for this estimator be understood as integrated variance approximated directly from instantaneous volatility as in \eqref{eq:ex5y} whereas RV should be understood as realized variance computed as in \eqref{eq:rvforscale}. For $\widehat{H}_{L,K}$ and $\widehat{H}_{R}$ we obtain similar results to the estimates from Table \ref{tab:ex7table} and both of these estimates are inaccurate when used for realized volatility and always stay below 0.3. However, the absolute scale estimator $\lvert \widehat{\mathscr{R}}_n^s\rvert$ performs differently. We observe that the estimator is accurate when using spot variance $Y(\sigma_t)$ as input. When using realized variance as input the estimator is not very accurate, but it performs better than the other two roughness estimators, and it does not estimate the process to be rough (i.e. $H<\frac{1}{2}$) when the true underlying model is actually smooth (i.e. $H>\frac{1}{2}$).
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{cccccccc}
+        \toprule
+        H & IV ($\widehat{H}_{L,K}$) & RV ($\widehat{H}_{L,K}$) & IV ($\widehat{H}_{R}$) & RV ($\widehat{H}_{R}$) & IV ($\lvert \widehat{\mathscr{R}}_n^s\rvert$) & RV ($\lvert \widehat{\mathscr{R}}_n^s\rvert$)\\
+        \midrule
+        0.1 & 0.140 & 0.226 & 0.102 & 0.192 & 0.067 & 0.175\\
+        0.2 & 0.219 & 0.275 & 0.202 & 0.246 & 0.189 & 0.294\\
+        0.3 & 0.312 & 0.275 & 0.300 & 0.259 & 0.294 & 0.445\\
+        0.4 & 0.408 & 0.216 & 0.399 & 0.201 & 0.396 & 0.501\\
+        0.5 & 0.503 & 0.150 & 0.498 & 0.109 & 0.498 & 0.510\\
+        0.6 & 0.593 & 0.107 & 0.596 & 0.044 & 0.599 & 0.510\\
+        0.7 & 0.676 & 0.077 & 0.691 & 0.016 & 0.699 & 0.509\\
+        0.8 & 0.749 & 0.055 & 0.780 & 0.005 & 0.799 & 0.508\\
+        \bottomrule
+    \end{tabular}
+    \caption{Estimated roughness for the three roughness estimators $\widehat{H}_{L,K}$, $\widehat{H}_R$ and $\lvert \widehat{\mathscr{R}}_n^s\rvert$ using instantaneous volatility (IV) and realized volatility/variance (RV) for simulated data from a fractional Ornstein-Uhlenbeck model \eqref{eq:fou} with Hurst exponent $H=\{0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8\}$.}
+    \label{tab:ex7tableincl_scale}
+\end{table}\\\\
+In the left plot of Figure \ref{fig:ex7singleincl_scale} we have plotted the results from Table \ref{tab:ex7tableincl_scale} to visualize the estimates. The right plot of Figure \ref{fig:ex7singleincl_scale} shows roughness estimates from the absolute scale estimator $\lvert \widehat{\mathscr{R}}_n^s\rvert$ across 100 independent price paths plotted against the true roughness of the model $H=\{0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8\}$. Thus, it is 100 repetitions of the procedure described above. The bold black lines represent the mean acroos 100 independent simulations whereas the dotted lines represent a 75\% confidence interval. 
+\begin{figure}[htbp]
+    \centering
+    
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{ex7_single_all.png}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \includegraphics[width=\linewidth]{ex7_final100scale.png}
+    \end{subfigure}
+    
+    \caption{Estimated roughness indexes using instantaneous volatility (IV) and realized volatility/variance (RV) from a fractional OU model (\ref{eq:fou}) with $T=1$ plotted for price paths generated by different values of $H$. \textbf{Left:} Estimates for all three roughness estimators $\widehat{H}_{L,K}$, $\widehat{H}_R$ and $\lvert \widehat{\mathscr{R}}_n^s\rvert$ . \textbf{Right:} Absolute scale estimates $\lvert \widehat{\mathscr{R}}_n^s\rvert$ for 100 independent price paths. The solid black line represents the mean, and the dashed black lines represent a 75\% confidence interval.}
+    \label{fig:ex7singleincl_scale}
+\end{figure}\\\\
+From Figure \ref{fig:ex7singleincl_scale} we conclude that the absolute scale estimator systematically exhibits the same kind of behaviour. That is, when used for realized variance the estimator is not very precise especially when the true roughness exponent of the underlying model takes a high value. However, it does remedy some of the inaccuracies observed for the other two estimators, and it does not estimate the path to be rough when the underlying model is not rough. As this is a simulation study, the difference between the blue and red lines are solely caused by estimation errors. \\\\
+In practice, instantaneous volatility cannot be observed, and roughness estimates are based on realized volatility. If using traditional roughness estimators such as $\widehat{H}_{L,K}$ and $\widehat{H}_R$, the above examples illustrate that one cannot necessarily draw the conclusion that (spot) volatility is rough just because realized volatility exhibit rough behaviour with $\hat{H}_{L,K}(RV)<\frac{1}{2}$ even if the estimated roughness is well below $\frac{1}{2}$.\\
+Passing to the absolute sequential scale estimator $\lvert \widehat{\mathscr{R}}_n^s\rvert$ which is developed with the ambition of accurately estimating roughness from realized variance does in these examples improve estimation from realized input. However, $\lvert \widehat{\mathscr{R}}_n^s\rvert$ is also somewhat vulnerable to estimation errors and does not completely remove inaccuracies caused by estimation errors. Furthermore, $\lvert \widehat{\mathscr{R}}_n^s\rvert$ requires observations of realized variance for very specific time points making it less applicable to real time high frequency data. 
 
 \subsection{RFSV model}
 We will now consider the stochastic volatility model suggested by \cite{gatheral}. The model is defined in the following way:
@@ -795,7 +961,7 @@ dS_t = S_t \sigma_t \sqrt{dt}U_n, \quad \sigma_t = e^{Y_t}, \quad dY_t = -\alpha
 \end{align}
 for some $\nu>0$, $\alpha>0$, $m\in\mathbb{R}$ and $H<\frac{1}{2}$ where $B^H_t$ is a fractional Brownian motion and $U_n$ are iid standard Gaussian variables. \cite{gatheral} further argues that choosing $\alpha \ll \frac{1}{T}$ is desirable since the log-volatility then locally behaves like a fBm while it is still technically stationary. In addition to this, \cite{gatheral} argues that observed skew term structure in financial data can easier be replicated by choosing $\alpha \ll \frac{1}{T}$.\\\\
 The specified RFSV model is similar to model (\ref{eq:fou}) from section 4.3 and both models use a fractional Ornstein-Uhlenbeck process to model log-volatility. In this section we use a different approach to compute realized and instantaneous volatility. We follow much of the simulation approach from \cite{gatheral}. We set $T=3601$ and simulate 5000 point per day. For every day we compute the realized volatility of the first 1000 points of the day, and we then rescale this volatility to be a daily volatility estimate. The corresponding instantaneous volatility is computed as the mean of the first 1000 points per day. Following this approach to compute volatility data, we perform many of the same analyses as in section 4.3. When simulating from the model we use the parameters $\nu = 0.2$, $\alpha = 10^{-4}$, $m = -7$ and we set $Y_0=m$ and $S_0 = 1$.\\\\
-In Table (++) we have computed roughness estimates from the RSFV model (\ref{eq:rfsv}) with Hurst exponent $H= \{0.1,0.2,0.3,0.4,0.5\}$.
+In Table \ref{tab:ex8table} we have computed roughness estimates from the RSFV model (\ref{eq:rfsv}) with Hurst exponent $H= \{0.1,0.2,0.3,0.4,0.5\}$.
 \begin{table}[htbp]
     \centering
     \begin{tabular}{cccccc}
@@ -810,7 +976,7 @@ In Table (++) we have computed roughness estimates from the RSFV model (\ref{eq:
         \bottomrule
     \end{tabular}
     \caption{Estimated roughness via $p$-th variation $\hat{H}_{L,K}$ with $L=60\times60$ and $K=60$ and via log regression for instantaneous and realized volatility for simulated data from the RSFV model \eqref{eq:rfsv} with Hurst exponent $H=\{0.1,0.2,0.3,0.4,0.5\}$.}
-    \label{tab:ex7table}
+    \label{tab:ex8table}
 \end{table}
 \begin{figure}[htbp]
     \centering
@@ -823,9 +989,93 @@ In Table (++) we have computed roughness estimates from the RSFV model (\ref{eq:
     \label{fig:rsfv_single}
 \end{figure}\\\\
 
+\section{Conclusion}
+In this thesis we have investigated roughness of volatility processes in financial time series and taken a closer look at the claim 'volatility is rough'. More precisely, we have investigated the robustness of roughness estimates based on realized volatility for three different roughness estimators. Most roughness estimators in literature rely on approximating true spot volatility $\sigma_t$ by realized volatility and then estimating the roughness of these proxy values $\hat{\sigma}_t$. We introduce two roughness estimators based on this approach, the roughness estimator via normalized $p$-th variation statistics $\widehat{H}_{L,K}$ and the roughness estimator by logarithmic regression $\widehat{H}_R$. We have in this thesis shown that such estimates based on realized volatility can be unreliable. We have conducted numerical experiments, and as described in section 4.1 and 4.2 we find that for two stochastic volatility diffusion models driven by a Brownian motion, realized volatility exhibit rough behaviour with an estimated roughness index significantly smaller than the true roughness index $H=\frac{1}{2}$. For our two stochastic diffusive examples we estimate the roughness of realized volatility in the range $\widehat{H}\approx 0.3$ and $\widehat{H}\approx 0.15$ respectively. However, when estimating directly from instantaneous volatility we obtain accurate results very close to the true roughness of the underlying model $H=\frac{1}{2}$. The two estimators $\widehat{H}_{L,K}$ and $\widehat{H}_R$ widely coincides, and generate very similar results in all cases. As these are simulation examples, this apparent rough behaviour of realized volatility is entirely caused by the difference between realized volatility and instantaneous volatility also known as the estimation error. These results suggest that it cannot necessarily be concluded that observed rough behaviour in realized volatility is an indicator of similar behaviour in true spot volatility.\\\\
+Moreover, we show in section 4.3 and 4.4 that for volatility processes driven by a fractional Ornstein-Uhlenbeck model, realized volatility always exhibit rough behaviour (i.e. $\widehat{H}<\frac{1}{2}$). For both of these examples even when the true underlying model has diffusive or smooth behaviour (i.e. $H\geq \frac{1}{2}$) the roughness estimates based on realized volatility always stay below $0.3$. If we estimate roughness directly from instantaneous volatility we obtain accurate estimates, and this again indicates that the estimation error can substantially distort the outcome of the roughness estimation. More precisely, these results show that stochastic diffusive models or even smooth volatility processes are perfectly compatible with rough behaviour observed in realized volatility. The conclusions from 'rough volatility' literature such as \cite{gatheral} stating that 'volatility is rough' because \\\\
+In this thesis we also introduce a third roughness estimator, the sequential scale estimator $\widehat{\mathscr{R}}_n^s$ first introduced by \cite{han}. This estimator estimates the roughness of a path from discrete observations of integrated variance or realized variance and is developed with the purpose of minimizing the possible distortion caused by estimation errors. We find that by modifying the estimator into the absolute sequential scale estimator $\lvert \widehat{\mathscr{R}}_n^s \rvert$ we do obtain more accurate estimates from realized data compared to our other two roughness estimators. For our two stochastic diffusive models in section 4.1 and 4.2, $\lvert \widehat{\mathscr{R}}_n^s \rvert$ performs very well when using realized variance as input, and it accurately estimates the true roughness of the underlying model $H=\frac{1}{2}$. Thus, in these two examples $\lvert \widehat{\mathscr{R}}_n^s \rvert$ completely remedies the apparent rough behaviour of realized volatility. However, for our models driven by a fractional Ornstein-Uhlenbeck model in section 4.3 and 4.4, the absolute sequential scale estimator does not perform as well as before. Here we find that $\lvert \widehat{\mathscr{R}}_n^s \rvert$ tends to always estimate the roughness of realized variance near $0.5$ when the underlying model is actually smooth (i.e. $H>\frac{1}{2}$). When the underlying model is rough (i.e. $H<\frac{1}{2}$) $\lvert \widehat{\mathscr{R}}_n^s \rvert$ tends to overestimate the true roughness such that it in all cases estimates the path to be nearer to diffusive behaviour (i.e. $H=\frac{1}{2}$) than the true model actually is. \\
+When we instead of realized variance use integrated variance computed directly from instantaneous volatility $\sigma_t$ as input, the sequential scale estimator performs very well, and does in all cases estimate the true roughness of the model accurately. Thus, $\lvert \widehat{\mathscr{R}}_n^s \rvert$ is also vulnerable to estimation errors where estimation error in this case means the difference between realized variance and integrated variance. \\\\
+Comparing our three roughness estimators we find that they all perform very well in our examples when based on instantaneous volatility. $\widehat{H}_{L,K}$ and $\lvert \widehat{\mathscr{R}}_n^s \rvert$ work in a model-free setting and are therefore very flexible and applicable to many different models. Estimators like $\widehat{H}_R$ only works well if the class of models is well-specified. However, $\widehat{H}_R$ seems to converge faster, and it requires less data input for the estimate to be accurate.\\
+For realized volatility/variance $\lvert \widehat{\mathscr{R}}_n^s \rvert$ does in some cases perform much better than the other two estimators, but it does not estimate the roughness of the underlying model accurately in all cases. Furthermore, $\lvert \widehat{\mathscr{R}}_n^s \rvert$ has much stronger requirements to the input data, and it needs observations at very specific time points. That makes the estimator less applicable to real world high-frequency data where the discrete grid of observation times might not be a uniform partition sequence.\\\\
+For future investigation it could be relevant to investigate how the absolute sequential scale estimator $\lvert \widehat{\mathscr{R}}_n^s \rvert$ could be further improved. The estimation error for this estimator is as shown very small, and if the estimator could fully handle this estimation error it has the potential to perform reliable roughness estimates from realized data. Another thing that could be further investigated is the estimation error itself. If it turns out that the estimation error is insignificant when using a certain approach to calculate it or a certain set of models, it would shed light on when to expect reliable roughness estimates. Both of these things could be a helping tool in determining whether volatility is rough or not.
+
 \newpage
 \section{Appendix}
-\subsection{A Spectral Method FFT}
+\subsection{Simulation of fractional Brownian motion} \label{sec:sim_fbm}
+Throughout this thesis we will be simulating from the fractional Brownian motion by using a spectral method which can be used for stationary processes. The idea is to analyse the stochastic process in the spectral domain rather than the time domain. The spectral density is computed as follows for frequencies $-\pi\leq \lambda \leq \pi$:
+\begin{align}
+f(\lambda):= \sum_{j=-\infty}^\infty \gamma(j) \exp(ij\lambda)
+\end{align}
+where $\gamma(\cdot)$ represent the autocovariance function. It can be shown that the spectral density of fractional Gaussian noise is given by
+\begin{align}
+f(\lambda) = 2\sin(\pi H)\Gamma(2H+1)(1-\cos\lambda)[\vert\lambda\vert ^{-2H-1}+B(\lambda, H)]
+\end{align}
+where $\Gamma(\cdot)$ denotes the Gamma function and 
+\begin{align}
+B(\lambda, H) := \sum_{j=1}^\infty \left((2\pi j+\lambda)^{-2H-1}+(2\pi j-\lambda)^{-2H-1}\right)
+\end{align}
+for $-\pi\leq \lambda \leq \pi$. The infinite sum makes direct numerical evaluation almost impossible. However, a useful approximation of the sum is made by \cite{paxson}. They show that by using
+\begin{align*}
+&\tilde{B}_3(\lambda, H) :=\\ 
+&\sum_{j=1}^3 \left(\left(a_j^+\right)^{-2H-1}+\left(a_j^-\right)^{-2H-1}\right)+\frac{\left(a_3^+\right)^{-2H}+\left(a_3^-\right)^{-2H}+\left(a_4^+\right)^{-2H}+\left(a_4^-\right)^{-2H}}{8H\pi}
+\end{align*}
+where $a^{\pm}_j=2\pi j\pm \lambda$, $f(\lambda)$ is approximated quite well.\\\\
+Now, consider a stationary Gaussian discrete-time process $X=\{X_n: n = 0,...,N-1\}$ where $N$ is the required sample size. The spectral theorem states that it can be represented in terms of the spectral density as
+\begin{align}
+X_n\overset{d}{=}\int_0^\pi \sqrt{\frac{f(\lambda)}{\pi}}\cos(n\lambda)dB_1(\lambda)-\int_0^\pi \sqrt{\frac{f(\lambda)}{\pi}}\sin(n\lambda)dB_2(\lambda)
+\end{align}
+where $B_1$ and $B_2$ are two mutually independent Brownian motions \cite{dieker}. We wish to approximate (8). The integrand is replaced by a simpler function. Fix some integer $l$ and set $t_k = \pi k/l$ for $k=0,...,l$. Now, define a simple function $\xi_n^{(l)}$ on $[0,\pi]$ for $0\leq n\leq N-1$ by 
+\begin{align}
+\xi_n^{(\ell)}(\lambda)= \sqrt{\frac{f(t_1)}{\pi}}\cos(nt_1)\mathbf{1}_{\{0\}}(\lambda)+\sum_{k=0}^{l-1} \sqrt{\frac{f(t_{k+1})}{\pi}}\cos(nt_{k+1})\mathbf{1}_{(t_k,t_{k+1}]}(\lambda).
+\end{align}
+The first integral in $(8)$ can be approximated by $\int_0^\pi \xi_n^{(\ell)}(\lambda)dB_1(\lambda)$. Since $\xi_n^{(\ell)}$ is a simple function the stochastic integral can be computed as
+\begin{align}
+\int_0^\pi \xi_n^{(l)}(\lambda)dB_1(\lambda) = \sum _{j=0}^{\ell-1} \xi_n^{(l)} (B(t_{j+1})-B(t_j)).
+\end{align} 
+Thus, we obtain 
+\begin{align*}
+&\int_0^\pi \xi_n^{(l)}(\lambda)dB_1(\lambda) = \sum_{j=0}^{\ell-1}\sum_{k=0}^{\ell-1} \sqrt{\frac{f(t_{k+1})}{\pi}} \cos(n t_{k+1}) \mathbf{1}_{(t_k,t_{k+1}]}(B_1(t_{j+1})-B_1(t_j))\\
+&= \sum_{k=0}^{l-1} \sqrt{\frac{f(t_{k+1})}{\pi}} \cos(n t_{k+1}) 
+(B_1(t_{k+1})-B_1(t_k)) \\
+&= \sum_{k=0}^{\ell-1} \sqrt{\frac{f(t_{k+1})}{\pi}} \cos(n t_{k+1})U_k^{(0)} \sqrt{\frac{\pi}{l}} = \sum_{k=0}^{\ell-1} \sqrt{\frac{f(t_{k+1})}{\ell}} \cos(n t_{k+1})U_k^{(0)} \label{eq:sim_xn}
+\end{align*}
+where $U_k^{(0)}$ is an i.i.d. standard normal random variable for $k=0,...,\ell-1$. The $U_k^{(0)}\sqrt{\pi/\ell}$ represent the Brownian motion increments which per definition are normally distributed with mean $0$ and variance $t_{k+1}-t_k$.\\\\
+The second integral in $(8)$ can be approximated in a similar way by replacing the cosine terms with sine terms. Thus, we obtain the following approximation of $X_n$:
+\begin{align}
+\hat{X}_n^{(\ell)} := \sum_{k=0}^{\ell-1} \sqrt{\frac{f(t_{k+1})}{\ell}}\left( \cos(nt_{k+1})U_k^{(0)}-\sin (nt_{k+1}) U_k^{(1)}\right).
+\end{align}
+The two vectors $U^{(0)}$ and $U^{(1)}$ are mutually independent since $B_1$ and $B_2$ are independent as well. In order to calculate $\hat{X}_n^{(\ell)}$ efficiently we will be using the fast Fourier transform (FFT). To this end, we define the sequence $(a_k)_{k=0,...,2\ell-1}$ by
+
+\[
+a_k := \begin{cases}
+0 & k = 0; \\
+\frac{1}{2} \left( U^{(0)}_{k-1} + i U^{(1)}_{k-1} \right) \sqrt{\frac{f(t_k)}{\ell}} & k = 1, \dots, \ell - 1; \\
+U^{(0)}_{k-1} \sqrt{\frac{f(t_k)}{\ell}} & k = \ell; \\
+\frac{1}{2} \left( U^{(0)}_{2\ell - k - 1} - i U^{(1)}_{2\ell - k - 1} \right) \sqrt{\frac{f(t_{2\ell - k})}{\ell}} & k = \ell + 1, \dots, 2\ell - 1.
+\end{cases}
+\]
+It is shown in Appendix \ref{sec:sim_proof} that the Fourier transform of $a_k$ is indeed real and equals $\hat{X}_n^{(\ell)}$. From this approximated fractional Gaussian noise we can generate the fBm. \\\\
+\cite{dieker} shows that the finite-dimensional distributions of $\hat{X}^{(\ell)}$ converge in probability to the corresponding finite-dimensional distributions of $X$ as $\ell\rightarrow \infty$. The rate of convergence is, however, quite slow. Therefore, we will be using a $\ell \geq 30000$ when simulating from the fBm by the spectral method in this thesis in order to make sure that our simulations are reliable. Figure \ref{fig:fbmsim} shows three simulations of fractional Brownian motions with different Hurst parameters generated by the spectral method. 
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{specsim1.jpeg}
+        \caption{H=0.2}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{specsim2.jpeg}
+        \caption{H=0.5}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{specsim3.jpeg}
+        \caption{H=0.8}
+    \end{subfigure}
+    \caption{Fractional Brownian motions generated by the spectral method.}
+    \label{fig:fbmsim}
+\end{figure}
+\subsubsection{Proof of Fourier transform in spectral method} \label{sec:sim_proof}
 Consider 
 \[
 a_k := \begin{cases}
@@ -861,7 +1111,7 @@ where we have reversed the sum order. Now we can combine the two sums into one. 
 &\lambda_n = U^{(0)}_{\ell-1} \sqrt{\frac{f(t_\ell)}{\ell}}\cos(nt_\ell)+ \sqrt{\frac{f(t_{k+1})}{\ell}} \sum_{k=0}^{l-2} \left(U^{(0)}_k\cos\left(n t_{k+1}\right)-U^{(1)}_{k}\sin\left(n t_{k+1}\right)\right)\\
 & = \sum_{k=0}^{l-1}\sqrt{\frac{f(t_{k+1})}{\ell}}\left(U^{(0)}_k\cos\left(n t_{k+1}\right)-U^{(1)}_{k}\sin\left(n t_{k+1}\right)\right)
 \end{align*}
-which equals the definition of $\hat{X}_n^{(\ell)}$ from (11) as desired.
+which equals the definition of $\hat{X}_n^{(\ell)}$ from \eqref{eq:sim_xn} as desired.
 
 \newpage
 \addcontentsline{toc}{section}{References}

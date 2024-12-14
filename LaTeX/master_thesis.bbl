@@ -1,9 +1,34 @@
-\begin{thebibliography}{8}
+\begin{thebibliography}{14}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Bayer et~al.(2016)Bayer, Friz, and Gatheral]{bayer2016}
+Christian Bayer, Peter Friz, and Jim Gatheral.
+\newblock Pricing under rough volatility.
+\newblock \emph{Quantitative Finance}, 16\penalty0 (6):\penalty0 887--904,
+  2016.
+
+\bibitem[Biagini(2008)]{biagini2008}
+F~Biagini.
+\newblock Stochastic calculus for fractional brow-nian motion and applications.
+\newblock \emph{Probability and its Applications (New York)/SpringerVerlag
+  London, Ltd}, 2008.
+
+\bibitem[Bolko et~al.(2023)Bolko, Christensen, Pakkanen, and
+  Veliyev]{bolko2023}
+Anine~E Bolko, Kim Christensen, Mikko~S Pakkanen, and Bezirgen Veliyev.
+\newblock A gmm approach to estimate the roughness of stochastic volatility.
+\newblock \emph{Journal of Econometrics}, 235\penalty0 (2):\penalty0 745--778,
+  2023.
+
+\bibitem[Bollerslev and Mikkelsen(1996)]{Bollerslev}
+Tim Bollerslev and Hans~Ole Mikkelsen.
+\newblock Modeling and pricing long memory in stock market volatility.
+\newblock \emph{Journal of econometrics}, 73\penalty0 (1):\penalty0 151--184,
+  1996.
 
 \bibitem[Comte and Renault(1998)]{comte}
 Fabienne Comte and Eric Renault.
@@ -15,18 +40,16 @@ Rama Cont and Purba Das.
 \newblock Rough volatility: fact or artefact?
 \newblock \emph{Sankhya B}, 86\penalty0 (1):\penalty0 191--223, 2024.
 
-\bibitem[Cont and Perkowski(2019)]{cont2}
-Rama Cont and Nicolas Perkowski.
-\newblock Pathwise integration and change of variable formulas for continuous
-  paths with arbitrary regularity.
-\newblock \emph{Transactions of the American Mathematical Society, Series B},
-  6\penalty0 (5):\penalty0 161--186, 2019.
-
 \bibitem[Dieker and Mandjes(2003)]{dieker}
 Antonius~Bernardus Dieker and Michael Mandjes.
 \newblock On spectral simulation of fractional brownian motion.
 \newblock \emph{Probability in the Engineering and Informational Sciences},
   17\penalty0 (3):\penalty0 417--434, 2003.
+
+\bibitem[El~Euch et~al.(2019)El~Euch, Gatheral, and Rosenbaum]{el2019}
+Omar El~Euch, Jim Gatheral, and Mathieu Rosenbaum.
+\newblock Roughening heston.
+\newblock \emph{Risk}, pages 84--89, 2019.
 
 \bibitem[Fukasawa et~al.(2022)Fukasawa, Takabatake, and Westphal]{fukasawa}
 Masaaki Fukasawa, Tetsuya Takabatake, and Rebecca Westphal.
@@ -41,11 +64,20 @@ Jim Gatheral, Thibault Jaisson, and Mathieu Rosenbaum.
 \newblock \emph{Quantitative finance}, 18\penalty0 (6):\penalty0 933--949,
   2018.
 
+\bibitem[Han and Schied(2022)]{han2022hurst}
+Xiyue Han and Alexander Schied.
+\newblock The hurst roughness exponent and its model-free estimation, 2022.
+
 \bibitem[Han and Schied(2023)]{han}
 Xiyue Han and Alexander Schied.
 \newblock Estimating the roughness exponent of stochastic volatility from
   discrete observations of the realized variance.
 \newblock \emph{arXiv preprint arXiv:2307.02582}, 2023.
+
+\bibitem[Jacod(2012)]{jacod2012}
+Jean Jacod.
+\newblock \emph{Discretization of processes}.
+\newblock Springer, 2012.
 
 \bibitem[Paxson(1997)]{paxson}
 Vern Paxson.
