@@ -6,14 +6,16 @@
 \contentsline {subsubsection}{\numberline {3.2.1}Estimating the roughness from discrete observations}{9}{subsubsection.3.2.1}%
 \contentsline {subsubsection}{\numberline {3.2.2}Sample behaviour of $\setbox \z@ \hbox {\mathsurround \z@ $\textstyle H$}\mathaccent "0362{H}_{L,K}$}{9}{subsubsection.3.2.2}%
 \contentsline {subsection}{\numberline {3.3}Roughness estimator via logarithmic regression}{14}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Sequential scale estimator of roughness exponent}{18}{subsection.3.4}%
-\contentsline {section}{\numberline {4}Numerical Experiments}{23}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Simple stochastic volatility diffusion model}{23}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}OU-SV model}{29}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}A fractional Ornstein-Uhlenbeck model}{35}{subsection.4.3}%
-\contentsline {subsection}{\numberline {4.4}RFSV model}{42}{subsection.4.4}%
-\contentsline {section}{\numberline {5}Conclusion}{44}{section.5}%
-\contentsline {section}{\numberline {6}Appendix}{46}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Simulation of fractional Brownian motion}{46}{subsection.6.1}%
-\contentsline {subsubsection}{\numberline {6.1.1}Proof of Fourier transform in spectral method}{48}{subsubsection.6.1.1}%
-\contentsline {section}{References}{50}{subsubsection.6.1.1}%
+\contentsline {subsection}{\numberline {3.4}The sequential scale estimator}{19}{subsection.3.4}%
+\contentsline {subsubsection}{\numberline {3.4.1}Sequential scale estimate from realized variance}{20}{subsubsection.3.4.1}%
+\contentsline {subsubsection}{\numberline {3.4.2}Sample behaviour of $\hat {\mathscr {R}}_n^s$ and $\hat {\mathscr {R}}_n$}{22}{subsubsection.3.4.2}%
+\contentsline {section}{\numberline {4}Numerical Experiments}{25}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Simple stochastic volatility diffusion model}{25}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}OU-SV model}{31}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}A fractional Ornstein-Uhlenbeck model}{39}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}RFSV model}{46}{subsection.4.4}%
+\contentsline {section}{\numberline {5}Conclusion}{48}{section.5}%
+\contentsline {section}{\numberline {6}Appendix}{51}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Simulation of fractional Brownian motion}{51}{subsection.6.1}%
+\contentsline {subsubsection}{\numberline {6.1.1}Proof of Fourier transform in spectral method}{53}{subsubsection.6.1.1}%
+\contentsline {section}{References}{55}{subsubsection.6.1.1}%
