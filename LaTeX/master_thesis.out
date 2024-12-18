@@ -18,4 +18,5 @@
 \BOOKMARK [1][-]{section.6}{Appendix}{}% 18
 \BOOKMARK [2][-]{subsection.6.1}{Simulation of fractional Brownian motion}{section.6}% 19
 \BOOKMARK [3][-]{subsubsection.6.1.1}{Proof of Fourier transform in spectral method}{subsection.6.1}% 20
-\BOOKMARK [1][-]{subsubsection.6.1.1}{References}{}% 21
+\BOOKMARK [2][-]{subsection.6.2}{R code}{section.6}% 21
+\BOOKMARK [1][-]{subsection.6.2}{References}{}% 22
