@@ -15,6 +15,7 @@
 \newtheorem{definition}{Definition}
 \newtheorem{theorem}{Theorem}
 \newtheorem{assumption}{Assumption}
+\setlength{\parindent}{0pt}
 
 
 \hypersetup{
@@ -26,6 +27,9 @@
 
 \begin{document}
 \pagenumbering{roman}
+\section*{Abstract}
+This master's thesis investigates the modelling of volatility processes in financial time series. More specifically, we examine whether there is statistical evidence to conclude that volatility is rough, i.e., should be modelled by so-called rough processes with a roughness $H<\frac{1}{2}$. Through detailed numerical examples, we demonstrate that well-known roughness estimators, which perform well on instantaneous volatility data, can systematically underestimate the true roughness of the underlying model when based on realized volatility data. Consequently, models with diffusive or smooth behaviour (i.e., $H\geq \frac{1}{2}$) may also be compatible with observed roughness in empirical realized volatility data. We show that the distortion of the roughness estimates arises from estimation errors when approximating volatility by realized volatility. Additionally, we investigate the performance of the sequential scale estimator, which is designed to account for estimation errors. We find that the sequential scale estimator requires a large number of observations to be fully unaffected by proxy errors. Thus, it does not resolve the primary issue of distortion from proxy errors in our numerical examples, which are based on realistic sample sizes.
+\newpage
 \tableofcontents
 \newpage
 \pagenumbering{arabic}
@@ -50,20 +54,23 @@ Thus, we also observe "illusive roughness" in realized data when using the seque
 The thesis is built up as follows: In Section \ref{sec:fbm} we formally introduce the fractional Brownian motion and discuss some of its most important properties. In Section \ref{sec:intro_est} we introduce the three roughness estimators we will be using and the theory behind them. In Section \ref{sec:num_exp} we conduct detailed numerical experiments for several stochastic volatility models to investigate the performance of roughness estimates from realized volatility data.
 
 \section{Fractional Brownian motion} \label{sec:fbm}
-Fractional Brownian motions work well as building blocks for stochastic volatility models. In this section, we will define the fractional Brownian motion, and briefly discuss some of fBm's most important properties. The definitions and properties will mainly follow the theory in \cite{biagini2008}.\\\\ 
+Fractional Brownian motions work well as building blocks for stochastic volatility models. In this section, we will define the fractional Brownian motion, and briefly discuss some of the fBm's most important properties. The definitions and properties will mainly follow the theory in \cite{biagini2008}.\\
+\begin{definition}
 A fractional Brownian motion (fBm for short) $(B_t^H)_{t\in\mathbb{R}}$ with Hurst parameter $H\in(0,1)$ is a centered continuous Gaussian process with covariance function
 \begin{align}
 \mathbb{E}\left[B_t^HB_s^H\right] = \frac{1}{2}\left(t^{2H}+S^{2H}-\vert t-s\vert ^{2H} \right) \label{eq:fbm}
-\end{align}
-for $s,t\geq 0$. For $H = \frac{1}{2}$ the fractional Brownian motion reduces to an ordinary Brownian motion. The incremental process of a fractional Brownian motion is called fractional Gaussian noise.\\
-From \eqref{eq:fbm} it can be seen that a fractional Brownian motion has the following properties:
+\end{align} \label{def:fbm}
+for $s,t\geq0$.
+\end{definition}
+For $H = \frac{1}{2}$ the fractional Brownian motion reduces to an ordinary Brownian motion. The incremental process of a fractional Brownian motion is called fractional Gaussian noise.\\
+By Definition \ref{def:fbm} it can be seen that a fractional Brownian motion has the following properties:
 \begin{enumerate}
     \item $B_0^H = 0$ and $\mathbb{E}[B^H_t] = 0$ for all $t\geq 0$.
     \item $B^H$ has homogeneous increments i.e. $B^H_{t+s}-B^H_s$ has the same law of $B^H_t$ for $s,t\geq0$.
     \item $B^H$ is a Gaussian process and $\mathbb{E}[(B^H_t)^2]=t^{2H}$, $t\geq 0$ for all $H\in (0,1)$.
     \item $B^H$ has continuous trajectories.
 \end{enumerate}
-The fractional Brownian motion can be divided into three very different families corresponding to $0<H<\frac{1}{2}$, $H=\frac{1}{2}$ and $\frac{1}{2}<H<1$. Looking at the correlation between two increments, we have that for $H=\frac{1}{2}$ the increments are independent since it is a Brownian motion. For $H\neq \frac{1}{2}$ the increments are not independent. From \eqref{eq:fbm} it can be seen that the covariance between the increments $B^H_{t+h}-B^H_{t}$ and $B^H_{s+h}-B^H_{s}$ with $s+h\leq t$ and $t-s=nh$ is
+The fractional Brownian motion can be divided into three very different families corresponding to $0<H<\frac{1}{2}$, $H=\frac{1}{2}$ and $\frac{1}{2}<H<1$. Looking at the correlation between two increments, we have that for $H=\frac{1}{2}$ the increments are independent since it is a Brownian motion. For $H\neq \frac{1}{2}$ the increments are not independent. From Definition \ref{def:fbm} it can be seen that the covariance between the increments $B^H_{t+h}-B^H_{t}$ and $B^H_{s+h}-B^H_{s}$ with $s+h\leq t$ and $t-s=nh$ is
 \begin{align*}
 \rho_H(n) = \frac{1}{2}h^{2H} \left( (n+1)^{2H} +(n-1)^{2H} -2n^{2H}\right).
 \end{align*}
@@ -73,7 +80,7 @@ When $h=1$ meaning that the incremental process has time step 1 we have that
 \rho_H(n) = \frac{1}{2}\left( (n+1)^{2H} +(n-1)^{2H} -2n^{2H}\right) \sim H(2H-1)n^{2H-2}
 \end{align*}
 as $n\rightarrow \infty$. Thus, we see that $\sum_{n=1}^\infty \rho_H(n) =\infty$ for $H>\frac{1}{2}$ and $\sum_{n=1}^\infty \lvert \rho_H(n) \rvert <\infty$ for $H<\frac{1}{2}$. The non-summable autocovariance function in the case $H>\frac{1}{2}$ is equivalent to long-range dependence and it indicates slow decay of the covariance function. That is, for $H>\frac{1}{2}$ the fBm has long-range dependence but for $H<\frac{1}{2}$ it does not. \\\\
-Furthermore, we have that the covariance function of the fBm is homogeneous of order $2H$. That is, 
+Furthermore, we have that the covariance function of the fBm \eqref{eq:fbm} is homogeneous of order $2H$. That is, 
 \begin{align*}
 \mathbb{E}\left[B_{at}^HB_{as}^H\right] = a^{2H} \mathbb{E}\left[B_t^HB_s^H\right].
 \end{align*}
@@ -83,7 +90,8 @@ In this thesis, we will be simulating high-frequency data based on fractional Br
 
 \section{Estimating the roughness of volatility} \label{sec:intro_est}
 Measuring the roughness of volatility is in practice not an easy task. 
-In practice, we observe only a singe price path with discrete observation times, and we need to determine the roughness of this path sampled at high frequency. In order to design proper estimators it is crucial to be able to determine the roughness of realized volatility, and multiple ways of measuring the roughness exist in literature. In this section we will introduce three different roughness estimators and the theory behind them. Firstly, we will be using the roughness index estimator via $p$-th variation $\widehat{H}_{L,K}$ which was first introduced by \cite{cont}. Secondly, we will describe the roughness estimator via log regression $\widehat{H}_{R}$ introduced by \cite{gatheral}. Thirdly, we will be using the sequential scale estimator $\widehat{\mathscr{R}}_n^s$ originally developed by \cite{han}. The explained theory and rationale behind the estimators will closely follow the theory from the original articles. In Section \ref{sec:num_exp} we will conduct numerical experiments, and we will compare the performance of the three roughness estimators. 
+In practice, we observe only a singe price path with discrete observation times, and we need to determine the roughness of this path sampled at high frequency. In order to design proper estimators it is crucial to be able to determine the roughness of realized volatility, and multiple ways of measuring the roughness exist in literature.\\
+In this section we will introduce three different roughness estimators and the theory behind them. Firstly, we will be using the roughness index estimator via $p$-th variation $\widehat{H}_{L,K}$ which was first introduced by \cite{cont}. Secondly, we will describe the roughness estimator via log regression $\widehat{H}_{R}$ introduced by \cite{gatheral}. Thirdly, we will be using the sequential scale estimator $\widehat{\mathscr{R}}_n^s$ originally designed by \cite{han}. The explained theory and rationale behind the estimators will closely follow the theory from the original articles. In Section \ref{sec:num_exp} we will conduct numerical experiments, and we will compare the performance of the three roughness estimators. 
 \subsection{Instantaneous volatility and realized volatility}
 Before we introduce the details of our roughness estimators we will start by explaining the concepts of instantaneous volatility and realized volatility. As mentioned in \eqref{eq:price_gen} price dynamics are often modelled on the form
 \begin{align*}
@@ -119,11 +127,11 @@ RV_{t,t+\Delta}(\pi^n) = \sqrt{\sum_{\pi^n \cap [t,t+\Delta]}\left(\log \frac{S(
 \end{align*}
 \label{def:real_vol}
 \end{definition}
-If the price $S_t$ is a continuous semimartingale then the quadratic variation equals the integrated variance of $\log S$ which is given by
+The integrated variance of $\log S$ is given by
 \begin{align}
 \left\langle log S \right\rangle_t = \int_0^t \sigma_s^2 ds. \label{eq:int_var}
 \end{align}
-Furthermore, if $S_t$ follows a stochastic volatility model given by price dynamics as in \eqref{eq:price_gen}, it is known that the realized variance converges in probability to the integrated variance of $\log S$ as sampling frequency increases \cite{jacod2012}. That is,
+If $S_t$ follows a stochastic volatility model given by price dynamics as in \eqref{eq:price_gen}, it is known that realized variance converges in probability to the integrated variance of $\log S$ as sampling frequency increases \cite{jacod2012}. That is,
 \begin{align*}
 RV_t^2(\pi^n)^2 (\pi^n) \overset{\mathbb{P}}{\underset{n \to \infty}{\longrightarrow}} \int_0^t \sigma_s^2 ds.
 \end{align*} 
@@ -136,7 +144,7 @@ Hence, along a single price path observed at high-frequency, we can compute the 
  RV_{t,t+\Delta} (\pi^n)\simeq \sqrt{\Delta} \sigma_t.
 \end{align*}
 More precisely, rescaled realized volatility $\frac{1}{\sqrt{\Delta}}RV_{t,t+\Delta}$ can be used as proxy values $\hat{\sigma}_t$ of instantaneous volatility $\sigma_t$. As $n$ increases the estimation becomes more accurate \cite{cont}.\\\\
-Several empirical studies including \cite{gatheral} have attempted to estimate roughness of volatility by estimating the roughness of realized volatility signals (i.e. proxy values $\hat{\sigma}_t$) using high-frequency data. Since carried out on high-frequency data, it is then assumed that the difference between $\hat{\sigma}_t$ and $\sigma_t$ is relatively small, and that the estimated roughness of realized volatility signals also works as a good estimation of the roughness of the instantaneous volatility process $\sigma_t$. However, there is no guarantee that $\hat{\sigma}_t$ and $\sigma_t$ exhibits same kind of roughness behaviour, and as we will illustrate later on estimation error in proxy values $\hat{\sigma}_t$ can substantially distort the roughness estimation.
+Several empirical studies including \cite{gatheral} have attempted to estimate roughness of volatility by estimating the roughness of realized volatility signals (i.e. proxy values $\hat{\sigma}_t$) using high-frequency data. Since carried out on high-frequency data, it is then assumed that the difference between $\hat{\sigma}_t$ and $\sigma_t$ is relatively small, and that the estimated roughness of realized volatility signals also works as a good estimation of the roughness of the instantaneous volatility process $\sigma_t$. However, there is no guarantee that $\hat{\sigma}_t$ and $\sigma_t$ exhibits same kind of roughness behaviour, and as we will demonstrate in the sequel, estimation errors in proxy values $\hat{\sigma}_t$ can substantially distort the roughness estimation.
 
 \subsection{Roughness index estimator via $p$-th variation} \label{sec:roughest_pth}
 In this section, we will describe the roughness index estimator via normalized $p$-th variation which was introduced in \cite{cont}. We will closely follow the theory and methodology behind the estimator described in \cite{cont}.\\\\

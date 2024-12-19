@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.9.7)  18 DEC 2024 22:11
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.9.7)  19 DEC 2024 12:28
 entering extended mode
 **./master_thesis.tex
 (master_thesis.tex
@@ -332,7 +332,7 @@ Package: amsthm 2020/05/29 v2.20.6
 \c@definition=\count273
 \c@theorem=\count274
 \c@assumption=\count275
-Package hyperref Info: Option `colorlinks' set `true' on input line 25.
+Package hyperref Info: Option `colorlinks' set `true' on input line 26.
 
 (C:\Users\plols\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 tex.def
@@ -346,22 +346,22 @@ LaTeX Warning: Label `fig:ex6dens' multiply defined.
 )
 \openout1 = `master_thesis.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
 
 (C:\Users\plols\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
@@ -397,7 +397,7 @@ File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package color Info: Driver file: pdftex.def on input line 147.
 )
-Package hyperref Info: Link coloring ON on input line 27.
+Package hyperref Info: Link coloring ON on input line 28.
  (C:\Users\plols\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
 
@@ -410,257 +410,257 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count283
 )
-LaTeX Info: Redefining \ref on input line 27.
-LaTeX Info: Redefining \pageref on input line 27.
-LaTeX Info: Redefining \nameref on input line 27.
+LaTeX Info: Redefining \ref on input line 28.
+LaTeX Info: Redefining \pageref on input line 28.
+LaTeX Info: Redefining \nameref on input line 28.
  (master_thesis.out) (master_thesis.out)
 \@outlinefile=\write3
 \openout3 = `master_thesis.out'.
 
- (master_thesis.toc
-LaTeX Font Info:    Trying to load font information for U+rsfs on input line 4.
-
+LaTeX Font Info:    Trying to load font information for U+rsfs on input line 31
+.
 
 (C:\Users\plols\AppData\Local\Programs\MiKTeX\tex/latex/jknappen\ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 4.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 31.
+
 
 (C:\Users\plols\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 4.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 31.
+
 
 (C:\Users\plols\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-))
-\tf@toc=\write4
-\openout4 = `master_thesis.toc'.
-
-
+)
 [1
 
 {C:/Users/plols/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 36--39
+(master_thesis.toc)
+\tf@toc=\write4
+\openout4 = `master_thesis.toc'.
+
+ [2]
+Underfull \hbox (badness 10000) in paragraph at lines 40--43
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 41--51
+Underfull \hbox (badness 10000) in paragraph at lines 45--55
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 41--51
+Underfull \hbox (badness 10000) in paragraph at lines 45--55
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 41--51
+Underfull \hbox (badness 10000) in paragraph at lines 45--55
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 41--51
+Underfull \hbox (badness 10000) in paragraph at lines 45--55
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 41--51
+Underfull \hbox (badness 10000) in paragraph at lines 45--55
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 41--51
+Underfull \hbox (badness 10000) in paragraph at lines 45--55
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 41--51
+Underfull \hbox (badness 10000) in paragraph at lines 45--55
 
  []
 
 [1] [2]
-Underfull \hbox (badness 10000) in paragraph at lines 53--55
+Underfull \hbox (badness 10000) in paragraph at lines 57--58
 
  []
 
 [3]
-Underfull \hbox (badness 10000) in paragraph at lines 74--77
+Underfull \hbox (badness 10000) in paragraph at lines 81--84
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 79--83
+Underfull \hbox (badness 10000) in paragraph at lines 86--90
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 79--83
+Underfull \hbox (badness 10000) in paragraph at lines 86--90
 
  []
 
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 91--94
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 100--103
+Underfull \hbox (badness 10000) in paragraph at lines 99--102
 
  []
 
 [5]
-Underfull \hbox (badness 10000) in paragraph at lines 137--140
+Underfull \hbox (badness 10000) in paragraph at lines 108--111
 
  []
 
 [6]
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 141.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 141.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 142--144
+Underfull \hbox (badness 10000) in paragraph at lines 145--148
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 146--149
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 149.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 149.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 150--152
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 154--157
 
  []
 
 [7]
-Underfull \hbox (badness 10000) in paragraph at lines 177--179
+Underfull \hbox (badness 10000) in paragraph at lines 185--187
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 181--185
+Underfull \hbox (badness 10000) in paragraph at lines 189--193
 
  []
 
-[8]
+[8] [9]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 215.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\setbox' on input line 215.
+(hyperref)                removing `math shift' on input line 223.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\z@' on input line 215.
+(hyperref)                removing `\setbox' on input line 223.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\hbox' on input line 215.
+(hyperref)                removing `\z@' on input line 223.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\mathsurround' on input line 215.
+(hyperref)                removing `\hbox' on input line 223.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\z@' on input line 215.
+(hyperref)                removing `\mathsurround' on input line 223.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 215.
+(hyperref)                removing `\z@' on input line 223.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\textstyle' on input line 215.
+(hyperref)                removing `math shift' on input line 223.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 215.
+(hyperref)                removing `\textstyle' on input line 223.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\mathaccent' on input line 215.
+(hyperref)                removing `math shift' on input line 223.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 215.
+(hyperref)                removing `\mathaccent' on input line 223.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 215.
+(hyperref)                removing `subscript' on input line 223.
 
-[9]
-<./Billeder/wagainstp_H01.png, id=283, 236.082pt x 169.23225pt>
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 223.
+
+<./Billeder/wagainstp_H01.png, id=290, 236.082pt x 169.23225pt>
 File: ./Billeder/wagainstp_H01.png Graphic file (type png)
 <use ./Billeder/wagainstp_H01.png>
-Package pdftex.def Info: ./Billeder/wagainstp_H01.png  used on input line 226.
+Package pdftex.def Info: ./Billeder/wagainstp_H01.png  used on input line 234.
 (pdftex.def)             Requested size: 165.59853pt x 118.70708pt.
-<./Billeder/wagainstp_H03.png, id=285, 237.88875pt x 164.41425pt>
+<./Billeder/wagainstp_H03.png, id=292, 237.88875pt x 164.41425pt>
 File: ./Billeder/wagainstp_H03.png Graphic file (type png)
 <use ./Billeder/wagainstp_H03.png>
-Package pdftex.def Info: ./Billeder/wagainstp_H03.png  used on input line 230.
+Package pdftex.def Info: ./Billeder/wagainstp_H03.png  used on input line 238.
 (pdftex.def)             Requested size: 165.59853pt x 114.45697pt.
-<./Billeder/wagainstp_H05.png, id=286, 239.09325pt x 169.8345pt>
+<./Billeder/wagainstp_H05.png, id=293, 239.09325pt x 169.8345pt>
 File: ./Billeder/wagainstp_H05.png Graphic file (type png)
 <use ./Billeder/wagainstp_H05.png>
-Package pdftex.def Info: ./Billeder/wagainstp_H05.png  used on input line 234.
+Package pdftex.def Info: ./Billeder/wagainstp_H05.png  used on input line 242.
 (pdftex.def)             Requested size: 165.59853pt x 117.63425pt.
-<./Billeder/wagainstp_H08.png, id=287, 239.09325pt x 169.23225pt>
+<./Billeder/wagainstp_H08.png, id=294, 239.09325pt x 169.23225pt>
 File: ./Billeder/wagainstp_H08.png Graphic file (type png)
 <use ./Billeder/wagainstp_H08.png>
-Package pdftex.def Info: ./Billeder/wagainstp_H08.png  used on input line 238.
+Package pdftex.def Info: ./Billeder/wagainstp_H08.png  used on input line 246.
 (pdftex.def)             Requested size: 165.59853pt x 117.21712pt.
-<./Billeder/hist_H01.jpeg, id=295, 302.63063pt x 271.0125pt>
+<./Billeder/hist_H01.jpeg, id=302, 302.63063pt x 271.0125pt>
 File: ./Billeder/hist_H01.jpeg Graphic file (type jpg)
 <use ./Billeder/hist_H01.jpeg>
-Package pdftex.def Info: ./Billeder/hist_H01.jpeg  used on input line 250.
+Package pdftex.def Info: ./Billeder/hist_H01.jpeg  used on input line 258.
 (pdftex.def)             Requested size: 165.59853pt x 148.29643pt.
-<./Billeder/hist_H03.jpeg, id=296, 302.63063pt x 271.0125pt>
+<./Billeder/hist_H03.jpeg, id=303, 302.63063pt x 271.0125pt>
 File: ./Billeder/hist_H03.jpeg Graphic file (type jpg)
 <use ./Billeder/hist_H03.jpeg>
-Package pdftex.def Info: ./Billeder/hist_H03.jpeg  used on input line 254.
+Package pdftex.def Info: ./Billeder/hist_H03.jpeg  used on input line 262.
 (pdftex.def)             Requested size: 165.59853pt x 148.29643pt.
-<./Billeder/hist_H05.jpeg, id=297, 302.63063pt x 271.0125pt>
+<./Billeder/hist_H05.jpeg, id=304, 302.63063pt x 271.0125pt>
 File: ./Billeder/hist_H05.jpeg Graphic file (type jpg)
 <use ./Billeder/hist_H05.jpeg>
-Package pdftex.def Info: ./Billeder/hist_H05.jpeg  used on input line 258.
+Package pdftex.def Info: ./Billeder/hist_H05.jpeg  used on input line 266.
 (pdftex.def)             Requested size: 165.59853pt x 148.29643pt.
-<./Billeder/hist_H08.jpeg, id=298, 302.63063pt x 271.0125pt>
+<./Billeder/hist_H08.jpeg, id=305, 302.63063pt x 271.0125pt>
 File: ./Billeder/hist_H08.jpeg Graphic file (type jpg)
 <use ./Billeder/hist_H08.jpeg>
-Package pdftex.def Info: ./Billeder/hist_H08.jpeg  used on input line 262.
+Package pdftex.def Info: ./Billeder/hist_H08.jpeg  used on input line 270.
 (pdftex.def)             Requested size: 165.59853pt x 148.29643pt.
-<./Billeder/H01_2000_1.jpeg, id=302, 302.63063pt x 271.0125pt>
+<./Billeder/H01_2000_1.jpeg, id=309, 302.63063pt x 271.0125pt>
 File: ./Billeder/H01_2000_1.jpeg Graphic file (type jpg)
 <use ./Billeder/H01_2000_1.jpeg>
-Package pdftex.def Info: ./Billeder/H01_2000_1.jpeg  used on input line 288.
+Package pdftex.def Info: ./Billeder/H01_2000_1.jpeg  used on input line 296.
 (pdftex.def)             Requested size: 165.59853pt x 148.29643pt.
-<./Billeder/H01_2000_2.jpeg, id=303, 302.63063pt x 271.0125pt>
+<./Billeder/H01_2000_2.jpeg, id=310, 302.63063pt x 271.0125pt>
 File: ./Billeder/H01_2000_2.jpeg Graphic file (type jpg)
 <use ./Billeder/H01_2000_2.jpeg>
-Package pdftex.def Info: ./Billeder/H01_2000_2.jpeg  used on input line 292.
+Package pdftex.def Info: ./Billeder/H01_2000_2.jpeg  used on input line 300.
 (pdftex.def)             Requested size: 165.59853pt x 148.29643pt.
-<./Billeder/differentK.jpeg, id=307, 302.63063pt x 271.0125pt>
+<./Billeder/differentK.jpeg, id=314, 302.63063pt x 271.0125pt>
 File: ./Billeder/differentK.jpeg Graphic file (type jpg)
 <use ./Billeder/differentK.jpeg>
-Package pdftex.def Info: ./Billeder/differentK.jpeg  used on input line 315.
+Package pdftex.def Info: ./Billeder/differentK.jpeg  used on input line 323.
 (pdftex.def)             Requested size: 269.09958pt x 240.98532pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 219--322
+Underfull \hbox (badness 10000) in paragraph at lines 227--330
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 219--322
+Underfull \hbox (badness 10000) in paragraph at lines 227--330
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 219--322
+Underfull \hbox (badness 10000) in paragraph at lines 227--330
 
  []
 
@@ -669,261 +669,261 @@ der/wagainstp_H05.png> <./Billeder/wagainstp_H08.png>] [12 <./Billeder/hist_H01
 .jpeg> <./Billeder/hist_H03.jpeg> <./Billeder/hist_H05.jpeg> <./Billeder/hist_H
 08.jpeg>] [13 <./Billeder/H01_2000_1.jpeg> <./Billeder/H01_2000_2.jpeg>]
 [14 <./Billeder/differentK.jpeg>]
-Underfull \hbox (badness 10000) in paragraph at lines 335--341
+Underfull \hbox (badness 10000) in paragraph at lines 343--349
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 335--341
+Underfull \hbox (badness 10000) in paragraph at lines 343--349
 
  []
 
 [15]
-Underfull \hbox (badness 10000) in paragraph at lines 343--348
+Underfull \hbox (badness 10000) in paragraph at lines 351--356
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 343--348
+Underfull \hbox (badness 10000) in paragraph at lines 351--356
 
  []
 
-<./Billeder/volis1.jpeg, id=366, 302.63063pt x 271.0125pt>
+<./Billeder/volis1.jpeg, id=373, 302.63063pt x 271.0125pt>
 File: ./Billeder/volis1.jpeg Graphic file (type jpg)
 <use ./Billeder/volis1.jpeg>
-Package pdftex.def Info: ./Billeder/volis1.jpeg  used on input line 361.
+Package pdftex.def Info: ./Billeder/volis1.jpeg  used on input line 369.
 (pdftex.def)             Requested size: 165.59853pt x 148.29643pt.
-<./Billeder/volis2.jpeg, id=367, 302.63063pt x 271.0125pt>
+<./Billeder/volis2.jpeg, id=374, 302.63063pt x 271.0125pt>
 File: ./Billeder/volis2.jpeg Graphic file (type jpg)
 <use ./Billeder/volis2.jpeg>
-Package pdftex.def Info: ./Billeder/volis2.jpeg  used on input line 365.
+Package pdftex.def Info: ./Billeder/volis2.jpeg  used on input line 373.
 (pdftex.def)             Requested size: 165.59853pt x 148.29643pt.
-<./Billeder/volisW.jpeg, id=379, 302.63063pt x 271.0125pt>
+<./Billeder/volisW.jpeg, id=386, 302.63063pt x 271.0125pt>
 File: ./Billeder/volisW.jpeg Graphic file (type jpg)
 <use ./Billeder/volisW.jpeg>
-Package pdftex.def Info: ./Billeder/volisW.jpeg  used on input line 377.
+Package pdftex.def Info: ./Billeder/volisW.jpeg  used on input line 385.
 (pdftex.def)             Requested size: 269.09958pt x 240.98532pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 354--383
+Underfull \hbox (badness 10000) in paragraph at lines 362--391
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 354--383
+Underfull \hbox (badness 10000) in paragraph at lines 362--391
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 354--383
+Underfull \hbox (badness 10000) in paragraph at lines 362--391
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 354--383
+Underfull \hbox (badness 10000) in paragraph at lines 362--391
 
  []
 
 [16] [17 <./Billeder/volis1.jpeg> <./Billeder/volis2.jpeg>]
-Underfull \hbox (badness 10000) in paragraph at lines 388--391
+Underfull \hbox (badness 10000) in paragraph at lines 396--399
 
  []
 
 [18 <./Billeder/volisW.jpeg>]
-Underfull \hbox (badness 10000) in paragraph at lines 401--404
+Underfull \hbox (badness 10000) in paragraph at lines 409--412
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 406--409
+Underfull \hbox (badness 10000) in paragraph at lines 414--417
 
  []
 
 [19]
-Underfull \hbox (badness 10000) in paragraph at lines 420--423
+Underfull \hbox (badness 10000) in paragraph at lines 428--431
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 433--435
+Underfull \hbox (badness 10000) in paragraph at lines 441--443
 
  []
 
 [20]
-Underfull \hbox (badness 10000) in paragraph at lines 454--457
+Underfull \hbox (badness 10000) in paragraph at lines 462--465
 
  []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 476--478
-
- []
-
-[21]
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 483.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 483.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `superscript' on input line 483.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 483.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 483.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 483.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 483.
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 484--486
 
  []
 
-<./Billeder/box3.png, id=457, 230.0595pt x 136.71075pt>
+[21]
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 491.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `subscript' on input line 491.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `superscript' on input line 491.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 491.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 491.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `subscript' on input line 491.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 491.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 492--494
+
+ []
+
+<./Billeder/box3.png, id=464, 230.0595pt x 136.71075pt>
 File: ./Billeder/box3.png Graphic file (type png)
 <use ./Billeder/box3.png>
-Package pdftex.def Info: ./Billeder/box3.png  used on input line 494.
+Package pdftex.def Info: ./Billeder/box3.png  used on input line 502.
 (pdftex.def)             Requested size: 165.59853pt x 98.4087pt.
-<./Billeder/box1.png, id=458, 230.0595pt x 148.75575pt>
+<./Billeder/box1.png, id=465, 230.0595pt x 148.75575pt>
 File: ./Billeder/box1.png Graphic file (type png)
 <use ./Billeder/box1.png>
-Package pdftex.def Info: ./Billeder/box1.png  used on input line 498.
+Package pdftex.def Info: ./Billeder/box1.png  used on input line 506.
 (pdftex.def)             Requested size: 165.59853pt x 107.07907pt.
-<./Billeder/box4.png, id=459, 232.4685pt x 140.32425pt>
+<./Billeder/box4.png, id=466, 232.4685pt x 140.32425pt>
 File: ./Billeder/box4.png Graphic file (type png)
 <use ./Billeder/box4.png>
-Package pdftex.def Info: ./Billeder/box4.png  used on input line 502.
+Package pdftex.def Info: ./Billeder/box4.png  used on input line 510.
 (pdftex.def)             Requested size: 165.59853pt x 99.96492pt.
-<./Billeder/box2.png, id=460, 231.86626pt x 148.75575pt>
+<./Billeder/box2.png, id=467, 231.86626pt x 148.75575pt>
 File: ./Billeder/box2.png Graphic file (type png)
 <use ./Billeder/box2.png>
-Package pdftex.def Info: ./Billeder/box2.png  used on input line 506.
+Package pdftex.def Info: ./Billeder/box2.png  used on input line 514.
 (pdftex.def)             Requested size: 165.59853pt x 106.24377pt.
 [22] [23 <./Billeder/box3.png> <./Billeder/box1.png> <./Billeder/box4.png> <./B
 illeder/box2.png>]
-<./Billeder/03fou_expo.png, id=483, 230.66174pt x 152.36925pt>
+<./Billeder/03fou_expo.png, id=491, 230.66174pt x 152.36925pt>
 File: ./Billeder/03fou_expo.png Graphic file (type png)
 <use ./Billeder/03fou_expo.png>
-Package pdftex.def Info: ./Billeder/03fou_expo.png  used on input line 528.
+Package pdftex.def Info: ./Billeder/03fou_expo.png  used on input line 536.
 (pdftex.def)             Requested size: 165.59853pt x 109.39189pt.
-<./Billeder/07fou_expo.png, id=484, 227.04825pt x 148.1535pt>
+<./Billeder/07fou_expo.png, id=492, 227.04825pt x 148.1535pt>
 File: ./Billeder/07fou_expo.png Graphic file (type png)
 <use ./Billeder/07fou_expo.png>
-Package pdftex.def Info: ./Billeder/07fou_expo.png  used on input line 532.
+Package pdftex.def Info: ./Billeder/07fou_expo.png  used on input line 540.
 (pdftex.def)             Requested size: 165.59853pt x 108.0562pt.
-<./Billeder/03fou_scale.png, id=485, 230.0595pt x 145.7445pt>
+<./Billeder/03fou_scale.png, id=493, 230.0595pt x 145.7445pt>
 File: ./Billeder/03fou_scale.png Graphic file (type png)
 <use ./Billeder/03fou_scale.png>
-Package pdftex.def Info: ./Billeder/03fou_scale.png  used on input line 536.
+Package pdftex.def Info: ./Billeder/03fou_scale.png  used on input line 544.
 (pdftex.def)             Requested size: 165.59853pt x 104.91148pt.
-<./Billeder/07fou_scale.png, id=486, 227.6505pt x 150.5625pt>
+<./Billeder/07fou_scale.png, id=494, 227.6505pt x 150.5625pt>
 File: ./Billeder/07fou_scale.png Graphic file (type png)
 <use ./Billeder/07fou_scale.png>
-Package pdftex.def Info: ./Billeder/07fou_scale.png  used on input line 540.
+Package pdftex.def Info: ./Billeder/07fou_scale.png  used on input line 548.
 (pdftex.def)             Requested size: 165.59853pt x 109.52603pt.
  [24] [25 <./Billeder/03fou_expo.png> <./Billeder/07fou_expo.png> <./Billeder/0
 3fou_scale.png> <./Billeder/07fou_scale.png>]
-<./Billeder/ex5_IVRV1.jpeg, id=518, 302.63063pt x 271.0125pt>
+<./Billeder/ex5_IVRV1.jpeg, id=525, 302.63063pt x 271.0125pt>
 File: ./Billeder/ex5_IVRV1.jpeg Graphic file (type jpg)
 <use ./Billeder/ex5_IVRV1.jpeg>
-Package pdftex.def Info: ./Billeder/ex5_IVRV1.jpeg  used on input line 563.
+Package pdftex.def Info: ./Billeder/ex5_IVRV1.jpeg  used on input line 571.
 (pdftex.def)             Requested size: 110.40253pt x 98.86703pt.
-<./Billeder/ex5_IVRV2.jpeg, id=519, 302.63063pt x 271.0125pt>
+<./Billeder/ex5_IVRV2.jpeg, id=526, 302.63063pt x 271.0125pt>
 File: ./Billeder/ex5_IVRV2.jpeg Graphic file (type jpg)
 <use ./Billeder/ex5_IVRV2.jpeg>
-Package pdftex.def Info: ./Billeder/ex5_IVRV2.jpeg  used on input line 567.
+Package pdftex.def Info: ./Billeder/ex5_IVRV2.jpeg  used on input line 575.
 (pdftex.def)             Requested size: 110.40253pt x 98.86703pt.
-<./Billeder/ex5_IVRV3.jpeg, id=520, 302.63063pt x 271.0125pt>
+<./Billeder/ex5_IVRV3.jpeg, id=527, 302.63063pt x 271.0125pt>
 File: ./Billeder/ex5_IVRV3.jpeg Graphic file (type jpg)
 <use ./Billeder/ex5_IVRV3.jpeg>
-Package pdftex.def Info: ./Billeder/ex5_IVRV3.jpeg  used on input line 571.
+Package pdftex.def Info: ./Billeder/ex5_IVRV3.jpeg  used on input line 579.
 (pdftex.def)             Requested size: 110.40253pt x 98.86703pt.
-<./Billeder/ex5_RVw.jpeg, id=526, 302.63063pt x 271.0125pt>
+<./Billeder/ex5_RVw.jpeg, id=533, 302.63063pt x 271.0125pt>
 File: ./Billeder/ex5_RVw.jpeg Graphic file (type jpg)
 <use ./Billeder/ex5_RVw.jpeg>
-Package pdftex.def Info: ./Billeder/ex5_RVw.jpeg  used on input line 581.
+Package pdftex.def Info: ./Billeder/ex5_RVw.jpeg  used on input line 589.
 (pdftex.def)             Requested size: 165.59853pt x 148.29643pt.
-<./Billeder/ex5_IVw.jpeg, id=527, 302.63063pt x 271.0125pt>
+<./Billeder/ex5_IVw.jpeg, id=534, 302.63063pt x 271.0125pt>
 File: ./Billeder/ex5_IVw.jpeg Graphic file (type jpg)
 <use ./Billeder/ex5_IVw.jpeg>
-Package pdftex.def Info: ./Billeder/ex5_IVw.jpeg  used on input line 585.
+Package pdftex.def Info: ./Billeder/ex5_IVw.jpeg  used on input line 593.
 (pdftex.def)             Requested size: 165.59853pt x 148.29643pt.
-<./Billeder/ex5_RVk.jpeg, id=532, 302.63063pt x 271.0125pt>
+<./Billeder/ex5_RVk.jpeg, id=539, 302.63063pt x 271.0125pt>
 File: ./Billeder/ex5_RVk.jpeg Graphic file (type jpg)
 <use ./Billeder/ex5_RVk.jpeg>
-Package pdftex.def Info: ./Billeder/ex5_RVk.jpeg  used on input line 596.
+Package pdftex.def Info: ./Billeder/ex5_RVk.jpeg  used on input line 604.
 (pdftex.def)             Requested size: 165.59853pt x 148.29643pt.
-<./Billeder/ex5_IVk.jpeg, id=533, 302.63063pt x 271.0125pt>
+<./Billeder/ex5_IVk.jpeg, id=540, 302.63063pt x 271.0125pt>
 File: ./Billeder/ex5_IVk.jpeg Graphic file (type jpg)
 <use ./Billeder/ex5_IVk.jpeg>
-Package pdftex.def Info: ./Billeder/ex5_IVk.jpeg  used on input line 600.
+Package pdftex.def Info: ./Billeder/ex5_IVk.jpeg  used on input line 608.
 (pdftex.def)             Requested size: 165.59853pt x 148.29643pt.
-<./Billeder/price_plot.jpeg, id=543, 331.99031pt x 302.63063pt>
+<./Billeder/price_plot.jpeg, id=550, 331.99031pt x 302.63063pt>
 File: ./Billeder/price_plot.jpeg Graphic file (type jpg)
 <use ./Billeder/price_plot.jpeg>
-Package pdftex.def Info: ./Billeder/price_plot.jpeg  used on input line 614.
+Package pdftex.def Info: ./Billeder/price_plot.jpeg  used on input line 622.
 (pdftex.def)             Requested size: 165.59853pt x 150.95474pt.
-<./Billeder/price_rescaled.jpeg, id=544, 331.99031pt x 302.63063pt>
+<./Billeder/price_rescaled.jpeg, id=551, 331.99031pt x 302.63063pt>
 File: ./Billeder/price_rescaled.jpeg Graphic file (type jpg)
 <use ./Billeder/price_rescaled.jpeg>
-Package pdftex.def Info: ./Billeder/price_rescaled.jpeg  used on input line 618
+Package pdftex.def Info: ./Billeder/price_rescaled.jpeg  used on input line 626
 .
 (pdftex.def)             Requested size: 165.59853pt x 150.95474pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 554--625
+Underfull \hbox (badness 10000) in paragraph at lines 562--633
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 554--625
+Underfull \hbox (badness 10000) in paragraph at lines 562--633
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 554--625
+Underfull \hbox (badness 10000) in paragraph at lines 562--633
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 554--625
+Underfull \hbox (badness 10000) in paragraph at lines 562--633
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 554--625
+Underfull \hbox (badness 10000) in paragraph at lines 562--633
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 554--625
+Underfull \hbox (badness 10000) in paragraph at lines 562--633
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 554--625
+Underfull \hbox (badness 10000) in paragraph at lines 562--633
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 554--625
+Underfull \hbox (badness 10000) in paragraph at lines 562--633
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 554--625
+Underfull \hbox (badness 10000) in paragraph at lines 562--633
 
  []
 
@@ -934,190 +934,190 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 5_IVRV3.jpeg> <./Billeder/ex5_RVw.jpeg> <./Billeder/ex5_IVw.jpeg>] [28 <./Bille
 der/ex5_RVk.jpeg> <./Billeder/ex5_IVk.jpeg>] [29 <./Billeder/price_plot.jpeg> <
 ./Billeder/price_rescaled.jpeg>]
-<./Billeder/ex5_scale1.jpeg, id=574, 331.99031pt x 302.63063pt>
+<./Billeder/ex5_scale1.jpeg, id=582, 331.99031pt x 302.63063pt>
 File: ./Billeder/ex5_scale1.jpeg Graphic file (type jpg)
 <use ./Billeder/ex5_scale1.jpeg>
-Package pdftex.def Info: ./Billeder/ex5_scale1.jpeg  used on input line 634.
+Package pdftex.def Info: ./Billeder/ex5_scale1.jpeg  used on input line 642.
 (pdftex.def)             Requested size: 110.40253pt x 100.63957pt.
-<./Billeder/ex5_scale2.jpeg, id=575, 331.99031pt x 302.63063pt>
+<./Billeder/ex5_scale2.jpeg, id=583, 331.99031pt x 302.63063pt>
 File: ./Billeder/ex5_scale2.jpeg Graphic file (type jpg)
 <use ./Billeder/ex5_scale2.jpeg>
-Package pdftex.def Info: ./Billeder/ex5_scale2.jpeg  used on input line 638.
+Package pdftex.def Info: ./Billeder/ex5_scale2.jpeg  used on input line 646.
 (pdftex.def)             Requested size: 110.40253pt x 100.63957pt.
-<./Billeder/ex5_scale3.jpeg, id=576, 331.99031pt x 302.63063pt>
+<./Billeder/ex5_scale3.jpeg, id=584, 331.99031pt x 302.63063pt>
 File: ./Billeder/ex5_scale3.jpeg Graphic file (type jpg)
 <use ./Billeder/ex5_scale3.jpeg>
-Package pdftex.def Info: ./Billeder/ex5_scale3.jpeg  used on input line 642.
+Package pdftex.def Info: ./Billeder/ex5_scale3.jpeg  used on input line 650.
 (pdftex.def)             Requested size: 110.40253pt x 100.63957pt.
-<./Billeder/ex5_densRV.png, id=591, 377.15906pt x 280.04625pt>
+<./Billeder/ex5_densRV.png, id=599, 377.15906pt x 280.04625pt>
 File: ./Billeder/ex5_densRV.png Graphic file (type png)
 <use ./Billeder/ex5_densRV.png>
-Package pdftex.def Info: ./Billeder/ex5_densRV.png  used on input line 671.
+Package pdftex.def Info: ./Billeder/ex5_densRV.png  used on input line 679.
 (pdftex.def)             Requested size: 165.59853pt x 122.95578pt.
-<./Billeder/ex5_densIV.png, id=592, 377.15906pt x 280.04625pt>
+<./Billeder/ex5_densIV.png, id=600, 377.15906pt x 280.04625pt>
 File: ./Billeder/ex5_densIV.png Graphic file (type png)
 <use ./Billeder/ex5_densIV.png>
-Package pdftex.def Info: ./Billeder/ex5_densIV.png  used on input line 675.
+Package pdftex.def Info: ./Billeder/ex5_densIV.png  used on input line 683.
 (pdftex.def)             Requested size: 165.59853pt x 122.95578pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 627--681
+Underfull \hbox (badness 10000) in paragraph at lines 635--689
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 627--681
+Underfull \hbox (badness 10000) in paragraph at lines 635--689
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 627--681
+Underfull \hbox (badness 10000) in paragraph at lines 635--689
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 627--681
+Underfull \hbox (badness 10000) in paragraph at lines 635--689
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 627--681
+Underfull \hbox (badness 10000) in paragraph at lines 635--689
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 627--681
+Underfull \hbox (badness 10000) in paragraph at lines 635--689
 
  []
 
 [30 <./Billeder/ex5_scale1.jpeg> <./Billeder/ex5_scale2.jpeg> <./Billeder/ex5_s
 cale3.jpeg>] [31]
-<./Billeder/ex6_IVRV1.jpeg, id=619, 302.63063pt x 271.0125pt>
+<./Billeder/ex6_IVRV1.jpeg, id=626, 302.63063pt x 271.0125pt>
 File: ./Billeder/ex6_IVRV1.jpeg Graphic file (type jpg)
 <use ./Billeder/ex6_IVRV1.jpeg>
-Package pdftex.def Info: ./Billeder/ex6_IVRV1.jpeg  used on input line 692.
+Package pdftex.def Info: ./Billeder/ex6_IVRV1.jpeg  used on input line 700.
 (pdftex.def)             Requested size: 110.40253pt x 98.86703pt.
-<./Billeder/ex6_IVRV2.jpeg, id=620, 302.63063pt x 271.0125pt>
+<./Billeder/ex6_IVRV2.jpeg, id=627, 302.63063pt x 271.0125pt>
 File: ./Billeder/ex6_IVRV2.jpeg Graphic file (type jpg)
 <use ./Billeder/ex6_IVRV2.jpeg>
-Package pdftex.def Info: ./Billeder/ex6_IVRV2.jpeg  used on input line 696.
+Package pdftex.def Info: ./Billeder/ex6_IVRV2.jpeg  used on input line 704.
 (pdftex.def)             Requested size: 110.40253pt x 98.86703pt.
-<./Billeder/ex6_IVRV3.jpeg, id=621, 302.63063pt x 271.0125pt>
+<./Billeder/ex6_IVRV3.jpeg, id=628, 302.63063pt x 271.0125pt>
 File: ./Billeder/ex6_IVRV3.jpeg Graphic file (type jpg)
 <use ./Billeder/ex6_IVRV3.jpeg>
-Package pdftex.def Info: ./Billeder/ex6_IVRV3.jpeg  used on input line 700.
+Package pdftex.def Info: ./Billeder/ex6_IVRV3.jpeg  used on input line 708.
 (pdftex.def)             Requested size: 110.40253pt x 98.86703pt.
-<./Billeder/ex6_RVw.jpeg, id=623, 331.99031pt x 302.63063pt>
+<./Billeder/ex6_RVw.jpeg, id=630, 331.99031pt x 302.63063pt>
 File: ./Billeder/ex6_RVw.jpeg Graphic file (type jpg)
 <use ./Billeder/ex6_RVw.jpeg>
-Package pdftex.def Info: ./Billeder/ex6_RVw.jpeg  used on input line 710.
+Package pdftex.def Info: ./Billeder/ex6_RVw.jpeg  used on input line 718.
 (pdftex.def)             Requested size: 165.59853pt x 150.95474pt.
-<./Billeder/ex6_IVw.jpeg, id=624, 331.99031pt x 302.63063pt>
+<./Billeder/ex6_IVw.jpeg, id=631, 331.99031pt x 302.63063pt>
 File: ./Billeder/ex6_IVw.jpeg Graphic file (type jpg)
 <use ./Billeder/ex6_IVw.jpeg>
-Package pdftex.def Info: ./Billeder/ex6_IVw.jpeg  used on input line 714.
+Package pdftex.def Info: ./Billeder/ex6_IVw.jpeg  used on input line 722.
 (pdftex.def)             Requested size: 165.59853pt x 150.95474pt.
-<./Billeder/ex6_logIV1.jpeg, id=629, 331.99031pt x 302.63063pt>
+<./Billeder/ex6_logIV1.jpeg, id=636, 331.99031pt x 302.63063pt>
 File: ./Billeder/ex6_logIV1.jpeg Graphic file (type jpg)
 <use ./Billeder/ex6_logIV1.jpeg>
-Package pdftex.def Info: ./Billeder/ex6_logIV1.jpeg  used on input line 725.
+Package pdftex.def Info: ./Billeder/ex6_logIV1.jpeg  used on input line 733.
 (pdftex.def)             Requested size: 165.59853pt x 150.95474pt.
-<./Billeder/ex6_logIV2.jpeg, id=630, 331.99031pt x 302.63063pt>
+<./Billeder/ex6_logIV2.jpeg, id=637, 331.99031pt x 302.63063pt>
 File: ./Billeder/ex6_logIV2.jpeg Graphic file (type jpg)
 <use ./Billeder/ex6_logIV2.jpeg>
-Package pdftex.def Info: ./Billeder/ex6_logIV2.jpeg  used on input line 729.
+Package pdftex.def Info: ./Billeder/ex6_logIV2.jpeg  used on input line 737.
 (pdftex.def)             Requested size: 165.59853pt x 150.95474pt.
-<./Billeder/ex6_logRV1.jpeg, id=633, 331.99031pt x 302.63063pt>
+<./Billeder/ex6_logRV1.jpeg, id=640, 331.99031pt x 302.63063pt>
 File: ./Billeder/ex6_logRV1.jpeg Graphic file (type jpg)
 <use ./Billeder/ex6_logRV1.jpeg>
-Package pdftex.def Info: ./Billeder/ex6_logRV1.jpeg  used on input line 739.
+Package pdftex.def Info: ./Billeder/ex6_logRV1.jpeg  used on input line 747.
 (pdftex.def)             Requested size: 165.59853pt x 150.95474pt.
-<./Billeder/ex6_logRV2.jpeg, id=634, 331.99031pt x 302.63063pt>
+<./Billeder/ex6_logRV2.jpeg, id=641, 331.99031pt x 302.63063pt>
 File: ./Billeder/ex6_logRV2.jpeg Graphic file (type jpg)
 <use ./Billeder/ex6_logRV2.jpeg>
-Package pdftex.def Info: ./Billeder/ex6_logRV2.jpeg  used on input line 743.
+Package pdftex.def Info: ./Billeder/ex6_logRV2.jpeg  used on input line 751.
 (pdftex.def)             Requested size: 165.59853pt x 150.95474pt.
-<./Billeder/ex6_scale1.jpeg, id=644, 331.99031pt x 302.63063pt>
+<./Billeder/ex6_scale1.jpeg, id=651, 331.99031pt x 302.63063pt>
 File: ./Billeder/ex6_scale1.jpeg Graphic file (type jpg)
 <use ./Billeder/ex6_scale1.jpeg>
-Package pdftex.def Info: ./Billeder/ex6_scale1.jpeg  used on input line 755.
+Package pdftex.def Info: ./Billeder/ex6_scale1.jpeg  used on input line 763.
 (pdftex.def)             Requested size: 110.40253pt x 100.63957pt.
-<./Billeder/ex6_scale2.jpeg, id=645, 331.99031pt x 302.63063pt>
+<./Billeder/ex6_scale2.jpeg, id=652, 331.99031pt x 302.63063pt>
 File: ./Billeder/ex6_scale2.jpeg Graphic file (type jpg)
 <use ./Billeder/ex6_scale2.jpeg>
-Package pdftex.def Info: ./Billeder/ex6_scale2.jpeg  used on input line 759.
+Package pdftex.def Info: ./Billeder/ex6_scale2.jpeg  used on input line 767.
 (pdftex.def)             Requested size: 110.40253pt x 100.63957pt.
-<./Billeder/ex6_scale3.jpeg, id=646, 331.99031pt x 302.63063pt>
+<./Billeder/ex6_scale3.jpeg, id=653, 331.99031pt x 302.63063pt>
 File: ./Billeder/ex6_scale3.jpeg Graphic file (type jpg)
 <use ./Billeder/ex6_scale3.jpeg>
-Package pdftex.def Info: ./Billeder/ex6_scale3.jpeg  used on input line 763.
+Package pdftex.def Info: ./Billeder/ex6_scale3.jpeg  used on input line 771.
 (pdftex.def)             Requested size: 110.40253pt x 100.63957pt.
-<./Billeder/ex6_densRV.jpeg, id=656, 302.63063pt x 227.34938pt>
+<./Billeder/ex6_densRV.jpeg, id=663, 302.63063pt x 227.34938pt>
 File: ./Billeder/ex6_densRV.jpeg Graphic file (type jpg)
 <use ./Billeder/ex6_densRV.jpeg>
-Package pdftex.def Info: ./Billeder/ex6_densRV.jpeg  used on input line 787.
+Package pdftex.def Info: ./Billeder/ex6_densRV.jpeg  used on input line 795.
 (pdftex.def)             Requested size: 165.59853pt x 124.40422pt.
-<./Billeder/ex6_densIV.jpeg, id=657, 302.63063pt x 228.10219pt>
+<./Billeder/ex6_densIV.jpeg, id=664, 302.63063pt x 228.10219pt>
 File: ./Billeder/ex6_densIV.jpeg Graphic file (type jpg)
 <use ./Billeder/ex6_densIV.jpeg>
-Package pdftex.def Info: ./Billeder/ex6_densIV.jpeg  used on input line 791.
+Package pdftex.def Info: ./Billeder/ex6_densIV.jpeg  used on input line 799.
 (pdftex.def)             Requested size: 165.59853pt x 124.81615pt.
-<./Billeder/ex6_densRV.png, id=671, 377.15906pt x 280.04625pt>
+<./Billeder/ex6_densRV.png, id=678, 377.15906pt x 280.04625pt>
 File: ./Billeder/ex6_densRV.png Graphic file (type png)
 <use ./Billeder/ex6_densRV.png>
-Package pdftex.def Info: ./Billeder/ex6_densRV.png  used on input line 821.
+Package pdftex.def Info: ./Billeder/ex6_densRV.png  used on input line 829.
 (pdftex.def)             Requested size: 165.59853pt x 122.95578pt.
-<./Billeder/ex6_densIV.png, id=672, 377.15906pt x 280.04625pt>
+<./Billeder/ex6_densIV.png, id=679, 377.15906pt x 280.04625pt>
 File: ./Billeder/ex6_densIV.png Graphic file (type png)
 <use ./Billeder/ex6_densIV.png>
-Package pdftex.def Info: ./Billeder/ex6_densIV.png  used on input line 825.
+Package pdftex.def Info: ./Billeder/ex6_densIV.png  used on input line 833.
 (pdftex.def)             Requested size: 165.59853pt x 122.95578pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 685--832
+Underfull \hbox (badness 10000) in paragraph at lines 693--840
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 685--832
+Underfull \hbox (badness 10000) in paragraph at lines 693--840
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 685--832
+Underfull \hbox (badness 10000) in paragraph at lines 693--840
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 685--832
+Underfull \hbox (badness 10000) in paragraph at lines 693--840
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 685--832
+Underfull \hbox (badness 10000) in paragraph at lines 693--840
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 685--832
+Underfull \hbox (badness 10000) in paragraph at lines 693--840
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 685--832
+Underfull \hbox (badness 10000) in paragraph at lines 693--840
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 685--832
+Underfull \hbox (badness 10000) in paragraph at lines 693--840
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 685--832
+Underfull \hbox (badness 10000) in paragraph at lines 693--840
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 685--832
+Underfull \hbox (badness 10000) in paragraph at lines 693--840
 
  []
 
@@ -1128,164 +1128,164 @@ g> <./Billeder/ex6_logIV2.jpeg> <./Billeder/ex6_logRV1.jpeg> <./Billeder/ex6_lo
 gRV2.jpeg>] [36 <./Billeder/ex6_scale1.jpeg> <./Billeder/ex6_scale2.jpeg> <./Bi
 lleder/ex6_scale3.jpeg>] [37 <./Billeder/ex6_densRV.jpeg> <./Billeder/ex6_densI
 V.jpeg>] [38]
-Underfull \hbox (badness 1270) in paragraph at lines 857--857
+Underfull \hbox (badness 1270) in paragraph at lines 865--865
 \OT1/cmr/m/n/10 a frac-tional Ornstein-Uhlenbeck model [] with Hurst ex-po-nent
  $\OML/cmm/m/it/10 H \OT1/cmr/m/n/10 =
  []
 
-<./Billeder/H01_S.png, id=728, 235.47975pt x 126.4725pt>
+<./Billeder/H01_S.png, id=735, 235.47975pt x 126.4725pt>
 File: ./Billeder/H01_S.png Graphic file (type png)
 <use ./Billeder/H01_S.png>
-Package pdftex.def Info: ./Billeder/H01_S.png  used on input line 865.
+Package pdftex.def Info: ./Billeder/H01_S.png  used on input line 873.
 (pdftex.def)             Requested size: 110.40253pt x 59.29541pt.
-<./Billeder/H01_RV.png, id=729, 235.47975pt x 125.268pt>
+<./Billeder/H01_RV.png, id=736, 235.47975pt x 125.268pt>
 File: ./Billeder/H01_RV.png Graphic file (type png)
 <use ./Billeder/H01_RV.png>
-Package pdftex.def Info: ./Billeder/H01_RV.png  used on input line 869.
+Package pdftex.def Info: ./Billeder/H01_RV.png  used on input line 877.
 (pdftex.def)             Requested size: 110.40253pt x 58.73068pt.
-<./Billeder/H01_IV.png, id=730, 233.07076pt x 127.677pt>
+<./Billeder/H01_IV.png, id=737, 233.07076pt x 127.677pt>
 File: ./Billeder/H01_IV.png Graphic file (type png)
 <use ./Billeder/H01_IV.png>
-Package pdftex.def Info: ./Billeder/H01_IV.png  used on input line 873.
+Package pdftex.def Info: ./Billeder/H01_IV.png  used on input line 881.
 (pdftex.def)             Requested size: 110.40253pt x 60.47964pt.
-<./Billeder/H02_S.png, id=731, 233.07076pt x 130.086pt>
+<./Billeder/H02_S.png, id=738, 233.07076pt x 130.086pt>
 File: ./Billeder/H02_S.png Graphic file (type png)
 <use ./Billeder/H02_S.png>
-Package pdftex.def Info: ./Billeder/H02_S.png  used on input line 877.
+Package pdftex.def Info: ./Billeder/H02_S.png  used on input line 885.
 (pdftex.def)             Requested size: 110.40253pt x 61.62077pt.
-<./Billeder/H02_RV.png, id=732, 233.673pt x 124.0635pt>
+<./Billeder/H02_RV.png, id=739, 233.673pt x 124.0635pt>
 File: ./Billeder/H02_RV.png Graphic file (type png)
 <use ./Billeder/H02_RV.png>
-Package pdftex.def Info: ./Billeder/H02_RV.png  used on input line 881.
+Package pdftex.def Info: ./Billeder/H02_RV.png  used on input line 889.
 (pdftex.def)             Requested size: 110.40253pt x 58.61462pt.
-<./Billeder/H02_IV.png, id=733, 227.6505pt x 127.07475pt>
+<./Billeder/H02_IV.png, id=740, 227.6505pt x 127.07475pt>
 File: ./Billeder/H02_IV.png Graphic file (type png)
 <use ./Billeder/H02_IV.png>
-Package pdftex.def Info: ./Billeder/H02_IV.png  used on input line 885.
+Package pdftex.def Info: ./Billeder/H02_IV.png  used on input line 893.
 (pdftex.def)             Requested size: 110.40253pt x 61.62535pt.
-<./Billeder/H03_S.png, id=734, 229.45724pt x 127.677pt>
+<./Billeder/H03_S.png, id=741, 229.45724pt x 127.677pt>
 File: ./Billeder/H03_S.png Graphic file (type png)
 <use ./Billeder/H03_S.png>
-Package pdftex.def Info: ./Billeder/H03_S.png  used on input line 889.
+Package pdftex.def Info: ./Billeder/H03_S.png  used on input line 897.
 (pdftex.def)             Requested size: 110.40253pt x 61.43037pt.
-<./Billeder/H03_RV.png, id=735, 233.07076pt x 123.46124pt>
+<./Billeder/H03_RV.png, id=742, 233.07076pt x 123.46124pt>
 File: ./Billeder/H03_RV.png Graphic file (type png)
 <use ./Billeder/H03_RV.png>
-Package pdftex.def Info: ./Billeder/H03_RV.png  used on input line 893.
+Package pdftex.def Info: ./Billeder/H03_RV.png  used on input line 901.
 (pdftex.def)             Requested size: 110.40253pt x 58.48267pt.
-<./Billeder/H03_IV.png, id=736, 231.86626pt x 125.268pt>
+<./Billeder/H03_IV.png, id=743, 231.86626pt x 125.268pt>
 File: ./Billeder/H03_IV.png Graphic file (type png)
 <use ./Billeder/H03_IV.png>
-Package pdftex.def Info: ./Billeder/H03_IV.png  used on input line 897.
+Package pdftex.def Info: ./Billeder/H03_IV.png  used on input line 905.
 (pdftex.def)             Requested size: 110.40253pt x 59.64627pt.
-<./Billeder/H04_S.png, id=737, 227.04825pt x 128.27925pt>
+<./Billeder/H04_S.png, id=744, 227.04825pt x 128.27925pt>
 File: ./Billeder/H04_S.png Graphic file (type png)
 <use ./Billeder/H04_S.png>
-Package pdftex.def Info: ./Billeder/H04_S.png  used on input line 901.
+Package pdftex.def Info: ./Billeder/H04_S.png  used on input line 909.
 (pdftex.def)             Requested size: 110.40253pt x 62.37585pt.
-<./Billeder/H04_RV.png, id=738, 224.63925pt x 127.07475pt>
+<./Billeder/H04_RV.png, id=745, 224.63925pt x 127.07475pt>
 File: ./Billeder/H04_RV.png Graphic file (type png)
 <use ./Billeder/H04_RV.png>
-Package pdftex.def Info: ./Billeder/H04_RV.png  used on input line 905.
+Package pdftex.def Info: ./Billeder/H04_RV.png  used on input line 913.
 (pdftex.def)             Requested size: 110.40253pt x 62.45331pt.
-<./Billeder/H04_IV.png, id=739, 227.04825pt x 130.68825pt>
+<./Billeder/H04_IV.png, id=746, 227.04825pt x 130.68825pt>
 File: ./Billeder/H04_IV.png Graphic file (type png)
 <use ./Billeder/H04_IV.png>
-Package pdftex.def Info: ./Billeder/H04_IV.png  used on input line 909.
+Package pdftex.def Info: ./Billeder/H04_IV.png  used on input line 917.
 (pdftex.def)             Requested size: 110.40253pt x 63.54723pt.
-<./Billeder/H05_S.png, id=740, 230.0595pt x 129.48375pt>
+<./Billeder/H05_S.png, id=747, 230.0595pt x 129.48375pt>
 File: ./Billeder/H05_S.png Graphic file (type png)
 <use ./Billeder/H05_S.png>
-Package pdftex.def Info: ./Billeder/H05_S.png  used on input line 913.
+Package pdftex.def Info: ./Billeder/H05_S.png  used on input line 921.
 (pdftex.def)             Requested size: 110.40253pt x 62.13765pt.
-<./Billeder/H05_RV.png, id=741, 233.07076pt x 124.66576pt>
+<./Billeder/H05_RV.png, id=748, 233.07076pt x 124.66576pt>
 File: ./Billeder/H05_RV.png Graphic file (type png)
 <use ./Billeder/H05_RV.png>
-Package pdftex.def Info: ./Billeder/H05_RV.png  used on input line 917.
+Package pdftex.def Info: ./Billeder/H05_RV.png  used on input line 925.
 (pdftex.def)             Requested size: 110.40253pt x 59.05324pt.
-<./Billeder/H05_IV.png, id=742, 230.66174pt x 127.677pt>
+<./Billeder/H05_IV.png, id=749, 230.66174pt x 127.677pt>
 File: ./Billeder/H05_IV.png Graphic file (type png)
 <use ./Billeder/H05_IV.png>
-Package pdftex.def Info: ./Billeder/H05_IV.png  used on input line 921.
+Package pdftex.def Info: ./Billeder/H05_IV.png  used on input line 929.
 (pdftex.def)             Requested size: 110.40253pt x 61.11087pt.
-<./Billeder/H06_S.png, id=743, 231.86626pt x 126.4725pt>
+<./Billeder/H06_S.png, id=750, 231.86626pt x 126.4725pt>
 File: ./Billeder/H06_S.png Graphic file (type png)
 <use ./Billeder/H06_S.png>
-Package pdftex.def Info: ./Billeder/H06_S.png  used on input line 925.
+Package pdftex.def Info: ./Billeder/H06_S.png  used on input line 933.
 (pdftex.def)             Requested size: 110.40253pt x 60.21979pt.
-<./Billeder/H06_RV.png, id=744, 227.04825pt x 132.495pt>
+<./Billeder/H06_RV.png, id=751, 227.04825pt x 132.495pt>
 File: ./Billeder/H06_RV.png Graphic file (type png)
 <use ./Billeder/H06_RV.png>
-Package pdftex.def Info: ./Billeder/H06_RV.png  used on input line 929.
+Package pdftex.def Info: ./Billeder/H06_RV.png  used on input line 937.
 (pdftex.def)             Requested size: 110.40253pt x 64.42577pt.
-<./Billeder/H06_IV.png, id=745, 229.45724pt x 127.677pt>
+<./Billeder/H06_IV.png, id=752, 229.45724pt x 127.677pt>
 File: ./Billeder/H06_IV.png Graphic file (type png)
 <use ./Billeder/H06_IV.png>
-Package pdftex.def Info: ./Billeder/H06_IV.png  used on input line 933.
+Package pdftex.def Info: ./Billeder/H06_IV.png  used on input line 941.
 (pdftex.def)             Requested size: 110.40253pt x 61.43037pt.
-<./Billeder/H07_S.png, id=746, 229.45724pt x 132.495pt>
+<./Billeder/H07_S.png, id=753, 229.45724pt x 132.495pt>
 File: ./Billeder/H07_S.png Graphic file (type png)
 <use ./Billeder/H07_S.png>
-Package pdftex.def Info: ./Billeder/H07_S.png  used on input line 937.
+Package pdftex.def Info: ./Billeder/H07_S.png  used on input line 945.
 (pdftex.def)             Requested size: 110.40253pt x 63.74849pt.
-<./Billeder/H07_RV.png, id=747, 227.04825pt x 130.68825pt>
+<./Billeder/H07_RV.png, id=754, 227.04825pt x 130.68825pt>
 File: ./Billeder/H07_RV.png Graphic file (type png)
 <use ./Billeder/H07_RV.png>
-Package pdftex.def Info: ./Billeder/H07_RV.png  used on input line 941.
+Package pdftex.def Info: ./Billeder/H07_RV.png  used on input line 949.
 (pdftex.def)             Requested size: 110.40253pt x 63.54723pt.
-<./Billeder/H07_IV.png, id=748, 224.037pt x 131.2905pt>
+<./Billeder/H07_IV.png, id=755, 224.037pt x 131.2905pt>
 File: ./Billeder/H07_IV.png Graphic file (type png)
 <use ./Billeder/H07_IV.png>
-Package pdftex.def Info: ./Billeder/H07_IV.png  used on input line 945.
+Package pdftex.def Info: ./Billeder/H07_IV.png  used on input line 953.
 (pdftex.def)             Requested size: 110.40253pt x 64.69951pt.
-<./Billeder/H08_S.png, id=749, 225.84375pt x 126.4725pt>
+<./Billeder/H08_S.png, id=756, 225.84375pt x 126.4725pt>
 File: ./Billeder/H08_S.png Graphic file (type png)
 <use ./Billeder/H08_S.png>
-Package pdftex.def Info: ./Billeder/H08_S.png  used on input line 949.
+Package pdftex.def Info: ./Billeder/H08_S.png  used on input line 957.
 (pdftex.def)             Requested size: 110.40253pt x 61.82732pt.
-<./Billeder/H08_RV.png, id=750, 227.04825pt x 127.677pt>
+<./Billeder/H08_RV.png, id=757, 227.04825pt x 127.677pt>
 File: ./Billeder/H08_RV.png Graphic file (type png)
 <use ./Billeder/H08_RV.png>
-Package pdftex.def Info: ./Billeder/H08_RV.png  used on input line 953.
+Package pdftex.def Info: ./Billeder/H08_RV.png  used on input line 961.
 (pdftex.def)             Requested size: 110.40253pt x 62.08301pt.
-<./Billeder/H08_IV.png, id=751, 233.07076pt x 125.268pt>
+<./Billeder/H08_IV.png, id=758, 233.07076pt x 125.268pt>
 File: ./Billeder/H08_IV.png Graphic file (type png)
 <use ./Billeder/H08_IV.png>
-Package pdftex.def Info: ./Billeder/H08_IV.png  used on input line 957.
+Package pdftex.def Info: ./Billeder/H08_IV.png  used on input line 965.
 (pdftex.def)             Requested size: 110.40253pt x 59.33853pt.
 
-LaTeX Warning: Float too large for page by 3.42853pt on input line 962.
+LaTeX Warning: Float too large for page by 3.42853pt on input line 970.
 
-<./Billeder/ex7_single_plot.png, id=757, 296.60812pt x 280.04625pt>
+<./Billeder/ex7_single_plot.png, id=764, 296.60812pt x 280.04625pt>
 File: ./Billeder/ex7_single_plot.png Graphic file (type png)
 <use ./Billeder/ex7_single_plot.png>
-Package pdftex.def Info: ./Billeder/ex7_single_plot.png  used on input line 970
+Package pdftex.def Info: ./Billeder/ex7_single_plot.png  used on input line 978
 .
 (pdftex.def)             Requested size: 269.09958pt x 254.08185pt.
-<./Billeder/ex7_plot100.png, id=763, 296.60812pt x 280.04625pt>
+<./Billeder/ex7_plot100.png, id=770, 296.60812pt x 280.04625pt>
 File: ./Billeder/ex7_plot100.png Graphic file (type png)
 <use ./Billeder/ex7_plot100.png>
-Package pdftex.def Info: ./Billeder/ex7_plot100.png  used on input line 981.
+Package pdftex.def Info: ./Billeder/ex7_plot100.png  used on input line 989.
 (pdftex.def)             Requested size: 269.09958pt x 254.08185pt.
-<./Billeder/ex7_scale_single.png, id=779, 377.15906pt x 309.40594pt>
+<./Billeder/ex7_scale_single.png, id=786, 377.15906pt x 309.40594pt>
 File: ./Billeder/ex7_scale_single.png Graphic file (type png)
 <use ./Billeder/ex7_scale_single.png>
 Package pdftex.def Info: ./Billeder/ex7_scale_single.png  used on input line 10
-17.
+25.
 (pdftex.def)             Requested size: 269.09958pt x 220.75616pt.
-<./Billeder/ex7_scale_multiple.png, id=784, 436.63126pt x 309.40594pt>
+<./Billeder/ex7_scale_multiple.png, id=791, 436.63126pt x 309.40594pt>
 File: ./Billeder/ex7_scale_multiple.png Graphic file (type png)
 <use ./Billeder/ex7_scale_multiple.png>
 Package pdftex.def Info: ./Billeder/ex7_scale_multiple.png  used on input line 
-1029.
+1037.
 (pdftex.def)             Requested size: 269.09958pt x 190.68718pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 837--1038
+Underfull \hbox (badness 10000) in paragraph at lines 845--1046
 
  []
 
 
-Overfull \hbox (95.15329pt too wide) in paragraph at lines 837--1038
+Overfull \hbox (95.15329pt too wide) in paragraph at lines 845--1046
 \OT1/cmr/m/n/10 frac-tional Ornstein-Uhlenbeck model [] with Hurst ex-po-nent $
 \OML/cmm/m/it/10 H \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 0\OML/cm
 m/m/it/10 :\OT1/cmr/m/n/10 1\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 0\OML/cmm/m/it/1
@@ -1299,12 +1299,12 @@ m/n/10 .
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 837--1038
+Underfull \hbox (badness 10000) in paragraph at lines 845--1046
 
  []
 
 
-Overfull \hbox (50.40323pt too wide) in paragraph at lines 837--1038
+Overfull \hbox (50.40323pt too wide) in paragraph at lines 845--1046
 \OT1/cmr/m/n/10 neous volatil-ity from model [] with Hurst ex-po-nent $\OML/cmm
 /m/it/10 H \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 0\OML/cmm/m/it/1
 0 :\OT1/cmr/m/n/10 1\OML/cmm/m/it/10 ; \OT1/cmr/m/n/10 0\OML/cmm/m/it/10 :\OT1/
@@ -1317,52 +1317,52 @@ m/n/10 0\OML/cmm/m/it/10 :\OT1/cmr/m/n/10 8\OMS/cmsy/m/n/10 g$
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 837--1038
+Underfull \hbox (badness 10000) in paragraph at lines 845--1046
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 837--1038
+Underfull \hbox (badness 10000) in paragraph at lines 845--1046
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 837--1038
+Underfull \hbox (badness 10000) in paragraph at lines 845--1046
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 837--1038
+Underfull \hbox (badness 10000) in paragraph at lines 845--1046
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 837--1038
+Underfull \hbox (badness 10000) in paragraph at lines 845--1046
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 837--1038
+Underfull \hbox (badness 10000) in paragraph at lines 845--1046
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 837--1038
+Underfull \hbox (badness 10000) in paragraph at lines 845--1046
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 837--1038
+Underfull \hbox (badness 10000) in paragraph at lines 845--1046
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 837--1038
+Underfull \hbox (badness 10000) in paragraph at lines 845--1046
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 837--1038
+Underfull \hbox (badness 10000) in paragraph at lines 845--1046
 
  []
 
@@ -1377,124 +1377,124 @@ lleder/H07_IV.png> <./Billeder/H08_S.png> <./Billeder/H08_RV.png> <./Billeder/H
 08_IV.png>] [43 <./Billeder/ex7_single_plot.png>] [44 <./Billeder/ex7_plot100.p
 ng>] [45] [46] [47 <./Billeder/ex7_scale_single.png> <./Billeder/ex7_scale_mult
 iple.png>]
-<./Billeder/rfsv_single.jpeg, id=884, 331.99031pt x 302.63063pt>
+<./Billeder/rfsv_single.jpeg, id=892, 331.99031pt x 302.63063pt>
 File: ./Billeder/rfsv_single.jpeg Graphic file (type jpg)
 <use ./Billeder/rfsv_single.jpeg>
-Package pdftex.def Info: ./Billeder/rfsv_single.jpeg  used on input line 1070.
+Package pdftex.def Info: ./Billeder/rfsv_single.jpeg  used on input line 1078.
 (pdftex.def)             Requested size: 165.59853pt x 150.95474pt.
-<./Billeder/rfsv_multiple.png, id=885, 377.15906pt x 280.04625pt>
+<./Billeder/rfsv_multiple.png, id=893, 377.15906pt x 280.04625pt>
 File: ./Billeder/rfsv_multiple.png Graphic file (type png)
 <use ./Billeder/rfsv_multiple.png>
-Package pdftex.def Info: ./Billeder/rfsv_multiple.png  used on input line 1074.
+Package pdftex.def Info: ./Billeder/rfsv_multiple.png  used on input line 1082.
 
 (pdftex.def)             Requested size: 165.59853pt x 122.95578pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1043--1084
+Underfull \hbox (badness 10000) in paragraph at lines 1051--1092
 
  []
 
 
-Overfull \hbox (3.60251pt too wide) in paragraph at lines 1043--1084
+Overfull \hbox (3.60251pt too wide) in paragraph at lines 1051--1092
 \OT1/cmr/m/n/10 mod-els use a frac-tional Ornstein-Uhlenbeck pro-cess to model 
 log-volatility. When
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1043--1084
+Underfull \hbox (badness 10000) in paragraph at lines 1051--1092
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1043--1084
+Underfull \hbox (badness 10000) in paragraph at lines 1051--1092
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1043--1084
+Underfull \hbox (badness 10000) in paragraph at lines 1051--1092
 
  []
 
 [48] [49]
-Underfull \hbox (badness 10000) in paragraph at lines 1086--1093
+Underfull \hbox (badness 10000) in paragraph at lines 1094--1101
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1086--1093
+Underfull \hbox (badness 10000) in paragraph at lines 1094--1101
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1086--1093
+Underfull \hbox (badness 10000) in paragraph at lines 1094--1101
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1086--1093
+Underfull \hbox (badness 10000) in paragraph at lines 1094--1101
 
  []
 
 [50 <./Billeder/rfsv_single.jpeg> <./Billeder/rfsv_multiple.png>] [51] [52]
-Overfull \hbox (2.51285pt too wide) detected at line 1113
+Overfull \hbox (2.51285pt too wide) detected at line 1121
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1113--1116
+Underfull \hbox (badness 10000) in paragraph at lines 1121--1124
 
  []
 
 [53]
-Underfull \hbox (badness 10000) in paragraph at lines 1133--1136
+Underfull \hbox (badness 10000) in paragraph at lines 1141--1144
 
  []
 
-<./Billeder/specsim1.jpeg, id=951, 302.63063pt x 271.0125pt>
+<./Billeder/specsim1.jpeg, id=959, 302.63063pt x 271.0125pt>
 File: ./Billeder/specsim1.jpeg Graphic file (type jpg)
 <use ./Billeder/specsim1.jpeg>
-Package pdftex.def Info: ./Billeder/specsim1.jpeg  used on input line 1155.
+Package pdftex.def Info: ./Billeder/specsim1.jpeg  used on input line 1163.
 (pdftex.def)             Requested size: 110.40253pt x 98.86703pt.
-<./Billeder/specsim2.jpeg, id=952, 302.63063pt x 271.0125pt>
+<./Billeder/specsim2.jpeg, id=960, 302.63063pt x 271.0125pt>
 File: ./Billeder/specsim2.jpeg Graphic file (type jpg)
 <use ./Billeder/specsim2.jpeg>
-Package pdftex.def Info: ./Billeder/specsim2.jpeg  used on input line 1160.
+Package pdftex.def Info: ./Billeder/specsim2.jpeg  used on input line 1168.
 (pdftex.def)             Requested size: 110.40253pt x 98.86703pt.
-<./Billeder/specsim3.jpeg, id=953, 302.63063pt x 271.0125pt>
+<./Billeder/specsim3.jpeg, id=961, 302.63063pt x 271.0125pt>
 File: ./Billeder/specsim3.jpeg Graphic file (type jpg)
 <use ./Billeder/specsim3.jpeg>
-Package pdftex.def Info: ./Billeder/specsim3.jpeg  used on input line 1165.
+Package pdftex.def Info: ./Billeder/specsim3.jpeg  used on input line 1173.
 (pdftex.def)             Requested size: 110.40253pt x 98.86703pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1148--1171
+Underfull \hbox (badness 10000) in paragraph at lines 1156--1179
 
  []
 
 [54] [55 <./Billeder/specsim1.jpeg> <./Billeder/specsim2.jpeg> <./Billeder/spec
 sim3.jpeg>]
-Overfull \hbox (27.97052pt too wide) in paragraph at lines 1196--1198
+Overfull \hbox (27.97052pt too wide) in paragraph at lines 1204--1206
 \OT1/cmr/m/n/10 Now note that $[] [] = \OMS/cmsy/m/n/10   []\OT1/cmr/m/n/10 (\O
 ML/cmm/m/it/10 nt[]\OT1/cmr/m/n/10 )$ since $\OML/cmm/m/it/10 t[] \OT1/cmr/m/n/
 10 = \OML/cmm/m/it/10 $\OT1/cmr/m/n/10 . Sim-i-larly, $[] [] =
  []
 
 
-Overfull \hbox (4.01172pt too wide) detected at line 1206
+Overfull \hbox (4.01172pt too wide) detected at line 1214
 []
  []
 
-[56] [57] (master_thesis.bbl
+[56] (master_thesis.bbl
 Underfull \hbox (badness 1817) in paragraph at lines 73--77
 []\OT1/cmr/m/n/10 Xiyue Han and Alexan-der Schied.  Ro-bust faber--schauder ap-
 prox-i-ma-
  []
 
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1217.
- [58]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1217.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1225.
+ [57]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1225.
  (master_thesis.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1217.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1217.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1225.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1225.
 
 Package rerunfilecheck Info: File `master_thesis.out' has not changed.
 (rerunfilecheck)             Checksum: 61A7F3BC3CA7ADA35AD26C03636D6477;1691.
@@ -1502,16 +1502,16 @@ Package rerunfilecheck Info: File `master_thesis.out' has not changed.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1217.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1225.
  ) 
 Here is how much of TeX's memory you used:
- 9205 strings out of 481199
- 146882 string characters out of 2905596
- 458371 words of memory out of 3000000
- 24395 multiletter control sequences out of 15000+200000
+ 9208 strings out of 481199
+ 146914 string characters out of 2905596
+ 458372 words of memory out of 3000000
+ 24396 multiletter control sequences out of 15000+200000
  544905 words of font info for 69 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 46i,18n,47p,1510b,537s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 46i,18n,47p,1510b,535s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Users/plols/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmbx10.pfb><C:/Users/plols/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
 fonts/cm/cmbx12.pfb><C:/Users/plols/AppData/Local/Programs/MiKTeX/fonts/type1/p
@@ -1532,9 +1532,9 @@ KTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/plols/AppData/Local/Pr
 ograms/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/plols/Ap
 pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm7.pfb><C:/U
 sers/plols/AppData/Local/Programs/MiKTeX/fonts/type1/public/rsfs/rsfs10.pfb>
-Output written on master_thesis.pdf (59 pages, 2479133 bytes).
+Output written on master_thesis.pdf (59 pages, 2481400 bytes).
 PDF statistics:
- 1077 PDF objects out of 1200 (max. 8388607)
- 173 named destinations out of 1000 (max. 500000)
+ 1081 PDF objects out of 1200 (max. 8388607)
+ 175 named destinations out of 1000 (max. 500000)
  602 words of extra memory for PDF output out of 10000 (max. 10000000)
 

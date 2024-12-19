@@ -18,5 +18,5 @@
 \contentsline {section}{\numberline {6}Appendix}{53}{section.6}%
 \contentsline {subsection}{\numberline {6.1}Simulation of fractional Brownian motion}{53}{subsection.6.1}%
 \contentsline {subsubsection}{\numberline {6.1.1}Proof of Fourier transform in spectral method}{55}{subsubsection.6.1.1}%
-\contentsline {subsection}{\numberline {6.2}R code}{57}{subsection.6.2}%
-\contentsline {section}{References}{58}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.2}R code}{56}{subsection.6.2}%
+\contentsline {section}{References}{57}{subsection.6.2}%
